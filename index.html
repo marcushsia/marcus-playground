@@ -30,8 +30,6 @@
     .card-date { font-size: 0.75rem; color: var(--muted); opacity: 0.7; }
     .card-arrow { font-size: 0.85rem; color: var(--accent); opacity: 0; transition: opacity 0.15s, transform 0.15s; }
     .card:hover .card-arrow { opacity: 1; transform: translateX(3px); }
-    .card-empty { border-style: dashed; opacity: 0.5; cursor: default; }
-    .card-empty:hover { transform: none; box-shadow: none; border-color: var(--border); }
     footer { max-width: 900px; margin: 4rem auto 0; font-size: 0.8rem; color: var(--muted); opacity: 0.5; text-align: center; }
   </style>
 </head>
@@ -44,12 +42,15 @@
   <hr class="divider" />
   <p class="section-title">Projects</p>
   <div class="grid">
-    <div class="card card-empty">
-      <div class="card-icon">&#10022;</div>
-      <h2>First project coming soon</h2>
-      <p>Projects will appear here as they're added.</p>
-      <div class="card-meta"><span class="card-date">&#8212;</span></div>
-    </div>
+    <a class="card" href="./tesla/">
+      <div class="card-icon">&#9889;</div>
+      <h2>Tesla Decision Guide</h2>
+      <p>Interactive family guide for the Tesla purchase — models, costs, financing options, and a recommendation.</p>
+      <div class="card-meta">
+        <span class="card-date">March 2026</span>
+        <span class="card-arrow">&#8594;</span>
+      </div>
+    </a>
   </div>
   <footer>Built with HTML &amp; CSS &middot; Hosted on GitHub Pages</footer>
 </body>
