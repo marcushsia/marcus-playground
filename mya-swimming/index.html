@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mya's Swimming Plan</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0f1117; --surface: #1a1d27; --border: #2a2e3e;
+      --accent: #6c8ef7; --accent-2: #a78bfa; --text: #e2e8f0;
+      --muted: #8892a4; --radius: 12px;
+      --font: 'Inter', system-ui, -apple-system, sans-serif;
+    }
+    body { background: var(--bg); color: var(--text); font-family: var(--font); min-height: 100vh; padding: 0 1.5rem 5rem; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .back-link { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.85rem; color: var(--muted); margin-top: 2rem; transition: color 0.15s; }
+    .back-link:hover { color: var(--accent); text-decoration: none; }
+    .container { max-width: 800px; margin: 0 auto; }
+    header { padding: 2.5rem 0 2rem; border-bottom: 1px solid var(--border); margin-bottom: 2.5rem; }
+    .tag { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); display: block; margin-bottom: 0.6rem; }
+    header h1 { font-size: clamp(1.8rem, 4vw, 2.5rem); font-weight: 700; letter-spacing: -0.02em; background: linear-gradient(135deg, var(--text) 40%, var(--accent-2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; line-height: 1.2; }
+    header .subtitle { color: var(--muted); font-size: 1rem; margin-top: 0.5rem; }
+    header .meta { color: var(--muted); font-size: 0.8rem; margin-top: 0.35rem; opacity: 0.7; }
+
+    /* Section headings */
+    h2 { font-size: 1.15rem; font-weight: 700; color: var(--text); margin: 2.5rem 0 1rem; letter-spacing: -0.01em; }
+    h3 { font-size: 1rem; font-weight: 700; color: var(--accent); margin: 1.75rem 0 0.75rem; }
+
+    p { font-size: 0.95rem; line-height: 1.75; color: #c8d0e0; margin-bottom: 0.9rem; }
+
+    /* Tables */
+    .table-wrap { overflow-x: auto; margin: 1.25rem 0; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+    thead tr { background: #1e2235; }
+    th { font-weight: 600; color: var(--text); padding: 0.65rem 1rem; text-align: left; border-bottom: 2px solid var(--border); font-size: 0.82rem; letter-spacing: 0.04em; text-transform: uppercase; }
+    td { padding: 0.6rem 1rem; border-bottom: 1px solid var(--border); color: #c8d0e0; vertical-align: top; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: rgba(108,142,247,0.04); }
+    .tfoot-row td { font-weight: 700; color: var(--text); background: #1e2235; border-top: 2px solid var(--border); border-bottom: none; }
+
+    /* Lists */
+    ul, ol { margin: 0.75rem 0 1rem 1.5rem; }
+    li { font-size: 0.92rem; line-height: 1.7; color: #c8d0e0; margin-bottom: 0.4rem; }
+    li strong { color: var(--text); }
+
+    /* Priority cards */
+    .priority-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; margin: 1.25rem 0; border-left: 3px solid var(--accent); }
+    .priority-card.p1 { border-left-color: #f87171; }
+    .priority-card.p2 { border-left-color: #fb923c; }
+    .priority-card.p3 { border-left-color: #facc15; }
+    .priority-card.p4 { border-left-color: #4ade80; }
+    .priority-card.p5 { border-left-color: #60a5fa; }
+    .priority-label { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; opacity: 0.7; margin-bottom: 0.3rem; }
+    .priority-card h3 { margin: 0 0 0.6rem; font-size: 1rem; color: var(--text); }
+    .priority-card .impact { display: inline-block; font-size: 0.75rem; font-weight: 600; padding: 0.15rem 0.5rem; border-radius: 999px; background: rgba(108,142,247,0.12); color: var(--accent); margin-bottom: 0.75rem; }
+    .priority-card .target, .priority-card .metric { font-size: 0.88rem; color: #c8d0e0; margin-bottom: 0.5rem; }
+    .priority-card .target strong, .priority-card .metric strong { color: var(--text); }
+    .priority-card ul { margin-top: 0.5rem; }
+
+    /* Snapshot section */
+    .snapshot-note { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.1rem 1.25rem; font-size: 0.88rem; line-height: 1.65; color: var(--muted); margin-top: 1rem; }
+
+    /* Open questions */
+    .questions-list { list-style: none; margin: 0; padding: 0; }
+    .questions-list li { padding: 0.75rem 0; border-bottom: 1px solid var(--border); font-size: 0.9rem; color: #c8d0e0; line-height: 1.6; display: flex; gap: 0.75rem; align-items: flex-start; }
+    .questions-list li::before { content: "?"; display: inline-flex; align-items: center; justify-content: center; min-width: 1.4rem; height: 1.4rem; background: rgba(108,142,247,0.12); color: var(--accent); border-radius: 50%; font-size: 0.75rem; font-weight: 700; margin-top: 0.1rem; }
+    .questions-list li:last-child { border-bottom: none; }
+
+    footer { max-width: 800px; margin: 4rem auto 0; font-size: 0.78rem; color: var(--muted); opacity: 0.45; text-align: center; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a class="back-link" href="../">&#8592; Back</a>
+
+    <header>
+      <span class="tag">Swimming Project</span>
+      <h1>&#127946; Mya's Swimming Plan</h1>
+      <p class="subtitle"><em>Project Rules &amp; High-Level Training Plan</em></p>
+      <p class="meta">Created March 6, 2026 &nbsp;&middot;&nbsp; Goal: A &rarr; AA Standard</p>
+    </header>
+
+    <!-- 1. ATHLETE SNAPSHOT -->
+    <h2>1. Athlete Snapshot</h2>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Event</th><th>Current Time</th><th>Standard Achieved</th><th>National Percentile</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>100 Free (SCY)</td><td><strong>58.39</strong></td><td>A Standard</td><td>~85th</td></tr>
+          <tr><td>50 Free (SCY)</td><td><strong>25.76</strong></td><td>A Standard (near AA)</td><td>~85&ndash;90th</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="snapshot-note">
+      Mya swims faster than ~85&ndash;90 out of every 100 fifteen-year-old girls in the US. Her speed is real &mdash; the 50 free proves it. The gap to the next level is about execution and targeted training, not raw talent.
+    </div>
+
+    <!-- 2. PROJECT GOAL -->
+    <h2>2. Project Goal</h2>
+    <p>Achieve AA Standard in both the 100 Free and 50 Free within this season.</p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Event</th><th>Current</th><th>AA Target</th><th>Drop Needed</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>100 Free (SCY)</td><td>58.39</td><td><strong>56.49</strong></td><td>~1.9 sec &nbsp;&#10003; Realistic</td></tr>
+          <tr><td>50 Free (SCY)</td><td>25.76</td><td><strong>26.09</strong></td><td>Already at AA! Preserve &amp; refine</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 3. PROJECT RULES -->
+    <h2>3. Project Rules</h2>
+    <ul>
+      <li><strong>Data first.</strong> Every training decision ties back to a number &mdash; split times, underwater distances, reaction times. No guessing.</li>
+      <li><strong>Prioritize by ROI.</strong> Work from the low-hanging fruit list in ranked order. Don't chase marginal gains before the big ones are captured.</li>
+      <li><strong>Coachability over volume.</strong> Technique refinements and race-execution work beat simply swimming more yards. Work smarter.</li>
+      <li><strong>Split every 100.</strong> Mya should know her first-50 vs second-50 split from every timed 100 free effort. That split is the primary diagnostic tool for this project.</li>
+      <li><strong>Measure turns.</strong> Track underwater distance off every turn (target: 5&ndash;7 m) at least once per week. Small gains compound.</li>
+      <li><strong>Breathing is a variable.</strong> Systematically test breath counts in the 50 free during practice &mdash; never leave it as habit.</li>
+      <li><strong>Peak at the right meet.</strong> Identify the target A-meet for the season and build the training cycle backward from that date.</li>
+      <li><strong>Weekly check-in.</strong> One short review per week: What did we test? What improved? What's next?</li>
+    </ul>
+
+    <!-- 4. TRAINING PLAN -->
+    <h2>4. High-Level Training Plan — Low-Hanging Fruit (Ranked)</h2>
+    <p>The five areas below are ordered by expected time-drop impact. Each has a target, a set of practice actions, and a success metric.</p>
+
+    <!-- Priority 1 -->
+    <div class="priority-card p1">
+      <div class="priority-label">Priority 1</div>
+      <h3>Back-Half Conditioning</h3>
+      <span class="impact">Highest Impact &mdash; ~1.0&ndash;1.5 sec</span>
+      <p class="target">The spread between Mya's 50 free speed and her 100 free time strongly suggests the back half of the 100 is where time is leaking. An optimal 100 at her level has a back-50 that is only 3&ndash;4 seconds slower than the front 50; if her gap exceeds 5 seconds, this area alone can close most of the AA gap.</p>
+      <p class="target"><strong>Target:</strong> Back 50 within 4 seconds of front 50 in race conditions.</p>
+      <strong style="font-size:0.85rem;color:var(--text);">Practice actions:</strong>
+      <ul>
+        <li>Race-pace repeat 50s (6&ndash;8 &times; 50 @ 100-race pace, 30 sec rest) &mdash; train the body to maintain speed after the turn.</li>
+        <li>Descending 75s (3&ndash;4 &times; 75 where the last 25 must match the first 25 pace) &mdash; simulate the race's critical zone.</li>
+        <li>Over-distance threshold sets (4 &times; 150 @ slightly below race pace) &mdash; build aerobic base specifically for the 50&ndash;100m zone.</li>
+        <li>Kick 50s on back half only &mdash; isolate the legs when they matter most.</li>
+      </ul>
+      <p class="metric" style="margin-top:0.75rem;"><strong>Success metric:</strong> Front/back split gap decreases from current baseline to &le;4 seconds within 6 weeks.</p>
+    </div>
+
+    <!-- Priority 2 -->
+    <div class="priority-card p2">
+      <div class="priority-label">Priority 2</div>
+      <h3>Pacing Strategy</h3>
+      <span class="impact">~0.5&ndash;1.0 sec</span>
+      <p class="target">Many A-level swimmers go out too fast, tie up at the 75m mark, and fade. The fastest 100 free is almost always a negative or even split &mdash; not a sprint-and-hold.</p>
+      <p class="target"><strong>Target:</strong> Establish a personal optimal split strategy and execute it consistently.</p>
+      <strong style="font-size:0.85rem;color:var(--text);">Practice actions:</strong>
+      <ul>
+        <li>Time every 100 free effort in practice with 50-split data &mdash; make the first/second 50 gap visible.</li>
+        <li>Trial a slightly more conservative front 50 (target: 27.0&ndash;27.5 first 50) and compare total times.</li>
+        <li>Mental rehearsal: identify the 40m mark as the 'commitment point' &mdash; don't accelerate before it.</li>
+        <li>Race-simulation 100s in practice with explicit split targets assigned beforehand.</li>
+      </ul>
+      <p class="metric" style="margin-top:0.75rem;"><strong>Success metric:</strong> Consistent execution of assigned splits within 0.3 seconds in practice 100s.</p>
+    </div>
+
+    <!-- Priority 3 -->
+    <div class="priority-card p3">
+      <div class="priority-label">Priority 3</div>
+      <h3>Turns &amp; Underwater Kicking</h3>
+      <span class="impact">~0.5&ndash;0.8 sec per race</span>
+      <p class="target">This is the single biggest differentiator between A and AA swimmers. Elite 15-year-olds hold 5&ndash;7 meters of powerful underwater dolphin or flutter kick off every turn. In a 100 free there are 3 turns &mdash; even 0.5 m gained on each = meaningful time.</p>
+      <p class="target"><strong>Target:</strong> Consistent 5&ndash;6 m underwaters off all three turns (measure weekly).</p>
+      <strong style="font-size:0.85rem;color:var(--text);">Practice actions:</strong>
+      <ul>
+        <li>Mark the 5 m and 6 m flags on the lane rope &mdash; Mya must visually pass the 5 m mark before surfacing on every turn in practice.</li>
+        <li>Underwater kick sets: 6 &times; 25 underwater only (dolphin or flutter kick off wall, streamline until flag, then freestyle to wall).</li>
+        <li>Turn mechanics check: approach speed, flip timing, toe-plant position, tightness of rotation &mdash; film from the side wall monthly.</li>
+        <li>Streamline drill: 10 push-offs per practice from the wall holding the tightest possible streamline &mdash; build muscle memory.</li>
+      </ul>
+      <p class="metric" style="margin-top:0.75rem;"><strong>Success metric:</strong> Measured underwater distance &ge;5 m off turns on 3 consecutive timed 100s.</p>
+    </div>
+
+    <!-- Priority 4 -->
+    <div class="priority-card p4">
+      <div class="priority-label">Priority 4</div>
+      <h3>Start &amp; Block Reaction</h3>
+      <span class="impact">~0.3&ndash;0.5 sec in 50 free</span>
+      <p class="target">The start accounts for roughly 20&ndash;25% of the 50 free. A clean entry angle, tight streamline, and a strong underwater off the block are all quickly coachable.</p>
+      <p class="target"><strong>Target:</strong> Reaction time &le;0.65 sec; underwater distance off start &ge;7 m.</p>
+      <strong style="font-size:0.85rem;color:var(--text);">Practice actions:</strong>
+      <ul>
+        <li>2&ndash;3 start repetitions per practice from the block &mdash; not optional.</li>
+        <li>Focus sequence: load &rarr; hip hinge &rarr; drive angle &rarr; arm sweep &rarr; tuck &rarr; kick sequence.</li>
+        <li>Time reaction: use a starter's beep app or coach with stopwatch from 'beep' to water entry.</li>
+        <li>Entry drill: practice 'pencil' entries off the block into a narrow target zone &mdash; teaches angle discipline.</li>
+        <li>Underwater 25s off the start: sprint to the 25m wall using only the start underwaters plus minimal strokes &mdash; isolates start efficiency.</li>
+      </ul>
+      <p class="metric" style="margin-top:0.75rem;"><strong>Success metric:</strong> Measurable improvement in underwater distance off the start vs. current baseline within 4 weeks.</p>
+    </div>
+
+    <!-- Priority 5 -->
+    <div class="priority-card p5">
+      <div class="priority-label">Priority 5</div>
+      <h3>Breathing Pattern in the 50 Free</h3>
+      <span class="impact">~0.2&ndash;0.3 sec</span>
+      <p class="target">Each breath in the 50 free costs time (head turn, rotation, drag). Many elite 50 freestylers breathe once or not at all. For Mya, this is the quickest experiment to run &mdash; the answer might be a free quarter-second.</p>
+      <p class="target"><strong>Target:</strong> Find Mya's optimal breath count for the 50 free through structured testing.</p>
+      <strong style="font-size:0.85rem;color:var(--text);">Practice actions:</strong>
+      <ul>
+        <li>Week 1: timed 50s with current breathing pattern &rarr; establish baseline.</li>
+        <li>Week 2: timed 50s breathing 0 times &rarr; compare.</li>
+        <li>Week 3: timed 50s breathing 1 time at the 25m turn &rarr; compare.</li>
+        <li>Select the pattern with the fastest reliable time and drill it as the standard.</li>
+        <li>If going no-breath, build CO&sub2; tolerance via hypoxic sets (e.g., 8 &times; 50 breathing every 5 strokes).</li>
+      </ul>
+      <p class="metric" style="margin-top:0.75rem;"><strong>Success metric:</strong> Optimal breath pattern identified and consistently used in all 50 free efforts within 3 weeks.</p>
+    </div>
+
+    <!-- 5. PROJECTED TIME DROPS -->
+    <h2>5. Projected Cumulative Time Drops</h2>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Focus Area</th><th>100 Free Drop</th><th>50 Free Drop</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Back-Half Conditioning</td><td>~1.0&ndash;1.5 sec</td><td>N/A</td></tr>
+          <tr><td>Pacing Strategy</td><td>~0.5&ndash;1.0 sec</td><td>~0.1&ndash;0.2 sec</td></tr>
+          <tr><td>Turns &amp; Underwater Kicking</td><td>~0.5&ndash;0.8 sec</td><td>~0.2&ndash;0.3 sec</td></tr>
+          <tr><td>Start &amp; Block Reaction</td><td>~0.1&ndash;0.2 sec</td><td>~0.3&ndash;0.5 sec</td></tr>
+          <tr><td>Breathing Pattern</td><td>~0.1&ndash;0.2 sec</td><td>~0.2&ndash;0.3 sec</td></tr>
+        </tbody>
+        <tfoot>
+          <tr class="tfoot-row"><td><strong>Total Potential Drop</strong></td><td><strong>~2.2&ndash;3.7 sec</strong></td><td><strong>~0.8&ndash;1.3 sec</strong></td></tr>
+        </tfoot>
+      </table>
+    </div>
+    <p>The 100 free path to AA (need ~1.9 sec) is well within the projected range. The 50 free is already at AA pace &mdash; the goal is to hold and consolidate it under race conditions.</p>
+
+    <!-- 6. OPEN QUESTIONS -->
+    <h2>6. Open Questions — Needed to Refine the Plan</h2>
+    <ul class="questions-list">
+      <li><strong>Current splits:</strong> What is Mya's actual first-50 vs second-50 split in the 100 free? This is the most important missing data point.</li>
+      <li><strong>Training schedule:</strong> How many days/hours per week does Mya currently train? Is the schedule flexible?</li>
+      <li><strong>Coach involvement:</strong> Does Mya's coach know about this plan? Is the coach open to incorporating these drills and sets?</li>
+      <li><strong>Target meet:</strong> What is the key meet for the season and when is it? We need to build the training cycle backward.</li>
+      <li><strong>Current underwater distances:</strong> Has anyone measured Mya's underwater distance off turns? Knowing the baseline determines how much the turns priority is worth.</li>
+      <li><strong>50 free breath count:</strong> How many times does Mya currently breathe in the 50 free? This changes the size of the breathing-pattern opportunity.</li>
+      <li><strong>Other events:</strong> Does Mya compete in other events (100 back, 200 free, IM)? If so, training choices may need to balance across events.</li>
+      <li><strong>Dryland / strength training:</strong> Is there any current dryland or strength program? Core and kick strength are directly tied to turns and underwaters.</li>
+      <li><strong>Recent time trajectory:</strong> Are the current times improving, plateaued, or regressing vs. last season? This shapes how aggressive the plan should be.</li>
+    </ul>
+
+  </div>
+  <footer>Built with HTML &amp; CSS &middot; Hosted on GitHub Pages</footer>
+</body>
+</html>
