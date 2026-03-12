@@ -518,6 +518,67 @@
       margin: 1rem 0;
     }
 
+    /* ── PACKING LIST ── */
+    #packing { background: var(--snow); }
+    .pack-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.25rem;
+    }
+    .pack-card {
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+    .pack-card .pack-header {
+      padding: 1.25rem 1.5rem 1rem;
+      color: white;
+    }
+    .pack-card .pack-icon { font-size: 1.75rem; margin-bottom: 0.4rem; display: block; }
+    .pack-card .pack-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+    }
+    .pack-card .pack-sub {
+      font-size: 0.75rem;
+      opacity: 0.75;
+      margin-top: 0.15rem;
+    }
+    .pack-card .pack-body {
+      padding: 1.25rem 1.5rem;
+      background: white;
+    }
+    .pack-card .pack-body ul { list-style: none; }
+    .pack-card .pack-body li {
+      font-size: 0.875rem;
+      color: var(--text);
+      padding: 0.28rem 0 0.28rem 1.5rem;
+      position: relative;
+      line-height: 1.4;
+      border-bottom: 1px solid #f3f4f6;
+    }
+    .pack-card .pack-body li:last-child { border-bottom: none; }
+    .pack-card .pack-body li::before {
+      content: '☐';
+      position: absolute;
+      left: 0;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+    .pack-card .pack-note {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      font-style: italic;
+      margin-top: 0.75rem;
+      padding-top: 0.75rem;
+      border-top: 1px dashed #e5e7eb;
+    }
+    .pack-zion   .pack-header { background: linear-gradient(135deg, #C0603A 0%, #8B3A1E 100%); }
+    .pack-brian  .pack-header { background: linear-gradient(135deg, #3B6FA0 0%, #1E3F60 100%); }
+    .pack-vegas  .pack-header { background: linear-gradient(135deg, #5a3d8a 0%, #1A1230 100%); }
+    .pack-general .pack-header { background: linear-gradient(135deg, #4A6278 0%, #2C3E50 100%); }
+
     /* ── FOOTER ── */
     footer {
       background: var(--slate);
@@ -901,6 +962,104 @@
             <span class="drive-arrow">→</span>
           </div>
           <span class="drive-dest">Las Vegas, NV 🎰</span>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- PACKING LIST -->
+  <section id="packing">
+    <div class="container">
+      <div class="section-label">What to Bring</div>
+      <div class="section-title">Packing List</div>
+      <div class="pack-grid">
+
+        <!-- Narrows / Zion -->
+        <div class="pack-card pack-zion">
+          <div class="pack-header">
+            <span class="pack-icon">🏔️</span>
+            <div class="pack-title">The Narrows</div>
+            <div class="pack-sub">Zion · March 16</div>
+          </div>
+          <div class="pack-body">
+            <ul>
+              <li>Dry bag for phone &amp; valuables</li>
+              <li>Layered base + mid-layer top</li>
+              <li>Windproof outer layer</li>
+              <li>Quick-dry bottoms</li>
+              <li>Sunscreen (SPF 30+)</li>
+              <li>Polarized sunglasses</li>
+              <li>Hat or cap</li>
+              <li>Snacks &amp; water</li>
+            </ul>
+            <p class="pack-note">Boots, neoprene socks &amp; poles rented from Zion Outfitter — no need to pack.</p>
+          </div>
+        </div>
+
+        <!-- Brian Head Skiing -->
+        <div class="pack-card pack-brian">
+          <div class="pack-header">
+            <span class="pack-icon">⛷️</span>
+            <div class="pack-title">Brian Head Skiing</div>
+            <div class="pack-sub">Mar 17–18 · 9,600 ft elevation</div>
+          </div>
+          <div class="pack-body">
+            <ul>
+              <li>Ski jacket</li>
+              <li>Ski pants or bibs</li>
+              <li>Thermal base layer (top &amp; bottom)</li>
+              <li>Fleece or mid-layer</li>
+              <li>Ski gloves</li>
+              <li>Ski goggles</li>
+              <li>Helmet (or rent on-site)</li>
+              <li>Neck gaiter / balaclava</li>
+              <li>High-SPF sunscreen — UV is intense at altitude</li>
+              <li>Hand warmers</li>
+              <li>Wool or synthetic ski socks</li>
+            </ul>
+            <p class="pack-note">Skis, boots &amp; poles rented from Georg's Rental Shop at the resort.</p>
+          </div>
+        </div>
+
+        <!-- Las Vegas -->
+        <div class="pack-card pack-vegas">
+          <div class="pack-header">
+            <span class="pack-icon">🎰</span>
+            <div class="pack-title">Las Vegas</div>
+            <div class="pack-sub">Mar 18–20 · ~73°F days</div>
+          </div>
+          <div class="pack-body">
+            <ul>
+              <li>Going-out outfit(s)</li>
+              <li>Casual daytime clothes</li>
+              <li>Comfortable walking shoes</li>
+              <li>Light jacket for evenings</li>
+              <li>Sunglasses</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Essentials -->
+        <div class="pack-card pack-general">
+          <div class="pack-header">
+            <span class="pack-icon">🎒</span>
+            <div class="pack-title">Essentials</div>
+            <div class="pack-sub">All-trip must-haves</div>
+          </div>
+          <div class="pack-body">
+            <ul>
+              <li>ID &amp; wallet</li>
+              <li>Phone &amp; charger</li>
+              <li>Portable battery pack</li>
+              <li>Medications &amp; first aid</li>
+              <li>Toiletries</li>
+              <li>Reusable water bottles</li>
+              <li>Snacks for long drives</li>
+              <li>Earbuds / headphones</li>
+              <li>Camera (optional)</li>
+            </ul>
+          </div>
         </div>
 
       </div>
