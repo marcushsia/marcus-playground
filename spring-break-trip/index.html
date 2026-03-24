@@ -579,6 +579,57 @@
     .pack-vegas  .pack-header { background: linear-gradient(135deg, #5a3d8a 0%, #1A1230 100%); }
     .pack-general .pack-header { background: linear-gradient(135deg, #4A6278 0%, #2C3E50 100%); }
 
+    /* ── ANSWERED PRAYERS ── */
+    #prayers { background: #0d1f17; }
+    #prayers .section-label { color: rgba(255,255,255,0.4); }
+    #prayers .section-title { color: white; }
+    .prayer-grid {
+      display: grid;
+      gap: 1rem;
+    }
+    .prayer-card {
+      background: white;
+      border-radius: var(--radius);
+      border-left: 5px solid #4CAF82;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+    .prayer-card-inner {
+      padding: 1.4rem 1.6rem;
+    }
+    .prayer-marker {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+      color: #2D7A56;
+      margin-bottom: 0.4rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .prayer-marker::before {
+      content: '';
+      display: inline-block;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: #4CAF82;
+    }
+    .prayer-card-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--slate);
+      margin-bottom: 0.6rem;
+      line-height: 1.3;
+    }
+    .prayer-card-body {
+      font-size: 0.9rem;
+      color: #3d4a3f;
+      line-height: 1.75;
+    }
+
     /* ── FOOTER ── */
     footer {
       background: var(--slate);
@@ -1059,6 +1110,49 @@
               <li>Earbuds / headphones</li>
               <li>Camera (optional)</li>
             </ul>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ANSWERED PRAYERS -->
+  <section id="prayers">
+    <div class="container">
+      <p class="section-label">God's Faithfulness</p>
+      <h2 class="section-title">Answered Prayers</h2>
+      <div class="prayer-grid">
+
+        <div class="prayer-card">
+          <div class="prayer-card-inner">
+            <p class="prayer-marker">Answered Prayer</p>
+            <h3 class="prayer-card-title">The Airbnb Host Came Through at the Last Minute</h3>
+            <p class="prayer-card-body">Fifteen minutes from the rental, no response from the host, and no way in. We prayed. He responded within a minute.</p>
+          </div>
+        </div>
+
+        <div class="prayer-card">
+          <div class="prayer-card-inner">
+            <p class="prayer-marker">Answered Prayer</p>
+            <h3 class="prayer-card-title">10 Seats on the Flight Home</h3>
+            <p class="prayer-card-body">A same-day change meant needing 10 seats on Southwest back to Austin — on a specific flight, not just any route. There were 11 available on the exact one.</p>
+          </div>
+        </div>
+
+        <div class="prayer-card">
+          <div class="prayer-card-inner">
+            <p class="prayer-marker">Answered Prayer</p>
+            <h3 class="prayer-card-title">Missing Bags Found Before Tracking Them Down</h3>
+            <p class="prayer-card-body">After the break-in, we prayed we'd find the stolen items before having to track the "Find My" location ourselves — which could have meant walking into something dangerous. We found the bags on our own first. A situation that could have turned threatening was quietly avoided.</p>
+          </div>
+        </div>
+
+        <div class="prayer-card">
+          <div class="prayer-card-inner">
+            <p class="prayer-marker">Answered Prayer</p>
+            <h3 class="prayer-card-title">The Last Flight Out</h3>
+            <p class="prayer-card-body">Severe weather was wreaking havoc on flights across the board. We prayed our plane would make it in safely — and that the crew delays wouldn't stack up so badly that they'd be grounded before we could depart. God answered. Our plane arrived, the crew made it work, and we lifted off — on the last flight out.</p>
           </div>
         </div>
 
