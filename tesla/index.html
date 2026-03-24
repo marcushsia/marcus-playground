@@ -152,6 +152,7 @@
   <button class="active" onclick="showTab('overview', this)">Overview</button>
   <button onclick="showTab('model', this)">The Car</button>
   <button onclick="showTab('fsd', this)">Full Self-Driving</button>
+  <button onclick="showTab('trims', this)">Which Trim?</button>
   <button onclick="showTab('compare', this)">Lease vs. Buy</button>
   <button onclick="showTab('numbers', this)">The Numbers</button>
   <button onclick="showTab('steps', this)">Next Steps</button>
@@ -325,6 +326,122 @@
     <div class="warning">
       <h4>⚠️ Important to Understand</h4>
       <p>FSD is a <strong>Level 2 driver assistance system</strong>. Dad must remain attentive with hands available to take control at any time. It is not a fully autonomous chauffeur — Tesla calls it "Supervised" for this reason. Think of it as a highly capable co-pilot that handles most of the work, but the driver is always responsible. That said, it meaningfully reduces the stress and physical effort of driving.</p>
+    </div>
+
+  </div>
+
+  <!-- ══════════════════════════════════════════ WHICH TRIM? ══ -->
+  <div class="tab-panel" id="tab-trims">
+
+    <div class="hero">
+      <div class="tag">Trim Recommendation</div>
+      <h2>Standard RWD is the right call.<br><strong>Long Range RWD if comfort matters on highway trips.</strong></h2>
+      <p>Speed, AWD traction, and extra range are all things your parents will never use. Here's exactly what each trim means and why two of the four are easy to skip.</p>
+    </div>
+
+    <div class="card">
+      <h2>First: What "Dual Motor" and "AWD" Actually Mean</h2>
+      <p style="margin-bottom:18px;">Every Tesla has electric motors — the question is how many and where.</p>
+      <div class="feature-grid">
+        <div class="feature">
+          <div class="emoji">⚡</div>
+          <h4>Single Motor — RWD</h4>
+          <p>One motor at the rear axle. Power goes to the back two wheels only. Simple, efficient, and the reason RWD trims have <em>more range</em> — less hardware, less energy loss. This is what Standard and Long Range RWD use.</p>
+        </div>
+        <div class="feature">
+          <div class="emoji">⚡⚡</div>
+          <h4>Dual Motor — AWD</h4>
+          <p>One motor at the front axle, one at the rear — all-wheel drive. Better traction on wet or slippery roads, noticeably faster acceleration. Slightly lower range because you're powering more hardware. This is what AWD and Long Range AWD use.</p>
+        </div>
+      </div>
+      <p style="margin-top:18px; color:#666;">In a gas car, AWD means complex driveshafts and transfer cases. In a Tesla it's just adding a second electric motor — which is why the price jump is relatively modest. But for Austin, TX in mostly dry weather, you likely won't feel the difference day-to-day.</p>
+    </div>
+
+    <div class="card">
+      <h2>The Four Trims — Side by Side</h2>
+      <div style="overflow-x:auto;">
+        <table class="model-table" style="min-width:620px;">
+          <tr>
+            <th>Trim</th>
+            <th>Price</th>
+            <th>Motors / Drive</th>
+            <th>Range</th>
+            <th>0–60 mph</th>
+          </tr>
+          <tr class="best">
+            <td>Standard RWD <span class="badge-rec">RECOMMENDED</span></td>
+            <td>~$39,990</td>
+            <td>1 motor / Rear</td>
+            <td>~303 mi</td>
+            <td>~6.8 sec</td>
+          </tr>
+          <tr>
+            <td>AWD</td>
+            <td>~$41,990</td>
+            <td>2 motors / All-wheel</td>
+            <td>~294 mi</td>
+            <td>~5.0 sec</td>
+          </tr>
+          <tr>
+            <td>Long Range RWD</td>
+            <td>~$44,990</td>
+            <td>1 motor / Rear</td>
+            <td>~357 mi</td>
+            <td>~5.4 sec</td>
+          </tr>
+          <tr>
+            <td>Long Range AWD</td>
+            <td>~$48,990</td>
+            <td>2 motors / All-wheel</td>
+            <td>~327 mi</td>
+            <td>~4.6 sec</td>
+          </tr>
+        </table>
+      </div>
+      <p style="margin-top:18px; color:#666; font-size:14px;">⚠️ Counterintuitive: the base AWD has <em>less</em> range than the Standard RWD (294 vs 303 miles) because dual motors draw more power. And the Long Range RWD has the <em>longest</em> range of any trim precisely because it's single-motor and efficient.</p>
+    </div>
+
+    <div class="card">
+      <h2>What You Actually Get — Trim by Trim</h2>
+
+      <div class="fsd-item">
+        <div class="fsd-emoji">1️⃣</div>
+        <div class="fsd-text">
+          <h4>Standard RWD — ~$39,990 &nbsp;<span style="background:#e8f5e9;color:#2e7d32;font-size:11px;font-weight:700;padding:3px 8px;border-radius:12px;">BEST FIT</span></h4>
+          <p>Single motor, rear-wheel drive. 18" wheels, simple LED headlights (no full-width lightbar), standard glass roof (no panoramic), cloth/synthetic leather seats, heated front seats and steering wheel, 15.4" touchscreen. Runs the exact same FSD software as every other trim. 303 miles of range is already far more than needed for any trip your parents take.</p>
+        </div>
+      </div>
+
+      <div class="fsd-item">
+        <div class="fsd-emoji">2️⃣</div>
+        <div class="fsd-text">
+          <h4>AWD — ~$41,990 &nbsp;<span style="background:#fce4ec;color:#c62828;font-size:11px;font-weight:700;padding:3px 8px;border-radius:12px;">SKIP</span></h4>
+          <p>Dual motor, all-wheel drive. Same base interior as Standard — no panoramic roof, no lightbar upgrade. Costs $2,000 more but actually has <em>less range</em> (294 miles). The only gain is AWD traction in bad weather, which Austin rarely sees. This is the weakest value in the lineup. Hard to justify.</p>
+        </div>
+      </div>
+
+      <div class="fsd-item">
+        <div class="fsd-emoji">3️⃣</div>
+        <div class="fsd-text">
+          <h4>Long Range RWD — ~$44,990 &nbsp;<span style="background:#fff8e1;color:#e65100;font-size:11px;font-weight:700;padding:3px 8px;border-radius:12px;">CONSIDER IF COMFORT MATTERS</span></h4>
+          <p>Single motor, rear-wheel drive. This trim steps up to 19" wheels, the full-width LED lightbars front and rear (notably more premium look), a <strong>panoramic moonroof</strong>, and an upgraded suspension that reviewers specifically call out for smoother ride quality on long drives. The longest range of any trim at 357 miles. If the Houston and Dallas highway trips are a regular thing, $5,000 more buys a meaningfully nicer car — not just extra miles.</p>
+        </div>
+      </div>
+
+      <div class="fsd-item">
+        <div class="fsd-emoji">4️⃣</div>
+        <div class="fsd-text">
+          <h4>Long Range AWD — ~$48,990 &nbsp;<span style="background:#fce4ec;color:#c62828;font-size:11px;font-weight:700;padding:3px 8px;border-radius:12px;">SKIP</span></h4>
+          <p>Dual motor, all-wheel drive. Everything in Long Range RWD plus the second motor. The only addition over LR RWD is AWD traction and faster acceleration — neither of which your parents need in Austin. At $9,000 more than Standard, you're paying for capabilities that will go unused. The 7-seat option is available here as an add-on ($2,500) but is a non-factor for two people.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>The Verdict for Mom &amp; Dad</h2>
+      <p style="margin-bottom:16px;">All four trims run identical FSD software. The hardware (HW4) is the same across all of them. So the things that actually differ are range, ride quality, and interior finish — none of which require going above Standard RWD for their use case.</p>
+      <p style="margin-bottom:16px;">The <strong>Standard RWD</strong> is the right call. 303 miles covers every trip they'll take with a massive buffer. The $268/mo payment estimate is built on this trim. FSD works exactly the same.</p>
+      <p>The only honest reason to go up to <strong>Long Range RWD</strong> is if the panoramic roof and smoother suspension feel meaningfully better for comfort — especially on those Austin→Houston highway runs. That's a legitimate $5,000 comfort upgrade, not a practical one. Worth considering if you want to give them the nicest possible daily experience. The numbers still work: roughly $320/mo car payment instead of $268.</p>
     </div>
 
   </div>
