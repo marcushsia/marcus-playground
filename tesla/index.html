@@ -122,6 +122,57 @@
     .step-body a { color: #cc0000; text-decoration: none; }
     .step-body a:hover { text-decoration: underline; }
 
+    /* ── Test Drive ── */
+    .td-phase { background: white; border-radius: 14px; padding: 28px 32px; margin-bottom: 20px; box-shadow: 0 2px 14px rgba(0,0,0,0.06); }
+    .td-phase-header { display: flex; align-items: center; gap: 14px; margin-bottom: 20px; }
+    .td-phase-badge { background: #1a1a1a; color: white; font-size: 11px; font-weight: 700; letter-spacing: 2px; padding: 5px 12px; border-radius: 20px; white-space: nowrap; }
+    .td-phase-badge.red { background: #cc0000; }
+    .td-phase-badge.green { background: #2e7d32; }
+    .td-phase-badge.blue { background: #1565c0; }
+    .td-phase-badge.orange { background: #e65100; }
+    .td-phase-badge.purple { background: #6a1b9a; }
+    .td-phase h2 { font-size: 20px; font-weight: 600; margin: 0; }
+    .td-phase h3 { font-size: 15px; font-weight: 700; color: #cc0000; margin: 16px 0 10px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .td-checklist { list-style: none; }
+    .td-checklist li { display: flex; align-items: flex-start; gap: 12px; padding: 9px 0; border-bottom: 1px solid #f5f5f5; font-size: 15px; color: #333; cursor: pointer; user-select: none; }
+    .td-checklist li:last-child { border-bottom: none; }
+    .td-checklist li.checked { color: #aaa; text-decoration: line-through; }
+    .td-checkbox { width: 20px; height: 20px; border: 2px solid #ddd; border-radius: 5px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 13px; transition: all 0.15s; margin-top: 1px; }
+    .td-checklist li.checked .td-checkbox { background: #2e7d32; border-color: #2e7d32; color: white; }
+    .td-quote { background: #f7f7f7; border-left: 4px solid #cc0000; border-radius: 0 8px 8px 0; padding: 14px 18px; margin: 12px 0; font-size: 15px; color: #444; font-style: italic; }
+    .td-intervention { background: #fff5f5; border: 1px solid #ffcdd2; border-radius: 10px; padding: 20px 24px; margin-bottom: 10px; }
+    .td-intervention label { display: block; font-size: 14px; font-weight: 600; color: #c62828; margin-bottom: 8px; }
+    .td-intervention input { width: 100%; border: 1px solid #e0e0e0; border-radius: 6px; padding: 9px 12px; font-size: 15px; color: #333; font-family: inherit; outline: none; }
+    .td-intervention input:focus { border-color: #cc0000; }
+    .td-scorecard { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .td-score-item { background: #f9f9f9; border-radius: 10px; padding: 18px; }
+    .td-score-item label { display: block; font-size: 14px; font-weight: 600; margin-bottom: 10px; color: #333; }
+    .td-stars { display: flex; gap: 6px; }
+    .td-stars span { font-size: 24px; cursor: pointer; opacity: 0.25; transition: opacity 0.1s; line-height: 1; }
+    .td-stars span.lit { opacity: 1; }
+    .td-total-box { background: #1a1a1a; color: white; border-radius: 10px; padding: 22px 28px; display: flex; justify-content: space-between; align-items: center; }
+    .td-total-box .tnum { font-size: 40px; font-weight: 300; color: white; }
+    .td-total-box .tlbl { font-size: 12px; color: #888; text-transform: uppercase; letter-spacing: 1px; margin-top: 4px; }
+    .td-decision-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 6px; }
+    .td-decision-opt { border: 2px solid #e0e0e0; border-radius: 10px; padding: 18px 14px; text-align: center; cursor: pointer; transition: all 0.15s; }
+    .td-decision-opt:hover { border-color: #bbb; }
+    .td-decision-opt.selected-buy { border-color: #2e7d32; background: #f0fff4; }
+    .td-decision-opt.selected-rent { border-color: #1565c0; background: #e3f2fd; }
+    .td-decision-opt.selected-pass { border-color: #c62828; background: #fff5f5; }
+    .td-decision-opt .opt-icon { font-size: 26px; }
+    .td-decision-opt .opt-label { font-size: 15px; font-weight: 700; margin-top: 6px; }
+    .td-rule-box { border-radius: 12px; padding: 22px 28px; text-align: center; margin-top: 4px; }
+    .td-rule-box.buy { background: #e8f5e9; border: 2px solid #2e7d32; }
+    .td-rule-box.rent { background: #e3f2fd; border: 2px solid #1565c0; }
+    .td-rule-box.pass { background: #fff5f5; border: 2px solid #c62828; }
+    .td-rule-box h3 { font-size: 18px; margin-bottom: 6px; }
+    .td-rule-box p { font-size: 14px; color: #555; }
+    .td-warning { background: #fffbf0; border: 1px solid #ffe0b2; border-left: 4px solid #f57c00; border-radius: 10px; padding: 18px 22px; margin-top: 4px; font-size: 15px; color: #555; }
+    .td-warning strong { color: #e65100; }
+    @media (max-width: 640px) {
+      .td-scorecard, .td-decision-grid { grid-template-columns: 1fr; }
+    }
+
     /* ── Footer ── */
     .footer { background: #1a1a1a; color: #666; text-align: center; padding: 20px; font-size: 13px; margin-top: 40px; }
 
@@ -156,6 +207,7 @@
   <button onclick="showTab('compare', this)">Lease vs. Buy</button>
   <button onclick="showTab('numbers', this)">The Numbers</button>
   <button onclick="showTab('steps', this)">Next Steps</button>
+  <button onclick="showTab('testdrive', this)">🚗 Test Drive</button>
 </div>
 
 <div class="content">
@@ -703,6 +755,257 @@
     </div>
   </div>
 
+
+  <!-- ══════════════════════════════════════════ TEST DRIVE ══ -->
+  <div class="tab-panel" id="tab-testdrive">
+
+    <!-- Quick Checklist -->
+    <div class="td-phase">
+      <div class="td-phase-header">
+        <span class="td-phase-badge red">BEFORE YOU START</span>
+        <h2>Quick Pre-Drive Checklist</h2>
+      </div>
+      <ul class="td-checklist" id="pre-checks">
+        <li onclick="toggleCheck(this)"><span class="td-checkbox"></span><span>Assign roles — Driver / Observer / Parents</span></li>
+        <li onclick="toggleCheck(this)"><span class="td-checkbox"></span><span>Choose route: city + highway + tricky turns (20–30 min destination)</span></li>
+        <li onclick="toggleCheck(this)"><span class="td-checkbox"></span><span>FSD enabled and confirmed</span></li>
+        <li onclick="toggleCheck(this)"><span class="td-checkbox"></span><span>Trip reset / baseline set</span></li>
+        <li onclick="toggleCheck(this)"><span class="td-checkbox"></span><span>Everyone knows the goal: "Is FSD good enough for daily use — not just cool?"</span></li>
+      </ul>
+    </div>
+
+    <!-- Phase 0 -->
+    <div class="td-phase">
+      <div class="td-phase-header">
+        <span class="td-phase-badge">PHASE 0 · 0–5 MIN</span>
+        <h2>Setup (Parked)</h2>
+      </div>
+      <div class="td-quote">"We're testing if FSD is good enough for daily use — not if it's cool."</div>
+      <ul class="td-checklist">
+        <li onclick="toggleCheck(this)"><span class="td-checkbox"></span><span>Enter a real destination (~20–30 min away)</span></li>
+        <li onclick="toggleCheck(this)"><span class="td-checkbox"></span><span>Confirm FSD is enabled</span></li>
+        <li onclick="toggleCheck(this)"><span class="td-checkbox"></span><span>Reset trip / baseline</span></li>
+        <li onclick="toggleCheck(this)"><span class="td-checkbox"></span><span><strong>Ask:</strong> "Would you feel comfortable turning this on alone?"</span></li>
+      </ul>
+    </div>
+
+    <!-- Phase 1 -->
+    <div class="td-phase">
+      <div class="td-phase-header">
+        <span class="td-phase-badge blue">PHASE 1 · 5–25 MIN</span>
+        <h2>City Driving</h2>
+      </div>
+      <h3>Intersections</h3>
+      <ul class="td-checklist">
+        <li onclick="toggleCheck(this)"><span class="td-checkbox"></span><span>Is it slowing naturally or abruptly?</span></li>
+        <li onclick="toggleCheck(this)"><span class="td-checkbox"></span><span>Would you trust this at a busy intersection?</span></li>
+      </ul>
+      <h3>Left Turn Test <span style="color:#cc0000;font-size:12px;">(CRITICAL)</span></h3>
+      <ul class="td-checklist">
+        <li onclick="toggleCheck(this)"><span class="td-checkbox"></span><span>Does this feel safe or hesitant?</span></li>
+        <li onclick="toggleCheck(this)"><span class="td-checkbox"></span><span>Would you intervene here?</span></li>
+      </ul>
+      <h3>Pedestrians / Bikes</h3>
+      <ul class="td-checklist">
+        <li onclick="toggleCheck(this)"><span class="td-checkbox"></span><span>Did it react early enough?</span></li>
+      </ul>
+      <h3>Lane Positioning</h3>
+      <ul class="td-checklist">
+        <li onclick="toggleCheck(this)"><span class="td-checkbox"></span><span>Is it choosing the correct lane early?</span></li>
+      </ul>
+    </div>
+
+    <!-- Interventions -->
+    <div class="td-phase">
+      <div class="td-phase-header">
+        <span class="td-phase-badge red">MOST IMPORTANT</span>
+        <h2>Intervention Tracker</h2>
+      </div>
+      <p style="color:#666;font-size:15px;margin-bottom:18px;">Every time you feel like taking over, log it below. Be honest — this is your most important data.</p>
+      <div class="td-intervention">
+        <label>Intervention #1 — Why did you take over?</label>
+        <input type="text" placeholder="Describe what happened...">
+      </div>
+      <div class="td-intervention">
+        <label>Intervention #2 — Why did you take over?</label>
+        <input type="text" placeholder="Describe what happened...">
+      </div>
+      <div class="td-intervention">
+        <label>Intervention #3 — Why did you take over?</label>
+        <input type="text" placeholder="Describe what happened...">
+      </div>
+      <div class="td-intervention">
+        <label>Intervention #4 — Why did you take over?</label>
+        <input type="text" placeholder="Describe what happened...">
+      </div>
+      <div style="margin-top:14px;">
+        <div class="td-total-box">
+          <div>
+            <div class="tnum" id="intervention-count">0</div>
+            <div class="tlbl">Total Interventions</div>
+          </div>
+          <div style="font-size:14px;color:#888;max-width:260px;text-align:right;">Low = FSD handled it.<br>High = you didn't trust it.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Phase 2 -->
+    <div class="td-phase">
+      <div class="td-phase-header">
+        <span class="td-phase-badge green">PHASE 2 · 25–40 MIN</span>
+        <h2>Highway</h2>
+      </div>
+      <div class="td-quote">"Now we're testing confidence and smoothness."</div>
+      <ul class="td-checklist">
+        <li onclick="toggleCheck(this)"><span class="td-checkbox"></span><span>Was the merge smooth or awkward?</span></li>
+        <li onclick="toggleCheck(this)"><span class="td-checkbox"></span><span>Does it feel better than normal cruise control?</span></li>
+        <li onclick="toggleCheck(this)"><span class="td-checkbox"></span><span>Would you relax or stay tense?</span></li>
+      </ul>
+      <h3>Lane Changes</h3>
+      <ul class="td-checklist">
+        <li onclick="toggleCheck(this)"><span class="td-checkbox"></span><span>Did it feel human-like or robotic?</span></li>
+      </ul>
+    </div>
+
+    <!-- Phase 3 -->
+    <div class="td-phase">
+      <div class="td-phase-header">
+        <span class="td-phase-badge orange">PHASE 3 · 40–50 MIN</span>
+        <h2>Navigation + Decision Making</h2>
+      </div>
+      <ul class="td-checklist">
+        <li onclick="toggleCheck(this)"><span class="td-checkbox"></span><span>Miss a turn OR change destination mid-drive</span></li>
+        <li onclick="toggleCheck(this)"><span class="td-checkbox"></span><span>Did it recover smoothly?</span></li>
+        <li onclick="toggleCheck(this)"><span class="td-checkbox"></span><span>Is it planning ahead or reacting late?</span></li>
+      </ul>
+    </div>
+
+    <!-- Phase 4 -->
+    <div class="td-phase">
+      <div class="td-phase-header">
+        <span class="td-phase-badge purple">PHASE 4 · 50–60 MIN</span>
+        <h2>Parking / Tight Areas</h2>
+      </div>
+      <ul class="td-checklist">
+        <li onclick="toggleCheck(this)"><span class="td-checkbox"></span><span>Test parking lot or tight streets</span></li>
+        <li onclick="toggleCheck(this)"><span class="td-checkbox"></span><span>Does this feel controlled or risky?</span></li>
+        <li onclick="toggleCheck(this)"><span class="td-checkbox"></span><span>Would you actually use this feature?</span></li>
+      </ul>
+      <h3>Bonus — Night Driving (Optional)</h3>
+      <ul class="td-checklist">
+        <li onclick="toggleCheck(this)"><span class="td-checkbox"></span><span>Does performance change at night?</span></li>
+        <li onclick="toggleCheck(this)"><span class="td-checkbox"></span><span>Any visibility-related issues?</span></li>
+      </ul>
+    </div>
+
+    <!-- Live Scorecard -->
+    <div class="td-phase">
+      <div class="td-phase-header">
+        <span class="td-phase-badge">LIVE SCORECARD</span>
+        <h2>Rate During the Drive</h2>
+      </div>
+      <p style="color:#666;font-size:15px;margin-bottom:20px;">Tap stars while driving or immediately after each phase. Don't wait — gut reactions are the most honest.</p>
+      <div class="td-scorecard">
+        <div class="td-score-item">
+          <label>City Driving</label>
+          <div class="td-stars" data-key="city">
+            <span onclick="setScore('city',1)">★</span><span onclick="setScore('city',2)">★</span><span onclick="setScore('city',3)">★</span><span onclick="setScore('city',4)">★</span><span onclick="setScore('city',5)">★</span>
+          </div>
+        </div>
+        <div class="td-score-item">
+          <label>Highway</label>
+          <div class="td-stars" data-key="highway">
+            <span onclick="setScore('highway',1)">★</span><span onclick="setScore('highway',2)">★</span><span onclick="setScore('highway',3)">★</span><span onclick="setScore('highway',4)">★</span><span onclick="setScore('highway',5)">★</span>
+          </div>
+        </div>
+        <div class="td-score-item">
+          <label>Smoothness</label>
+          <div class="td-stars" data-key="smooth">
+            <span onclick="setScore('smooth',1)">★</span><span onclick="setScore('smooth',2)">★</span><span onclick="setScore('smooth',3)">★</span><span onclick="setScore('smooth',4)">★</span><span onclick="setScore('smooth',5)">★</span>
+          </div>
+        </div>
+        <div class="td-score-item">
+          <label>Trust</label>
+          <div class="td-stars" data-key="trust">
+            <span onclick="setScore('trust',1)">★</span><span onclick="setScore('trust',2)">★</span><span onclick="setScore('trust',3)">★</span><span onclick="setScore('trust',4)">★</span><span onclick="setScore('trust',5)">★</span>
+          </div>
+        </div>
+        <div class="td-score-item" style="grid-column: 1 / -1;">
+          <label>Stress Level <span style="font-weight:400;color:#888;">(5 = totally relaxed, 1 = very tense)</span></label>
+          <div class="td-stars" data-key="stress">
+            <span onclick="setScore('stress',1)">★</span><span onclick="setScore('stress',2)">★</span><span onclick="setScore('stress',3)">★</span><span onclick="setScore('stress',4)">★</span><span onclick="setScore('stress',5)">★</span>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:16px;">
+        <div class="td-total-box">
+          <div>
+            <div class="tnum" id="score-total">–</div>
+            <div class="tlbl">Score / 25</div>
+          </div>
+          <div style="font-size:14px;color:#888;text-align:right;">18+ = strong buy signal<br>12–17 = mixed<br>Under 12 = pass</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Final Questions -->
+    <div class="td-phase">
+      <div class="td-phase-header">
+        <span class="td-phase-badge red">DEBRIEF — DO THIS IMMEDIATELY AFTER</span>
+        <h2>Final Decision Questions</h2>
+      </div>
+
+      <h3>1. Would you use this every day?</h3>
+      <div class="td-decision-grid">
+        <div class="td-decision-opt" onclick="selectOpt(this,'q1','selected-buy')"><div class="opt-icon">✅</div><div class="opt-label">Yes</div></div>
+        <div class="td-decision-opt" onclick="selectOpt(this,'q1','selected-rent')"><div class="opt-icon">🤷</div><div class="opt-label">Sometimes</div></div>
+        <div class="td-decision-opt" onclick="selectOpt(this,'q1','selected-pass')"><div class="opt-icon">❌</div><div class="opt-label">No</div></div>
+      </div>
+
+      <h3 style="margin-top:20px;">2. Did it reduce or increase stress?</h3>
+      <div class="td-decision-grid">
+        <div class="td-decision-opt" onclick="selectOpt(this,'q2','selected-buy')"><div class="opt-icon">😌</div><div class="opt-label">Reduced</div></div>
+        <div class="td-decision-opt" onclick="selectOpt(this,'q2','selected-rent')"><div class="opt-icon">😐</div><div class="opt-label">Same</div></div>
+        <div class="td-decision-opt" onclick="selectOpt(this,'q2','selected-pass')"><div class="opt-icon">😰</div><div class="opt-label">Increased</div></div>
+      </div>
+
+      <h3 style="margin-top:20px;">3. Did you ever feel unsafe?</h3>
+      <div class="td-decision-grid" style="grid-template-columns:1fr 1fr;">
+        <div class="td-decision-opt" onclick="selectOpt(this,'q3','selected-buy')"><div class="opt-icon">🟢</div><div class="opt-label">No</div></div>
+        <div class="td-decision-opt" onclick="selectOpt(this,'q3','selected-pass')"><div class="opt-icon">🔴</div><div class="opt-label">Yes</div></div>
+      </div>
+      <div style="margin-top:10px;">
+        <input type="text" placeholder="If yes — when did you feel unsafe?" style="width:100%;border:1px solid #e0e0e0;border-radius:6px;padding:10px 14px;font-size:15px;font-family:inherit;outline:none;">
+      </div>
+    </div>
+
+    <!-- Decision Rule -->
+    <div class="td-phase">
+      <div class="td-phase-header">
+        <span class="td-phase-badge">THE VERDICT</span>
+        <h2>Decision Rule</h2>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:12px;">
+        <div class="td-rule-box buy">
+          <h3>✅ BUY</h3>
+          <p>Low interventions + high trust + stress reduced</p>
+        </div>
+        <div class="td-rule-box rent">
+          <h3>⚖️ RENT LONGER</h3>
+          <p>Mixed or inconsistent experience — keep testing</p>
+        </div>
+        <div class="td-rule-box pass">
+          <h3>❌ PASS</h3>
+          <p>Frequent interventions or low trust</p>
+        </div>
+      </div>
+      <div class="td-warning" style="margin-top:18px;">
+        <strong>Key reminder:</strong> If you don't track interventions + stress, you will overvalue the "wow" moments. The numbers tell the real story.
+      </div>
+    </div>
+
+  </div>
+
 </div><!-- end .content -->
 
 <div class="footer">
@@ -715,6 +1018,50 @@
     document.querySelectorAll('.tabs button').forEach(b => b.classList.remove('active'));
     document.getElementById('tab-' + name).classList.add('active');
     btn.classList.add('active');
+  }
+
+  // Test Drive interactivity
+  function toggleCheck(li) {
+    li.classList.toggle('checked');
+    li.querySelector('.td-checkbox').textContent = li.classList.contains('checked') ? '✓' : '';
+  }
+
+  var scores = {};
+  function setScore(key, val) {
+    scores[key] = val;
+    var stars = document.querySelectorAll('.td-stars[data-key="' + key + '"] span');
+    stars.forEach(function(s, i) { s.classList.toggle('lit', i < val); });
+    updateScoreTotal();
+  }
+
+  function updateScoreTotal() {
+    var keys = ['city','highway','smooth','trust','stress'];
+    var total = 0, filled = 0;
+    keys.forEach(function(k) { if (scores[k]) { total += scores[k]; filled++; } });
+    var el = document.getElementById('score-total');
+    if (el) el.textContent = filled > 0 ? total : '–';
+  }
+
+  // Intervention counter
+  document.addEventListener('input', function(e) {
+    if (e.target.closest('.td-intervention input')) {
+      var inputs = document.querySelectorAll('.td-intervention input');
+      var count = 0;
+      inputs.forEach(function(inp) { if (inp.value.trim()) count++; });
+      var el = document.getElementById('intervention-count');
+      if (el) el.textContent = count;
+    }
+  });
+
+  function selectOpt(el, group, cls) {
+    el.closest('.td-phase').querySelectorAll('[data-group="' + group + '"], .td-decision-opt').forEach(function(o) {
+      // only clear siblings in same grid
+    });
+    var grid = el.closest('.td-decision-grid');
+    grid.querySelectorAll('.td-decision-opt').forEach(function(o) {
+      o.classList.remove('selected-buy','selected-rent','selected-pass');
+    });
+    el.classList.add(cls);
   }
 
   function dollar(n) {
