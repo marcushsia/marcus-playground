@@ -3,279 +3,653 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Spring Break 2026 · Utah & Vegas</title>
+  <title>Spring Break 2026 · Hsia Family</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --rust:   #c0522a;
-      --gold:   #d4933a;
-      --sand:   #f5ede0;
-      --slate:  #2c3e50;
-      --muted:  #6b7a8d;
-      --white:  #ffffff;
-      --card-bg:#fffaf5;
-      --border: #e8d9c5;
-      --prayer: #4a7c59;
-      --prayer-light: #edf5f0;
-      --prayer-border: #a8d5b5;
+      --terracotta: #C0603A;
+      --terracotta-light: #E8836A;
+      --terracotta-bg: #FDF0EA;
+      --slate: #2C3E50;
+      --slate-light: #4A6278;
+      --snow: #F9F9F9;
+      --sand: #F0E4D0;
+      --gold: #D4A844;
+      --gold-light: #F0C96A;
+      --blue-ski: #3B6FA0;
+      --blue-ski-light: #6B9FC4;
+      --blue-ski-bg: #EBF2F9;
+      --vegas-dark: #1A1230;
+      --vegas-mid: #2D2148;
+      --text: #2C2C2C;
+      --text-muted: #6B7280;
+      --radius: 16px;
+      --shadow: 0 4px 20px rgba(0,0,0,0.08);
+      --shadow-md: 0 8px 32px rgba(0,0,0,0.12);
     }
 
     html { scroll-behavior: smooth; }
 
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background: var(--sand);
-      color: var(--slate);
+      font-family: 'Inter', sans-serif;
+      background: var(--snow);
+      color: var(--text);
       line-height: 1.6;
     }
 
+    .back-link {
+      position: absolute;
+      top: 1.25rem;
+      left: 1.5rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: rgba(255,255,255,0.45);
+      text-decoration: none;
+      letter-spacing: 0.04em;
+      transition: color 0.15s;
+      z-index: 10;
+    }
+    .back-link:hover { color: rgba(255,255,255,0.85); }
+
     /* ── HERO ── */
     .hero {
-      position: relative;
-      background: linear-gradient(160deg, #8b4513 0%, #c0522a 35%, #d4933a 70%, #e8a84e 100%);
-      color: var(--white);
+      background: linear-gradient(135deg, #1a1a2e 0%, #2C3E50 40%, #4a2c1a 100%);
+      color: white;
       text-align: center;
-      padding: 80px 24px 64px;
+      padding: 5rem 2rem 4rem;
+      position: relative;
       overflow: hidden;
     }
     .hero::before {
       content: '';
       position: absolute;
       inset: 0;
-      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-      pointer-events: none;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
     }
-    .hero-back {
-      position: absolute;
-      top: 20px;
-      left: 24px;
-      font-size: 13px;
-      color: rgba(255,255,255,0.75);
-      text-decoration: none;
-      letter-spacing: 0.03em;
-      transition: color 0.2s;
-    }
-    .hero-back:hover { color: var(--white); }
-    .hero-eyebrow {
-      font-size: 12px;
+    .hero-badge {
+      display: inline-block;
+      background: rgba(212, 168, 68, 0.25);
+      border: 1px solid rgba(212, 168, 68, 0.5);
+      color: var(--gold-light);
+      font-size: 0.78rem;
       font-weight: 600;
-      letter-spacing: 0.15em;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
-      color: rgba(255,255,255,0.7);
-      margin-bottom: 16px;
+      padding: 0.35rem 1rem;
+      border-radius: 999px;
+      margin-bottom: 1.25rem;
     }
     .hero h1 {
-      font-size: clamp(2.2rem, 6vw, 3.8rem);
-      font-weight: 800;
-      letter-spacing: -0.02em;
-      line-height: 1.1;
-      margin-bottom: 12px;
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.2rem, 6vw, 4rem);
+      font-weight: 700;
+      line-height: 1.15;
+      margin-bottom: 0.75rem;
     }
-    .hero-sub {
+    .hero h1 span { color: var(--gold-light); }
+    .hero-subtitle {
       font-size: clamp(1rem, 2.5vw, 1.25rem);
-      color: rgba(255,255,255,0.82);
-      margin-bottom: 28px;
+      color: rgba(255,255,255,0.7);
+      font-weight: 300;
+      letter-spacing: 0.04em;
+      margin-bottom: 2rem;
     }
-    .hero-tags {
+    .hero-stops {
       display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
+      align-items: center;
       justify-content: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
     }
-    .hero-tag {
-      background: rgba(255,255,255,0.18);
-      border: 1px solid rgba(255,255,255,0.3);
-      border-radius: 20px;
-      padding: 5px 14px;
-      font-size: 13px;
+    .hero-stop {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      color: white;
+      padding: 0.5rem 1.25rem;
+      border-radius: 999px;
+      font-size: 0.88rem;
       font-weight: 500;
-      color: var(--white);
     }
+    .hero-arrow { color: rgba(255,255,255,0.35); font-size: 1rem; }
 
-    /* ── LAYOUT ── */
-    .page { max-width: 860px; margin: 0 auto; padding: 48px 20px 80px; }
-
-    /* ── SECTION TITLES ── */
-    .section-title {
-      font-size: 11px;
+    /* ── SECTION WRAPPER ── */
+    section { padding: 4rem 1.5rem; }
+    .container { max-width: 960px; margin: 0 auto; }
+    .section-label {
+      font-size: 0.72rem;
       font-weight: 700;
       letter-spacing: 0.14em;
       text-transform: uppercase;
-      color: var(--rust);
-      margin-bottom: 20px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
+      color: var(--text-muted);
+      margin-bottom: 0.4rem;
     }
-    .section-title::after {
-      content: '';
-      flex: 1;
-      height: 1px;
-      background: var(--border);
-    }
-
-    /* ── CARDS ── */
-    .card {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 24px 28px;
-      margin-bottom: 16px;
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.5rem, 3.5vw, 2.2rem);
+      font-weight: 600;
+      color: var(--slate);
+      margin-bottom: 2rem;
     }
 
     /* ── ITINERARY ── */
-    .day-block { margin-bottom: 32px; }
-    .day-block:last-child { margin-bottom: 0; }
-    .day-label {
-      display: inline-block;
-      background: var(--rust);
-      color: var(--white);
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      padding: 4px 12px;
-      border-radius: 20px;
-      margin-bottom: 10px;
-    }
-    .day-title {
-      font-size: 1.1rem;
-      font-weight: 700;
-      color: var(--slate);
-      margin-bottom: 8px;
-    }
-    .day-items { list-style: none; }
-    .day-items li {
-      padding: 5px 0 5px 16px;
-      border-left: 2px solid var(--border);
-      margin-left: 4px;
-      font-size: 0.95rem;
-      color: #4a5568;
-    }
-    .day-items li + li { margin-top: 2px; }
-    .day-items a { color: var(--rust); text-decoration: none; }
-    .day-items a:hover { text-decoration: underline; }
-
-    /* ── WEATHER ── */
-    .weather-grid {
+    #itinerary { background: white; }
+    .day-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 14px;
+      gap: 1rem;
     }
-    .weather-card {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 16px 18px;
+    .day-card {
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      display: grid;
+      grid-template-columns: 80px 1fr;
     }
-    .weather-date {
-      font-size: 11px;
+    .day-card .day-sidebar {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 1.25rem 0.5rem;
+      text-align: center;
+      gap: 0.25rem;
+    }
+    .day-card .day-emoji { font-size: 1.5rem; }
+    .day-card .day-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
       font-weight: 700;
+      line-height: 1;
+      color: white;
+    }
+    .day-card .day-dow {
+      font-size: 0.65rem;
+      font-weight: 600;
       letter-spacing: 0.08em;
       text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 4px;
+      color: rgba(255,255,255,0.75);
     }
-    .weather-cond {
-      font-size: 1rem;
-      font-weight: 700;
-      color: var(--slate);
-      margin-bottom: 4px;
+    .day-card .day-body {
+      padding: 1.1rem 1.25rem;
+      background: white;
     }
-    .weather-temp {
-      font-size: 0.9rem;
-      color: var(--rust);
+    .day-card .day-date-full {
+      font-size: 0.75rem;
       font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 0.35rem;
     }
-    .weather-note {
-      font-size: 0.8rem;
-      color: var(--muted);
-      margin-top: 6px;
-      font-style: italic;
+    .day-card .day-activities {
+      font-size: 0.9rem;
+      color: var(--text);
+      line-height: 1.7;
     }
-
-    /* ── LODGING ── */
-    .lodging-block { margin-bottom: 20px; }
-    .lodging-block:last-child { margin-bottom: 0; }
-    .lodging-name {
+    .day-card .day-activities li {
+      list-style: none;
+      padding-left: 1rem;
+      position: relative;
+    }
+    .day-card .day-activities li::before {
+      content: '·';
+      position: absolute;
+      left: 0;
+      color: var(--text-muted);
       font-weight: 700;
-      font-size: 1rem;
-      color: var(--slate);
-      margin-bottom: 4px;
     }
-    .lodging-addr {
-      font-size: 0.88rem;
-      color: var(--muted);
-      margin-bottom: 6px;
-    }
-    .lodging-link {
-      font-size: 0.85rem;
-      color: var(--rust);
-      text-decoration: none;
-      font-weight: 500;
-    }
-    .lodging-link:hover { text-decoration: underline; }
-
-    /* ── ANSWERED PRAYERS ── */
-    .prayer-section { margin-top: 48px; }
-    .prayer-section .section-title {
-      color: var(--prayer);
-    }
-    .prayer-section .section-title::after {
-      background: var(--prayer-border);
-    }
-    .prayer-intro {
-      font-size: 0.95rem;
-      color: var(--muted);
-      margin-bottom: 24px;
-      font-style: italic;
-    }
-    .prayer-card {
-      background: var(--prayer-light);
-      border: 1px solid var(--prayer-border);
-      border-left: 4px solid var(--prayer);
-      border-radius: 10px;
-      padding: 20px 24px;
-      margin-bottom: 14px;
-    }
-    .prayer-card:last-child { margin-bottom: 0; }
-    .prayer-title {
-      font-size: 0.95rem;
-      font-weight: 700;
-      color: var(--prayer);
-      margin-bottom: 6px;
+    .day-card .day-lodging {
+      margin-top: 0.65rem;
+      font-size: 0.78rem;
+      color: var(--text-muted);
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 0.35rem;
+      flex-wrap: wrap;
     }
-    .prayer-title::before {
-      content: '✦';
-      font-size: 0.75rem;
-      opacity: 0.7;
+    .day-card .day-lodging a {
+      color: var(--blue-ski);
+      text-decoration: none;
+      font-weight: 500;
+      border-bottom: 1px dashed var(--blue-ski-light);
     }
-    .prayer-body {
-      font-size: 0.92rem;
-      color: #3d5246;
-      line-height: 1.65;
+    .day-card .day-lodging a:hover { color: var(--terracotta); }
+    .day-weather {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-top: 0.55rem;
+    }
+    .day-weather .w-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      font-size: 0.74rem;
+      font-weight: 600;
+      padding: 0.2rem 0.6rem;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+    .w-pill-warm  { background: #FEF3C7; color: #92400E; }
+    .w-pill-cold  { background: var(--blue-ski-bg); color: #1E3F60; }
+    .w-pill-vegas { background: #F5F0FF; color: #6B3FA0; }
+    .w-pill-split-label {
+      font-size: 0.65rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-muted);
+    }
+    .optional-callout {
+      margin-top: 0.7rem;
+      background: #F0FAF4;
+      border-left: 3px solid #4CAF82;
+      border-radius: 0 8px 8px 0;
+      padding: 0.65rem 0.9rem;
+      font-size: 0.78rem;
+    }
+    .optional-callout .oc-header {
+      font-weight: 700;
+      color: #2D7A56;
+      margin-bottom: 0.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .optional-callout .oc-header a {
+      color: #2D7A56;
+      text-decoration: none;
+      border-bottom: 1px dashed #7DC4A0;
+    }
+    .optional-callout .oc-header a:hover { color: var(--terracotta); }
+    .optional-callout .oc-badge {
+      display: inline-block;
+      background: #D1F5E3;
+      color: #1E6640;
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      padding: 0.1rem 0.45rem;
+      border-radius: 999px;
+      margin-right: 0.3rem;
+    }
+    .optional-callout .oc-detail {
+      color: #4A7A60;
+      font-size: 0.72rem;
+      line-height: 1.6;
+    }
+    .optional-callout .oc-prices {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+      margin-top: 0.35rem;
+    }
+    .optional-callout .oc-price {
+      background: white;
+      border-radius: 6px;
+      padding: 0.2rem 0.5rem;
+      font-size: 0.72rem;
+      color: var(--slate);
+      white-space: nowrap;
+    }
+    .optional-callout .oc-price strong { color: #2D7A56; }
+    .rental-callout {
+      margin-top: 0.7rem;
+      background: var(--blue-ski-bg);
+      border-left: 3px solid var(--blue-ski);
+      border-radius: 0 8px 8px 0;
+      padding: 0.65rem 0.9rem;
+      font-size: 0.78rem;
+    }
+    .rental-callout .rc-header {
+      font-weight: 700;
+      color: var(--blue-ski);
+      margin-bottom: 0.3rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .rental-callout .rc-header a {
+      color: var(--blue-ski);
+      text-decoration: none;
+      border-bottom: 1px dashed var(--blue-ski-light);
+    }
+    .rental-callout .rc-note {
+      color: var(--slate-light);
+      font-size: 0.72rem;
+      margin-bottom: 0.45rem;
+    }
+    .rental-callout .rc-prices {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+    }
+    .rental-callout .rc-price {
+      background: white;
+      border-radius: 6px;
+      padding: 0.2rem 0.5rem;
+      font-size: 0.72rem;
+      color: var(--slate);
+      white-space: nowrap;
+    }
+    .rental-callout .rc-price strong { color: var(--blue-ski); }
+    .rental-callout .rc-discount {
+      margin-top: 0.4rem;
+      font-size: 0.7rem;
+      color: var(--terracotta);
+      font-weight: 600;
     }
 
-    /* ── DIVIDER ── */
-    .divider { border: none; border-top: 1px solid var(--border); margin: 40px 0; }
+    /* stop-based color themes */
+    .stop-zion .day-sidebar  { background: linear-gradient(180deg, var(--terracotta) 0%, #a04d2a 100%); }
+    .stop-zion .day-date-full { color: var(--terracotta); }
+    .stop-brian .day-sidebar { background: linear-gradient(180deg, var(--blue-ski) 0%, #2a537a 100%); }
+    .stop-brian .day-date-full { color: var(--blue-ski); }
+    .stop-vegas .day-sidebar { background: linear-gradient(180deg, #5a3d8a 0%, var(--vegas-dark) 100%); }
+    .stop-vegas .day-date-full { color: #8B6FCC; }
+    .stop-depart .day-sidebar { background: linear-gradient(180deg, #6b7280 0%, #4b5563 100%); }
+    .stop-depart .day-date-full { color: #6b7280; }
+
+    /* ── DESTINATION HIGHLIGHTS ── */
+    #highlights { background: var(--sand); }
+    .dest-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.25rem;
+    }
+    .dest-card {
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+    }
+    .dest-card .dest-header {
+      padding: 1.75rem 1.5rem 1.25rem;
+      color: white;
+      position: relative;
+    }
+    .dest-card .dest-icon { font-size: 2.2rem; margin-bottom: 0.5rem; display: block; }
+    .dest-card .dest-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+    .dest-card .dest-sub {
+      font-size: 0.8rem;
+      opacity: 0.75;
+      margin-top: 0.2rem;
+    }
+    .dest-card .dest-body {
+      padding: 1.25rem 1.5rem;
+      background: white;
+      font-size: 0.875rem;
+      color: var(--text);
+      line-height: 1.75;
+    }
+    .dest-card .dest-body ul { list-style: none; }
+    .dest-card .dest-body li { padding: 0.15rem 0 0.15rem 1.25rem; position: relative; }
+    .dest-card .dest-body li::before { content: '→'; position: absolute; left: 0; opacity: 0.4; font-size: 0.75rem; top: 0.3rem; }
+    .dest-card .dest-tag {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 0.2rem 0.65rem;
+      border-radius: 999px;
+      margin-bottom: 0.75rem;
+    }
+
+    .dest-zion .dest-header { background: linear-gradient(135deg, #C0603A 0%, #8B3A1E 100%); }
+    .dest-zion .dest-tag { background: var(--terracotta-bg); color: var(--terracotta); }
+    .dest-brian .dest-header { background: linear-gradient(135deg, #3B6FA0 0%, #1E3F60 100%); }
+    .dest-brian .dest-tag { background: var(--blue-ski-bg); color: var(--blue-ski); }
+    .dest-vegas .dest-header { background: linear-gradient(135deg, #5a3d8a 0%, #1A1230 100%); }
+    .dest-vegas .dest-tag { background: #F5F0FF; color: #6B3FA0; }
+
+    /* ── WEATHER ── */
+    #weather { background: white; }
+    .weather-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+    }
+    .weather-card {
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      box-shadow: var(--shadow);
+      text-align: center;
+    }
+    .weather-card .w-icon { font-size: 2rem; margin-bottom: 0.5rem; }
+    .weather-card .w-place {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+    }
+    .weather-card .w-temps {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 0.6rem;
+    }
+    .weather-card .w-high, .weather-card .w-low {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.1rem;
+    }
+    .weather-card .w-temp-val {
+      font-size: 1.5rem;
+      font-weight: 700;
+      line-height: 1;
+    }
+    .weather-card .w-temp-label {
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+    .weather-card .w-note {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 0.5rem;
+    }
+    .weather-card .w-divider { width: 1px; background: #e5e7eb; align-self: stretch; }
+
+    .wc-zion { background: var(--terracotta-bg); }
+    .wc-zion .w-high .w-temp-val { color: var(--terracotta); }
+    .wc-zion .w-low .w-temp-val  { color: var(--slate-light); }
+    .wc-brian { background: var(--blue-ski-bg); }
+    .wc-brian .w-high .w-temp-val { color: var(--blue-ski); }
+    .wc-brian .w-low .w-temp-val  { color: #1E3F60; }
+    .wc-vegas { background: #F5F0FF; }
+    .wc-vegas .w-high .w-temp-val { color: #6B3FA0; }
+    .wc-vegas .w-low .w-temp-val  { color: var(--slate-light); }
+
+    /* ── DRIVE TIMES ── */
+    #drives { background: var(--slate); }
+    #drives .section-label { color: rgba(255,255,255,0.45); }
+    #drives .section-title { color: white; }
+    .drive-timeline {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+    .drive-leg {
+      display: grid;
+      grid-template-columns: 1fr 90px 1fr;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .drive-origin, .drive-dest {
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: rgba(255,255,255,0.85);
+    }
+    .drive-dest { text-align: right; }
+    .drive-middle {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.2rem;
+    }
+    .drive-time-pill {
+      background: var(--gold);
+      color: var(--slate);
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 0.25rem 0.6rem;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+    .drive-arrow { color: var(--gold); font-size: 1.1rem; }
+    .drive-divider {
+      height: 1px;
+      background: rgba(255,255,255,0.08);
+      margin: 1rem 0;
+    }
+
+    /* ── PACKING LIST ── */
+    #packing { background: var(--snow); }
+    .pack-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.25rem;
+    }
+    .pack-card {
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+    .pack-card .pack-header {
+      padding: 1.25rem 1.5rem 1rem;
+      color: white;
+    }
+    .pack-card .pack-icon { font-size: 1.75rem; margin-bottom: 0.4rem; display: block; }
+    .pack-card .pack-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+    }
+    .pack-card .pack-sub {
+      font-size: 0.75rem;
+      opacity: 0.75;
+      margin-top: 0.15rem;
+    }
+    .pack-card .pack-body {
+      padding: 1.25rem 1.5rem;
+      background: white;
+    }
+    .pack-card .pack-body ul { list-style: none; }
+    .pack-card .pack-body li {
+      font-size: 0.875rem;
+      color: var(--text);
+      padding: 0.28rem 0 0.28rem 1.5rem;
+      position: relative;
+      line-height: 1.4;
+      border-bottom: 1px solid #f3f4f6;
+    }
+    .pack-card .pack-body li:last-child { border-bottom: none; }
+    .pack-card .pack-body li::before {
+      content: '☐';
+      position: absolute;
+      left: 0;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+    .pack-card .pack-note {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      font-style: italic;
+      margin-top: 0.75rem;
+      padding-top: 0.75rem;
+      border-top: 1px dashed #e5e7eb;
+    }
+    .pack-zion   .pack-header { background: linear-gradient(135deg, #C0603A 0%, #8B3A1E 100%); }
+    .pack-brian  .pack-header { background: linear-gradient(135deg, #3B6FA0 0%, #1E3F60 100%); }
+    .pack-vegas  .pack-header { background: linear-gradient(135deg, #5a3d8a 0%, #1A1230 100%); }
+    .pack-general .pack-header { background: linear-gradient(135deg, #4A6278 0%, #2C3E50 100%); }
+
+    /* ── ANSWERED PRAYERS ── */
+    #prayers { background: #0d1f17; }
+    #prayers .section-label { color: rgba(255,255,255,0.4); }
+    #prayers .section-title { color: white; }
+    .prayer-grid {
+      display: grid;
+      gap: 1rem;
+    }
+    .prayer-card {
+      background: white;
+      border-radius: var(--radius);
+      border-left: 5px solid #4CAF82;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+    .prayer-card-inner {
+      padding: 1.4rem 1.6rem;
+    }
+    .prayer-marker {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+      color: #2D7A56;
+      margin-bottom: 0.4rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .prayer-marker::before {
+      content: '';
+      display: inline-block;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: #4CAF82;
+    }
+    .prayer-card-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--slate);
+      margin-bottom: 0.6rem;
+      line-height: 1.3;
+    }
+    .prayer-card-body {
+      font-size: 0.9rem;
+      color: #3d4a3f;
+      line-height: 1.75;
+    }
 
     /* ── FOOTER ── */
     footer {
+      background: var(--slate);
+      color: rgba(255,255,255,0.5);
       text-align: center;
-      padding: 32px 20px;
+      padding: 2rem 1.5rem;
       font-size: 0.8rem;
-      color: var(--muted);
-      border-top: 1px solid var(--border);
     }
+    footer strong { color: rgba(255,255,255,0.8); font-family: 'Playfair Display', serif; }
 
     /* ── RESPONSIVE ── */
-    @media (max-width: 540px) {
-      .hero { padding: 72px 20px 48px; }
-      .card { padding: 18px 20px; }
+    @media (max-width: 600px) {
+      .day-card { grid-template-columns: 68px 1fr; }
+      .day-card .day-num { font-size: 1.3rem; }
+      .drive-leg {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+      .drive-dest { text-align: center; }
+      .drive-middle { flex-direction: row; justify-content: center; gap: 0.5rem; }
     }
   </style>
 </head>
@@ -283,214 +657,513 @@
 
   <!-- HERO -->
   <header class="hero">
-    <a class="hero-back" href="../../">← Back</a>
-    <p class="hero-eyebrow">March 15 – 20, 2026</p>
-    <h1>Spring Break 2026</h1>
-    <p class="hero-sub">Utah Canyons · Brian Head · Las Vegas</p>
-    <div class="hero-tags">
-      <span class="hero-tag">✈ Austin → Las Vegas</span>
-      <span class="hero-tag">🏜 Zion National Park</span>
-      <span class="hero-tag">⛷ Brian Head Resort</span>
-      <span class="hero-tag">🎰 Las Vegas</span>
+    <a class="back-link" href="../">&#8592; Back</a>
+    <div class="hero-badge">March 15 – 20, 2026</div>
+    <h1>Spring Break <span>2026</span></h1>
+    <p class="hero-subtitle">Yeng/Hsia Family Trip · Utah &amp; Las Vegas</p>
+    <div class="hero-stops">
+      <span class="hero-stop">🏔️ Zion National Park</span>
+      <span class="hero-arrow">→</span>
+      <span class="hero-stop">⛷️ Brian Head Resort</span>
+      <span class="hero-arrow">→</span>
+      <span class="hero-stop">🎰 Las Vegas</span>
     </div>
   </header>
 
-  <div class="page">
+  <!-- ITINERARY -->
+  <section id="itinerary">
+    <div class="container">
+      <p class="section-label">Day by Day</p>
+      <h2 class="section-title">The Itinerary</h2>
+      <div class="day-grid">
 
-    <!-- ITINERARY -->
-    <section>
-      <p class="section-title">Day-by-Day Itinerary</p>
-
-      <div class="card">
-
-        <div class="day-block">
-          <span class="day-label">March 15 · Sunday</span>
-          <p class="day-title">Fly In · Drive to Zion Area</p>
-          <ul class="day-items">
-            <li>Fly Austin → Las Vegas</li>
-            <li>Pick up rental car and drive to Hurricane, UT</li>
-            <li>Grocery run — stock up for the week</li>
-            <li>Check in to Airbnb and rest up</li>
-          </ul>
+        <!-- March 15 -->
+        <div class="day-card stop-zion">
+          <div class="day-sidebar">
+            <span class="day-emoji">✈️</span>
+            <span class="day-num">15</span>
+            <span class="day-dow">Sun</span>
+          </div>
+          <div class="day-body">
+            <div class="day-date-full">March 15 · Arrival Day</div>
+            <div class="day-weather">
+              <span class="w-pill-split-label">LAS</span>
+              <span class="w-pill w-pill-vegas">☀️ Hi 82° · Lo 60°</span>
+              <span class="w-pill-split-label">→ Hurricane</span>
+              <span class="w-pill w-pill-warm">☀️ Hi 72° · Lo 44° · Gusty</span>
+            </div>
+            <ul class="day-activities">
+              <li>Fly into Las Vegas</li>
+              <li>Drive to Hurricane, UT (~2 hr 30 min)</li>
+              <li>Buy groceries &amp; supplies</li>
+              <li>Check in &amp; relax</li>
+            </ul>
+            <div class="day-lodging">
+              🏠 306 East 500 North, Hurricane, UT 84737 ·
+              <a href="https://www.airbnb.com/rooms/1222514595795308412" target="_blank">Airbnb listing ↗</a>
+            </div>
+          </div>
         </div>
 
-        <div class="day-block">
-          <span class="day-label">March 16 · Monday</span>
-          <p class="day-title">The Narrows · Drive to Brian Head</p>
-          <ul class="day-items">
-            <li>Pick up rental gear at <a href="https://zionoutfitter.com/" target="_blank">Zion Outfitter</a></li>
-            <li>Hike The Narrows in Zion National Park</li>
-            <li>Optional: post-hike shower at <a href="https://zionoutfitter.com/showers/" target="_blank">Zion Outfitter</a></li>
-            <li>Drive to Brian Head and check in to VRBO</li>
-          </ul>
+        <!-- March 16 -->
+        <div class="day-card stop-zion">
+          <div class="day-sidebar">
+            <span class="day-emoji">🏔️</span>
+            <span class="day-num">16</span>
+            <span class="day-dow">Mon</span>
+          </div>
+          <div class="day-body">
+            <div class="day-date-full">March 16 · Zion Day</div>
+            <div class="day-weather">
+              <span class="w-pill w-pill-warm">☀️ Hi 79° · Lo 42°</span>
+            </div>
+            <ul class="day-activities">
+              <li>Pick up rental gear — <a href="https://zionoutfitter.com/" target="_blank" style="color:var(--terracotta);text-decoration:none;border-bottom:1px dashed var(--terracotta-light);font-weight:500;">Zion Outfitter ↗</a></li>
+              <li>Hike The Narrows, Zion National Park</li>
+              <li>Drive to Brian Head (~1 hr 45 min)</li>
+              <li>Check into Brian Head lodging</li>
+            </ul>
+            <div class="optional-callout">
+              <div class="oc-header">
+                <span class="oc-badge">Optional</span>
+                🚿 Post-hike shower — <a href="https://zionoutfitter.com/showers/" target="_blank">Zion Outfitter ↗</a>
+              </div>
+              <div class="oc-detail">Clean up before the drive to Brian Head · Located near Zion park entrance</div>
+            </div>
+            <div class="day-lodging">
+              🏠 259 Village Way, Brian Head, UT 84719 ·
+              <a href="https://www.vrbo.com/5015069" target="_blank">VRBO listing ↗</a>
+            </div>
+          </div>
         </div>
 
-        <div class="day-block">
-          <span class="day-label">March 17 · Tuesday</span>
-          <p class="day-title">Ski Day 1 · Brian Head Resort</p>
-          <ul class="day-items">
-            <li>Pick up ski rentals at Georg's Rental Shop (walk-in only — arrive early)</li>
-            <li>Full ski day at Brian Head Resort</li>
-            <li>Dinner in Brian Head</li>
-          </ul>
+        <!-- March 17 -->
+        <div class="day-card stop-brian">
+          <div class="day-sidebar">
+            <span class="day-emoji">⛷️</span>
+            <span class="day-num">17</span>
+            <span class="day-dow">Tue</span>
+          </div>
+          <div class="day-body">
+            <div class="day-date-full">March 17 · Ski Day 1</div>
+            <div class="day-weather">
+              <span class="w-pill w-pill-cold">🌨️ Hi 28° · Lo 14° · Light snow · Windy</span>
+            </div>
+            <ul class="day-activities">
+              <li>Pick up ski rentals at Georg's Rental Shop — <a href="https://www.georgsskishop.com/rentals" target="_blank" style="color:var(--blue-ski);text-decoration:none;border-bottom:1px dashed var(--blue-ski-light);font-weight:500;">georgsskishop.com ↗</a></li>
+              <li>Full ski day at Brian Head Resort</li>
+              <li>Arrive early to beat lift lines</li>
+              <li>Dinner in Brian Head</li>
+            </ul>
+            <div class="rental-callout">
+              <div class="rc-header">🎿 Georg's Rental Shop · Walk-in only, first-come first-serve</div>
+              <div class="rc-note">Skis include boots &amp; poles · Snowboard packages include board &amp; boots · Equipment tuned daily</div>
+              <div class="rc-prices">
+                <span class="rc-price">Sport <strong>$32</strong></span>
+                <span class="rc-price">Performance <strong>$39</strong></span>
+                <span class="rc-price">High Perf. <strong>$49</strong></span>
+                <span class="rc-price">Boots only <strong>$18</strong></span>
+                <span class="rc-price">Kids 6–12 <strong>$20</strong></span>
+                <span class="rc-price">Kids 5&amp;under <strong>$10</strong></span>
+              </div>
+              <div class="rc-discount">★ $2/person off for multi-day rentals — applies to us (Mar 17–18)</div>
+            </div>
+          </div>
         </div>
 
-        <div class="day-block">
-          <span class="day-label">March 18 · Wednesday</span>
-          <p class="day-title">Ski Day 2 · Drive to Vegas</p>
-          <ul class="day-items">
-            <li>Morning ski session — Brian Head Resort</li>
-            <li>Optional: pool, hot tub &amp; lazy river at <a href="https://www.cedarcityut.gov/897/hours" target="_blank">Cedar City Recreation Center</a> (Adults $5 · Youth $4.50)</li>
-            <li>Drive to Las Vegas and check in</li>
-          </ul>
+        <!-- March 18 -->
+        <div class="day-card stop-brian">
+          <div class="day-sidebar">
+            <span class="day-emoji">⛷️</span>
+            <span class="day-num">18</span>
+            <span class="day-dow">Wed</span>
+          </div>
+          <div class="day-body">
+            <div class="day-date-full">March 18 · Ski Day 2 → Vegas</div>
+            <div class="day-weather">
+              <span class="w-pill-split-label">AM</span>
+              <span class="w-pill w-pill-cold">🌨️ Hi 28° · Early snow showers</span>
+              <span class="w-pill-split-label">PM → LAS</span>
+              <span class="w-pill w-pill-vegas">☀️ Hi 85°</span>
+            </div>
+            <ul class="day-activities">
+              <li>Full ski day at Brian Head</li>
+              <li>Drive to Las Vegas (~3 hr)</li>
+              <li>Check into Vegas Airbnb</li>
+            </ul>
+            <div class="optional-callout">
+              <div class="oc-header">
+                <span class="oc-badge">Optional</span>
+                🏊 After ski — <a href="https://www.cedarcityut.gov/897/hours" target="_blank">Cedar City Recreation Center ↗</a>
+              </div>
+              <div class="oc-detail">Showers · Pool · Hot tub · Lazy river · Weight room · On the way to Las Vegas · Daily admission:</div>
+              <div class="oc-prices">
+                <span class="oc-price">Adults (18–62) <strong>$5.00</strong></span>
+                <span class="oc-price">Youth (4–17) <strong>$4.50</strong></span>
+                <span class="oc-price">Senior (63+) <strong>$4.50</strong></span>
+              </div>
+            </div>
+            <div class="day-lodging">
+              🏠 Las Vegas ·
+              <a href="https://www.airbnb.com/rooms/1456967535695544159" target="_blank">Airbnb listing ↗</a>
+            </div>
+          </div>
         </div>
 
-        <div class="day-block">
-          <span class="day-label">March 19 · Thursday</span>
-          <p class="day-title">Vegas Day 1</p>
-          <ul class="day-items">
-            <li>Explore the Strip</li>
-            <li>Restaurants, shows, and leisure time</li>
-          </ul>
+        <!-- March 19 -->
+        <div class="day-card stop-vegas">
+          <div class="day-sidebar">
+            <span class="day-emoji">🎰</span>
+            <span class="day-num">19</span>
+            <span class="day-dow">Thu</span>
+          </div>
+          <div class="day-body">
+            <div class="day-date-full">March 19 · Vegas Day</div>
+            <div class="day-weather">
+              <span class="w-pill w-pill-vegas">☀️ Hi 88° · Lo 62° · Record heat</span>
+            </div>
+            <ul class="day-activities">
+              <li>Vegas exploration</li>
+              <li>Restaurants &amp; shows</li>
+            </ul>
+          </div>
         </div>
 
-        <div class="day-block" style="margin-bottom:0">
-          <span class="day-label">March 20 · Friday</span>
-          <p class="day-title">Vegas Day 2 · Fly Home</p>
-          <ul class="day-items">
-            <li>Vegas exploration — morning and afternoon</li>
-            <li>Airport lounge before departure</li>
-            <li>Fly Las Vegas → Austin</li>
-          </ul>
+        <!-- March 20 -->
+        <div class="day-card stop-depart">
+          <div class="day-sidebar">
+            <span class="day-emoji">🛫</span>
+            <span class="day-num">20</span>
+            <span class="day-dow">Fri</span>
+          </div>
+          <div class="day-body">
+            <div class="day-date-full">March 20 · Departure Day</div>
+            <div class="day-weather">
+              <span class="w-pill w-pill-vegas">☀️ Hi 88° · Lo 62° · Record heat</span>
+            </div>
+            <ul class="day-activities">
+              <li>Vegas exploration</li>
+              <li>Airport lounge</li>
+              <li>Fly home</li>
+            </ul>
+          </div>
         </div>
 
       </div>
-    </section>
+    </div>
+  </section>
 
-    <hr class="divider" />
+  <!-- DESTINATION HIGHLIGHTS -->
+  <section id="highlights">
+    <div class="container">
+      <p class="section-label">Three Stops</p>
+      <h2 class="section-title">Destination Highlights</h2>
+      <div class="dest-grid">
 
-    <!-- WEATHER -->
-    <section>
-      <p class="section-title">Weather Forecast</p>
+        <div class="dest-card dest-zion">
+          <div class="dest-header">
+            <span class="dest-icon">🏔️</span>
+            <div class="dest-name">Zion National Park</div>
+            <div class="dest-sub">Hurricane, UT · March 15–16</div>
+          </div>
+          <div class="dest-body">
+            <span class="dest-tag">Hiking</span>
+            <ul>
+              <li>Primary activity: Hike The Narrows</li>
+              <li>Walk through the Virgin River gorge</li>
+              <li>One of Utah's most iconic hikes</li>
+              <li>Base in Hurricane, UT (30 min to park)</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="dest-card dest-brian">
+          <div class="dest-header">
+            <span class="dest-icon">⛷️</span>
+            <div class="dest-name">Brian Head Resort</div>
+            <div class="dest-sub">Brian Head, UT · March 16–18</div>
+          </div>
+          <div class="dest-body">
+            <span class="dest-tag">Skiing</span>
+            <ul>
+              <li>Two full ski days planned</li>
+              <li>Base elevation ~9,600 ft</li>
+              <li>Reliable March snow conditions</li>
+              <li>Arrive early to avoid lift lines</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="dest-card dest-vegas">
+          <div class="dest-header">
+            <span class="dest-icon">🎰</span>
+            <div class="dest-name">Las Vegas</div>
+            <div class="dest-sub">Las Vegas, NV · March 18–20</div>
+          </div>
+          <div class="dest-body">
+            <span class="dest-tag">Leisure</span>
+            <ul>
+              <li>Trip ends with well-earned relaxation</li>
+              <li>Restaurants, shows, &amp; pool time</li>
+              <li>Record heat forecast (~85–90°F highs)</li>
+              <li>Departure from LAS airport</li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- WEATHER -->
+  <section id="weather">
+    <div class="container">
+      <p class="section-label">Forecast as of March 14, 2026</p>
+      <h2 class="section-title">March Weather</h2>
       <div class="weather-grid">
 
-        <div class="weather-card">
-          <p class="weather-date">Mar 15 · Hurricane / Zion</p>
-          <p class="weather-cond">☀ Sunny</p>
-          <p class="weather-temp">High 72° · Low 44°</p>
-          <p class="weather-note">W winds 16–21 mph, gusts to 36 mph</p>
+        <div class="weather-card wc-zion">
+          <div class="w-icon">☀️</div>
+          <div class="w-place">Zion / Hurricane</div>
+          <div class="w-temps">
+            <div class="w-high">
+              <span class="w-temp-val">79°</span>
+              <span class="w-temp-label">High</span>
+            </div>
+            <div class="w-divider"></div>
+            <div class="w-low">
+              <span class="w-temp-val">42°</span>
+              <span class="w-temp-label">Low</span>
+            </div>
+          </div>
+          <div class="w-note">☀️ Sunny & warm · Above avg temps · Light winds Mar 16</div>
         </div>
 
-        <div class="weather-card">
-          <p class="weather-date">Mar 16 · Narrows Hike</p>
-          <p class="weather-cond">☀ Sunny</p>
-          <p class="weather-temp">High 72° · Low 44°</p>
-          <p class="weather-note">Breezy in canyon — secure loose gear</p>
+        <div class="weather-card wc-brian">
+          <div class="w-icon">🌨️</div>
+          <div class="w-place">Brian Head Resort</div>
+          <div class="w-temps">
+            <div class="w-high">
+              <span class="w-temp-val">26–30°</span>
+              <span class="w-temp-label">High</span>
+            </div>
+            <div class="w-divider"></div>
+            <div class="w-low">
+              <span class="w-temp-val">10–16°</span>
+              <span class="w-temp-label">Low</span>
+            </div>
+          </div>
+          <div class="w-note">🌨️ Cold &amp; wintry · Light snow possible · Windy · Much colder than avg</div>
         </div>
 
-        <div class="weather-card">
-          <p class="weather-date">Mar 17 · Brian Head Ski Day 1</p>
-          <p class="weather-cond">⛅ Sunny → Partly Cloudy</p>
-          <p class="weather-temp">High 55° · Low 33°</p>
-          <p class="weather-note">Soft afternoon snow — go early for best conditions</p>
-        </div>
-
-        <div class="weather-card">
-          <p class="weather-date">Mar 18 · Brian Head Ski Day 2</p>
-          <p class="weather-cond">⛅ Partly Cloudy</p>
-          <p class="weather-temp">High 58° · Low 37°</p>
-          <p class="weather-note">High UV at 9,600 ft — sunscreen required</p>
-        </div>
-
-        <div class="weather-card">
-          <p class="weather-date">Mar 18–19 · Las Vegas</p>
-          <p class="weather-cond">⛅ Partly Cloudy</p>
-          <p class="weather-temp">High 72–73° · Low 54°</p>
-          <p class="weather-note">Classic spring weather, warm and comfortable</p>
-        </div>
-
-        <div class="weather-card">
-          <p class="weather-date">Mar 20 · Departure</p>
-          <p class="weather-cond">⛅ Partly Cloudy</p>
-          <p class="weather-temp">High 73° · Low 54°</p>
-          <p class="weather-note">Comfortable travel day</p>
-        </div>
-
-      </div>
-      <div class="card" style="margin-top:14px; font-size:0.88rem; color: var(--muted);">
-        <strong style="color:var(--slate)">Conditions summary:</strong> Warmer-than-average week across all stops (~10–20°F above seasonal norms). Brian Head base depth: 40 inches with 8 of 8 lifts open. Last updated March 10, 2026.
-      </div>
-    </section>
-
-    <hr class="divider" />
-
-    <!-- LODGING -->
-    <section>
-      <p class="section-title">Lodging</p>
-      <div class="card">
-
-        <div class="lodging-block">
-          <p class="lodging-name">🏡 Zion Area Airbnb</p>
-          <p class="lodging-addr">306 East 500 North · Hurricane, UT 84737</p>
-          <a class="lodging-link" href="https://www.airbnb.com/rooms/1222514595795308412" target="_blank">View on Airbnb →</a>
-        </div>
-
-        <hr style="border:none; border-top:1px solid var(--border); margin:16px 0;" />
-
-        <div class="lodging-block">
-          <p class="lodging-name">⛷ Brian Head VRBO</p>
-          <p class="lodging-addr">259 Village Way · Brian Head, UT 84719</p>
-          <a class="lodging-link" href="https://www.vrbo.com/5015069" target="_blank">View on VRBO →</a>
-        </div>
-
-        <hr style="border:none; border-top:1px solid var(--border); margin:16px 0;" />
-
-        <div class="lodging-block" style="margin-bottom:0">
-          <p class="lodging-name">🎰 Las Vegas Airbnb</p>
-          <a class="lodging-link" href="https://www.airbnb.com/rooms/1456967535695544159" target="_blank">View on Airbnb →</a>
+        <div class="weather-card wc-vegas">
+          <div class="w-icon">☀️</div>
+          <div class="w-place">Las Vegas</div>
+          <div class="w-temps">
+            <div class="w-high">
+              <span class="w-temp-val">85–90°</span>
+              <span class="w-temp-label">High</span>
+            </div>
+            <div class="w-divider"></div>
+            <div class="w-low">
+              <span class="w-temp-val">60–62°</span>
+              <span class="w-temp-label">Low</span>
+            </div>
+          </div>
+          <div class="w-note">☀️ Record-breaking heat · 15–20°+ above normal · Stay hydrated!</div>
         </div>
 
       </div>
-    </section>
+    </div>
+  </section>
 
-    <hr class="divider" />
+  <!-- DRIVE TIMES -->
+  <section id="drives">
+    <div class="container">
+      <p class="section-label">Road Trip</p>
+      <h2 class="section-title">Drive Times</h2>
+      <div class="drive-timeline">
 
-    <!-- ANSWERED PRAYERS -->
-    <section class="prayer-section">
-      <p class="section-title">Answered Prayers</p>
-      <p class="prayer-intro">A record of the specific things we brought to God during this trip — and how He came through.</p>
+        <div class="drive-leg">
+          <span class="drive-origin">✈️ Las Vegas</span>
+          <div class="drive-middle">
+            <span class="drive-time-pill">~2h 30m</span>
+            <span class="drive-arrow">→</span>
+          </div>
+          <span class="drive-dest">Hurricane, UT 🏔️</span>
+        </div>
 
-      <div class="prayer-card">
-        <p class="prayer-title">The Airbnb Host Came Through at the Last Minute</p>
-        <p class="prayer-body">Fifteen minutes from the rental, no response from the host, and no way in. We prayed. He responded within a minute.</p>
+        <div class="drive-divider"></div>
+
+        <div class="drive-leg">
+          <span class="drive-origin">🏔️ Hurricane, UT</span>
+          <div class="drive-middle">
+            <span class="drive-time-pill">~1h 45m</span>
+            <span class="drive-arrow">→</span>
+          </div>
+          <span class="drive-dest">Brian Head, UT ⛷️</span>
+        </div>
+
+        <div class="drive-divider"></div>
+
+        <div class="drive-leg">
+          <span class="drive-origin">⛷️ Brian Head, UT</span>
+          <div class="drive-middle">
+            <span class="drive-time-pill">~3h 00m</span>
+            <span class="drive-arrow">→</span>
+          </div>
+          <span class="drive-dest">Las Vegas, NV 🎰</span>
+        </div>
+
       </div>
+    </div>
+  </section>
 
-      <div class="prayer-card">
-        <p class="prayer-title">10 Seats on the Flight Home</p>
-        <p class="prayer-body">A same-day change meant needing 10 seats on Southwest back to Austin — on a specific flight, not just any route. There were 11 available on the exact one.</p>
+  <!-- PACKING LIST -->
+  <section id="packing">
+    <div class="container">
+      <div class="section-label">What to Bring</div>
+      <div class="section-title">Packing List</div>
+      <div class="pack-grid">
+
+        <!-- Narrows / Zion -->
+        <div class="pack-card pack-zion">
+          <div class="pack-header">
+            <span class="pack-icon">🏔️</span>
+            <div class="pack-title">The Narrows</div>
+            <div class="pack-sub">Zion · March 16</div>
+          </div>
+          <div class="pack-body">
+            <ul>
+              <li>Dry bag for phone &amp; valuables</li>
+              <li>Layered base + mid-layer top</li>
+              <li>Windproof outer layer</li>
+              <li>Quick-dry bottoms</li>
+              <li>Sunscreen (SPF 30+)</li>
+              <li>Polarized sunglasses</li>
+              <li>Hat or cap</li>
+              <li>Snacks &amp; water</li>
+            </ul>
+            <p class="pack-note">Boots, neoprene socks &amp; poles rented from Zion Outfitter — no need to pack.</p>
+          </div>
+        </div>
+
+        <!-- Brian Head Skiing -->
+        <div class="pack-card pack-brian">
+          <div class="pack-header">
+            <span class="pack-icon">⛷️</span>
+            <div class="pack-title">Brian Head Skiing</div>
+            <div class="pack-sub">Mar 17–18 · 9,600 ft elevation</div>
+          </div>
+          <div class="pack-body">
+            <ul>
+              <li>Ski jacket</li>
+              <li>Ski pants or bibs</li>
+              <li>Thermal base layer (top &amp; bottom)</li>
+              <li>Fleece or mid-layer</li>
+              <li>Ski gloves</li>
+              <li>Ski goggles</li>
+              <li>Helmet (or rent on-site)</li>
+              <li>Neck gaiter / balaclava</li>
+              <li>High-SPF sunscreen — UV is intense at altitude</li>
+              <li>Hand warmers</li>
+              <li>Wool or synthetic ski socks</li>
+            </ul>
+            <p class="pack-note">Skis, boots &amp; poles rented from Georg's Rental Shop at the resort.</p>
+          </div>
+        </div>
+
+        <!-- Las Vegas -->
+        <div class="pack-card pack-vegas">
+          <div class="pack-header">
+            <span class="pack-icon">🎰</span>
+            <div class="pack-title">Las Vegas</div>
+            <div class="pack-sub">Mar 18–20 · ~85–90°F days · Record heat</div>
+          </div>
+          <div class="pack-body">
+            <ul>
+              <li>Going-out outfit(s)</li>
+              <li>Casual daytime clothes</li>
+              <li>Comfortable walking shoes</li>
+              <li>Light jacket for evenings</li>
+              <li>Sunglasses</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Essentials -->
+        <div class="pack-card pack-general">
+          <div class="pack-header">
+            <span class="pack-icon">🎒</span>
+            <div class="pack-title">Essentials</div>
+            <div class="pack-sub">All-trip must-haves</div>
+          </div>
+          <div class="pack-body">
+            <ul>
+              <li>ID &amp; wallet</li>
+              <li>Phone &amp; charger</li>
+              <li>Portable battery pack</li>
+              <li>Medications &amp; first aid</li>
+              <li>Toiletries</li>
+              <li>Reusable water bottles</li>
+              <li>Snacks for long drives</li>
+              <li>Earbuds / headphones</li>
+              <li>Camera (optional)</li>
+            </ul>
+          </div>
+        </div>
+
       </div>
+    </div>
+  </section>
 
-      <div class="prayer-card">
-        <p class="prayer-title">Missing Bags Found Before Tracking Them Down</p>
-        <p class="prayer-body">After the break-in, we prayed we'd find the stolen items before having to track the "Find My" location ourselves — which could have meant walking into something dangerous. We found the bags on our own first. A situation that could have turned threatening was quietly avoided.</p>
+  <!-- ANSWERED PRAYERS -->
+  <section id="prayers">
+    <div class="container">
+      <p class="section-label">God's Faithfulness</p>
+      <h2 class="section-title">Answered Prayers</h2>
+      <div class="prayer-grid">
+
+        <div class="prayer-card">
+          <div class="prayer-card-inner">
+            <p class="prayer-marker">Answered Prayer</p>
+            <h3 class="prayer-card-title">The Airbnb Host Came Through at the Last Minute</h3>
+            <p class="prayer-card-body">Fifteen minutes from the rental, no response from the host, and no way in. We prayed. He responded within a minute.</p>
+          </div>
+        </div>
+
+        <div class="prayer-card">
+          <div class="prayer-card-inner">
+            <p class="prayer-marker">Answered Prayer</p>
+            <h3 class="prayer-card-title">10 Seats on the Flight Home</h3>
+            <p class="prayer-card-body">A same-day change meant needing 10 seats on Southwest back to Austin — on a specific flight, not just any route. There were 11 available on the exact one.</p>
+          </div>
+        </div>
+
+        <div class="prayer-card">
+          <div class="prayer-card-inner">
+            <p class="prayer-marker">Answered Prayer</p>
+            <h3 class="prayer-card-title">Missing Bags Found Before Tracking Them Down</h3>
+            <p class="prayer-card-body">After the break-in, we prayed we'd find the stolen items before having to track the "Find My" location ourselves — which could have meant walking into something dangerous. We found the bags on our own first. A situation that could have turned threatening was quietly avoided.</p>
+          </div>
+        </div>
+
+        <div class="prayer-card">
+          <div class="prayer-card-inner">
+            <p class="prayer-marker">Answered Prayer</p>
+            <h3 class="prayer-card-title">The Last Flight Out</h3>
+            <p class="prayer-card-body">Severe weather was wreaking havoc on flights across the board. We prayed our plane would make it in safely — and that the crew delays wouldn't stack up so badly that they'd be grounded before we could depart. God answered. Our plane arrived, the crew made it work, and we lifted off — on the last flight out.</p>
+          </div>
+        </div>
+
       </div>
+    </div>
+  </section>
 
-      <div class="prayer-card">
-        <p class="prayer-title">The Last Flight Out</p>
-        <p class="prayer-body">Severe weather was wreaking havoc on flights across the board. We prayed our plane would make it in safely — and that the crew delays wouldn't stack up so badly that they'd be grounded before we could depart. God answered. Our plane arrived, the crew made it work, and we lifted off — on the last flight out.</p>
-      </div>
-
-      <div class="prayer-card">
-        <p class="prayer-title">The Van Window Was Covered</p>
-        <p class="prayer-body">After the break-in smashed the window of the rental van and our laptop bags were stolen, we prayed the Tura van owners would have mercy on us and not charge us an unreasonable amount for the repair. We never heard from them. Praise God — it seems they're taking care of it completely. Sometimes an answered prayer looks like silence.</p>
-      </div>
-
-    </section>
-
-  </div>
-
+  <!-- FOOTER -->
   <footer>
-    Spring Break 2026 · Hsia Family · March 15–20
+    <p><strong>Spring Break 2026 · Yeng/Hsia Family Trip</strong></p>
+    <p style="margin-top:0.4rem;">March 15–20 · Zion → Brian Head → Las Vegas</p>
   </footer>
 
 </body>
