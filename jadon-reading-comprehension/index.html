@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Jadon Hsia's Reading Tracker</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: #111A2E;
+    color: #F8FAFC;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    padding: 32px 16px;
+  }
+
+  .tracker-body {
+    width: 100%;
+    max-width: 860px;
+    background: #111A2E;
+    border-radius: 18px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  /* ── Title ─────────────────────────────────────────────────── */
+  .title {
+    font-size: 32px;
+    font-weight: 700;
+    color: #F8FAFC;
+    line-height: 1.2;
+  }
+
+  /* ── Student Tag ────────────────────────────────────────────── */
+  .student-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #17243D;
+    border-radius: 999px;
+    padding: 6px 10px;
+    align-self: flex-start;
+  }
+  .tag-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #22C55E;
+    flex-shrink: 0;
+  }
+  .tag-text {
+    font-size: 12px;
+    font-weight: 600;
+    color: #B9C8E6;
+  }
+
+  /* ── Subtitle ───────────────────────────────────────────────── */
+  .subtitle {
+    font-size: 15px;
+    color: #A8B4CC;
+    line-height: 1.45;
+  }
+
+  /* ── Score Update Controls ──────────────────────────────────── */
+  .score-controls {
+    background: #0C1220;
+    border-radius: 12px;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .book-select, .score-input {
+    background: #111A2E;
+    border: none;
+    border-radius: 10px;
+    padding: 9px 12px;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    color: #C8D4EC;
+    cursor: pointer;
+    outline: none;
+    appearance: none;
+    -webkit-appearance: none;
+  }
+  .book-select {
+    width: 280px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238EA1C7' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 32px;
+  }
+  .score-input {
+    width: 170px;
+  }
+  .score-input::placeholder {
+    color: #6F83AA;
+  }
+  .update-btn {
+    background: #2563EB;
+    color: #FFFFFF;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 14px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.15s;
+  }
+  .update-btn:hover { background: #1D4ED8; }
+
+  /* ── Scores Panel ───────────────────────────────────────────── */
+  .scores-panel {
+    background: #0C1220;
+    border-radius: 14px;
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .header-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0 4px;
+  }
+  .header-row span {
+    font-size: 12px;
+    font-weight: 600;
+    color: #8FA2C7;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .divider {
+    height: 1px;
+    background: #1F2A44;
+    border-radius: 1px;
+  }
+  .data-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-radius: 10px;
+    padding: 6px 4px;
+  }
+  .data-row:nth-child(odd) { background: #131E34; }
+  .data-row:nth-child(even) { background: #101A2E; }
+  .data-row span {
+    font-size: 13px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .col-book  { width: 260px; flex-shrink: 0; }
+  .col-date  { width: 120px; flex-shrink: 0; }
+  .col-score { width: 80px;  flex-shrink: 0; }
+  .col-q     { width: 160px; flex-shrink: 0; }
+  .col-a     { width: 140px; flex-shrink: 0; }
+
+  .book-name  { color: #E6ECFA; font-weight: 500; }
+  .date-text  { color: #C2CEE6; }
+  .score-text { font-weight: 700; }
+  .score-green      { color: #22C55E; }
+  .score-lime       { color: #84CC16; }
+  .score-amber      { color: #F59E0B; }
+  .score-red        { color: #EF4444; }
+  .link-blue  { color: #60A5FA; font-weight: 600; text-decoration: none; cursor: pointer; }
+  .link-amber { color: #FBBF24; font-weight: 600; text-decoration: none; cursor: pointer; }
+  .link-blue:hover  { text-decoration: underline; }
+  .link-amber:hover { text-decoration: underline; }
+
+  /* ── Quick Summary ──────────────────────────────────────────── */
+  .quick-summary {
+    display: flex;
+    gap: 12px;
+  }
+  .summary-card {
+    background: #17243D;
+    border-radius: 12px;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
+  }
+  .summary-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #9EB1D7;
+  }
+  .summary-value {
+    font-size: 30px;
+    font-weight: 700;
+    color: #F8FAFC;
+  }
+
+  /* ── PDF Links ──────────────────────────────────────────────── */
+  .pdf-panel {
+    background: #0C1220;
+    border-radius: 14px;
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .pdf-heading {
+    font-size: 18px;
+    font-weight: 700;
+    color: #F8FAFC;
+  }
+  .pdf-desc {
+    font-size: 13px;
+    color: #9FB0D1;
+  }
+  .pdf-link-row {
+    font-size: 13px;
+    font-weight: 500;
+    color: #60A5FA;
+  }
+  .pdf-link-row a {
+    color: #60A5FA;
+    text-decoration: none;
+  }
+  .pdf-link-row a:hover { text-decoration: underline; }
+  .pdf-link-row .sep { color: #4B5E80; margin: 0 4px; }
+
+  /* ── Footer ─────────────────────────────────────────────────── */
+  .footer {
+    font-size: 12px;
+    font-weight: 500;
+    color: #7E8DAE;
+    text-align: center;
+  }
+
+  /* ── Toast ──────────────────────────────────────────────────── */
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: #22C55E;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 10px 18px;
+    border-radius: 10px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s;
+    z-index: 100;
+  }
+  .toast.show { opacity: 1; }
+</style>
+</head>
+<body>
+
+<div class="tracker-body">
+
+  <h1 class="title">Jadon Hsia's Reading Tracker</h1>
+
+  <div class="student-tag">
+    <div class="tag-dot"></div>
+    <span class="tag-text">Student: Jadon Hsia</span>
+  </div>
+
+  <p class="subtitle">Track every book Jadon reads, update comprehension test scores, and open question/answer PDFs in one place.</p>
+
+  <!-- Score Update Controls -->
+  <div class="score-controls">
+    <select class="book-select" id="bookSelect">
+      <option value="">Select Book</option>
+      <option value="North! Or Be Eaten">North! Or Be Eaten</option>
+    </select>
+    <input class="score-input" type="number" id="scoreInput" placeholder="e.g. 94" min="0" max="100" />
+    <button class="update-btn" onclick="updateScore()">Add / Update Score</button>
+  </div>
+
+  <!-- Scores Panel -->
+  <div class="scores-panel">
+    <div class="header-row">
+      <span class="col-book">Book</span>
+      <span class="col-date">Test Date</span>
+      <span class="col-score">Score</span>
+      <span class="col-q">Questions PDF</span>
+      <span class="col-a">Answers PDF</span>
+    </div>
+    <div class="divider"></div>
+    <div id="tableBody"></div>
+  </div>
+
+  <!-- Quick Summary -->
+  <div class="quick-summary">
+    <div class="summary-card">
+      <span class="summary-label">Books Tracked</span>
+      <span class="summary-value" id="booksTracked">0</span>
+    </div>
+    <div class="summary-card">
+      <span class="summary-label">Average Score</span>
+      <span class="summary-value" id="avgScore">—</span>
+    </div>
+  </div>
+
+  <p class="footer">Built for Jadon Hsia &middot; Reading growth one book at a time</p>
+
+</div>
+
+<div class="toast" id="toast">Score updated!</div>
+
+<script>
+  // ── Data ──────────────────────────────────────────────────────
+  const books = [
+    {
+      title: "North! Or Be Eaten (Wingfeather Saga Book 2)",
+      date: "Mar 27, 2026",
+      score: 90,
+      qPdf: "Wingfeather_North_Or_Be_Eaten_Questions.pdf",
+      aPdf: "Wingfeather_North_Or_Be_Eaten_Answers.pdf"
+    }
+  ];
+
+  // ── Score color ───────────────────────────────────────────────
+  function scoreClass(s) {
+    if (s >= 93) return 'score-green';
+    if (s >= 85) return 'score-lime';
+    if (s >= 75) return 'score-amber';
+    return 'score-red';
+  }
+
+  // ── Render table ──────────────────────────────────────────────
+  function renderTable() {
+    const tbody = document.getElementById('tableBody');
+    tbody.innerHTML = '';
+    books.forEach((b, i) => {
+      const row = document.createElement('div');
+      row.className = 'data-row';
+      row.dataset.index = i;
+      row.innerHTML = `
+        <span class="col-book book-name">${b.title}</span>
+        <span class="col-date date-text">${b.date}</span>
+        <span class="col-score score-text ${scoreClass(b.score)}">${b.score}%</span>
+        <a class="col-q link-blue" href="${b.qPdf}" target="_blank">View Questions</a>
+        <a class="col-a link-amber" href="${b.aPdf}" target="_blank">View Answers</a>
+      `;
+      tbody.appendChild(row);
+    });
+  }
+
+  // ── Render summary ────────────────────────────────────────────
+  function renderSummary() {
+    const count = books.length;
+    const avg = count ? (books.reduce((a, b) => a + b.score, 0) / count).toFixed(2) : 0;
+    document.getElementById('booksTracked').textContent = count;
+    document.getElementById('avgScore').textContent = count ? avg + '%' : '—';
+  }
+
+  // ── Render all ────────────────────────────────────────────────
+  function renderAll() {
+    renderTable();
+    renderSummary();
+  }
+
+  // ── Update score ──────────────────────────────────────────────
+  function updateScore() {
+    const bookTitle = document.getElementById('bookSelect').value;
+    const scoreRaw  = document.getElementById('scoreInput').value;
+
+    if (!bookTitle) { alert('Please select a book.'); return; }
+    if (scoreRaw === '' || isNaN(scoreRaw) || +scoreRaw < 0 || +scoreRaw > 100) {
+      alert('Please enter a valid score (0–100).');
+      return;
+    }
+
+    const score = Math.round(+scoreRaw);
+    const today = new Date();
+    const dateStr = today.toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' });
+
+    const existing = books.find(b => b.title === bookTitle);
+    if (existing) {
+      existing.score = score;
+      existing.date  = dateStr;
+    } else {
+      const slug = bookTitle.toLowerCase().replace(/[^a-z0-9]+/g, '_');
+      books.push({
+        title: bookTitle,
+        date:  dateStr,
+        score,
+        qPdf: slug + '_questions.pdf',
+        aPdf: slug + '_answers.pdf'
+      });
+      // Add to dropdown
+      const sel = document.getElementById('bookSelect');
+      const opt = document.createElement('option');
+      opt.value = bookTitle;
+      opt.textContent = bookTitle;
+      sel.appendChild(opt);
+    }
+
+    renderAll();
+    document.getElementById('scoreInput').value = '';
+    document.getElementById('bookSelect').value = '';
+
+    const toast = document.getElementById('toast');
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2000);
+  }
+
+  // ── Init ──────────────────────────────────────────────────────
+  renderAll();
+</script>
+</body>
+</html>
