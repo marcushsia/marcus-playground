@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Illumination of the Bible · Doctrine Lessons</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,700;1,6..72,400;1,6..72,700&family=Funnel+Sans:wght@400;500;600;700&family=Geist:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Geist', system-ui, sans-serif; background: #FFF7EF; color: #1A1A1A; min-height: 100vh; }
+    .page { max-width: 600px; margin: 0 auto; padding: 40px 24px 60px; display: flex; flex-direction: column; gap: 32px; }
+    .card { background: #FFFFFF; border-radius: 12px; padding: 24px 28px; box-shadow: 0 2px 4px rgba(0,0,0,.031), 0 12px 32px rgba(0,0,0,.059); }
+    .label-pill { display: inline-block; background: rgba(255,92,0,.094); color: #FF5C00; font-family: 'Funnel Sans', system-ui, sans-serif; font-size: 11px; font-weight: 600; letter-spacing: .8px; padding: 4px 12px; border-radius: 999px; }
+    .hero { display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center; }
+    .breadcrumb { font-family: 'Funnel Sans', system-ui, sans-serif; font-size: 12px; font-weight: 500; color: #888; letter-spacing: 1px; }
+    .breadcrumb a { color: #888; text-decoration: none; } .breadcrumb a:hover { color: #FF5C00; }
+    .hero-title { font-family: 'Newsreader', Georgia, serif; font-size: clamp(26px, 6vw, 34px); font-weight: 700; color: #1A1A1A; line-height: 1.15; }
+    .hero-subtitle { font-family: 'Newsreader', Georgia, serif; font-size: clamp(16px, 3.5vw, 20px); font-style: italic; color: #FF5C00; }
+    .hero-divider { width: 60px; height: 3px; background: #FF5C00; border-radius: 999px; }
+    .hero-meta { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: center; }
+    .hero-meta span { font-family: 'Funnel Sans', system-ui, sans-serif; font-size: 11px; font-weight: 500; color: #666; }
+    .hero-meta .dot { color: #888; }
+    .quote-card { display: flex; flex-direction: column; gap: 16px; }
+    .quote-mark { font-family: 'Newsreader', Georgia, serif; font-size: 48px; font-weight: 700; color: #FF5C00; line-height: .6; }
+    .quote-text { font-family: 'Newsreader', Georgia, serif; font-size: 17px; font-style: italic; color: #1A1A1A; line-height: 1.6; }
+    .quote-ref { font-family: 'Funnel Sans', system-ui, sans-serif; font-size: 12px; font-weight: 500; color: #FF8533; letter-spacing: .5px; }
+    .overview-card { display: flex; flex-direction: column; gap: 16px; }
+    .section-title { font-family: 'Newsreader', Georgia, serif; font-weight: 700; color: #1A1A1A; }
+    .overview-body { font-size: 14px; color: #555; line-height: 1.7; }
+    .overview-body strong { color: #1A1A1A; font-weight: 600; }
+    .key-section { display: flex; flex-direction: column; gap: 16px; }
+    .key-grid { display: flex; flex-direction: column; gap: 10px; }
+    .key-tile { display: flex; align-items: flex-start; gap: 12px; background: #FFF7EF; border-radius: 8px; padding: 14px 18px; }
+    .key-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+    .key-name { font-size: 14px; font-weight: 600; color: #1A1A1A; }
+    .key-sub { font-family: 'Funnel Sans', system-ui, sans-serif; font-size: 12px; font-weight: 500; color: #888; margin-top: 2px; }
+    @media (min-width: 480px) { .key-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; } }
+    .script-section { display: flex; flex-direction: column; gap: 16px; }
+    .script-card { background: #FFFFFF; border-radius: 12px; padding: 20px 24px; display: flex; flex-direction: column; gap: 12px; border: 1px solid #F3F4F6; box-shadow: 0 2px 4px rgba(0,0,0,.031), 0 12px 32px rgba(0,0,0,.059); }
+    .script-ref-pill { display: inline-block; background: rgba(255,92,0,.078); color: #FF5C00; font-family: 'Funnel Sans', system-ui, sans-serif; font-size: 10px; font-weight: 600; letter-spacing: .5px; padding: 3px 10px; border-radius: 999px; align-self: flex-start; }
+    .script-verse { font-family: 'Newsreader', Georgia, serif; font-size: 15px; font-style: italic; color: #333; line-height: 1.6; }
+    .script-body { font-size: 14px; color: #555; line-height: 1.65; }
+    .script-note { display: flex; gap: 8px; background: #FFF7EF; border-radius: 6px; padding: 10px 14px; }
+    .script-insight { font-size: 13px; font-weight: 600; color: #FF5C00; line-height: 1.5; }
+    .reflect-block { background: rgba(255,92,0,.039); border-left: 3px solid #FF5C00; border-radius: 12px; padding: 24px 28px; display: flex; flex-direction: column; gap: 14px; }
+    .reflect-label { font-family: 'Funnel Sans', system-ui, sans-serif; font-size: 10px; font-weight: 700; color: #FF8533; letter-spacing: 1.5px; text-transform: uppercase; }
+    .reflect-text { font-family: 'Newsreader', Georgia, serif; font-size: 16px; font-style: italic; color: #1A1A1A; line-height: 1.7; }
+    .takeaway-card { display: flex; flex-direction: column; gap: 16px; }
+    .takeaway-list { display: flex; flex-direction: column; gap: 10px; }
+    .takeaway-item { display: flex; gap: 10px; align-items: flex-start; }
+    .ta-bullet { font-size: 14px; color: #FF5C00; flex-shrink: 0; margin-top: 1px; }
+    .ta-text { font-size: 13px; color: #666; line-height: 1.6; }
+    .close-quote { display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 16px 0 8px; text-align: center; }
+    .close-line { width: 40px; height: 2px; background: rgba(255,92,0,.25); border-radius: 999px; }
+    .close-text { font-family: 'Newsreader', Georgia, serif; font-size: 14px; font-style: italic; color: #888; line-height: 1.7; max-width: 420px; }
+    .close-ref { font-family: 'Funnel Sans', system-ui, sans-serif; font-size: 11px; font-weight: 500; color: #FF8533; letter-spacing: .5px; }
+    .footer { display: flex; justify-content: center; }
+    .footer-txt { font-family: 'Funnel Sans', system-ui, sans-serif; font-size: 10px; color: #888; letter-spacing: .5px; }
+    @media (max-width: 480px) { .page { padding: 28px 16px 48px; gap: 24px; } .card { padding: 20px; } .script-card { padding: 16px 18px; } .reflect-block { padding: 20px; } }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <div class="hero">
+    <div class="breadcrumb"><a href="./index.html">Lessons</a> &nbsp;/&nbsp; Doctrine &nbsp;/&nbsp; Illumination of the Bible</div>
+    <div>
+      <div class="hero-title">Illumination of the Bible</div>
+      <div class="hero-subtitle">The Spirit Opens the Word</div>
+    </div>
+    <div class="hero-divider"></div>
+    <div class="hero-meta">
+      <span>Doctrine Series</span><span class="dot">·</span>
+      <span>1 Corinthians 2:12</span><span class="dot">·</span>
+      <span>February 17, 2024</span>
+    </div>
+  </div>
+
+  <div class="card quote-card">
+    <div class="quote-mark">"</div>
+    <div class="quote-text">Now we have received not the spirit of the world, but the Spirit who is from God, that we might understand the things freely given us by God.</div>
+    <div class="quote-ref">— 1 Corinthians 2:12 (ESV)</div>
+  </div>
+
+  <div class="card overview-card">
+    <div class="label-pill">Lesson Overview</div>
+    <div class="section-title" style="font-size:22px;">Inspiration vs. Illumination</div>
+    <p class="overview-body"><strong>Inspiration</strong> is how God gave us the Bible — through Spirit-moved writers. <strong>Illumination</strong> is how God helps us understand it — through the same Spirit, living in us. All the truth we need is already in Scripture. The Holy Spirit's job is to open our eyes to it.</p>
+  </div>
+
+  <div class="key-section">
+    <div class="section-title" style="font-size:20px;">Key Truths</div>
+    <div class="key-grid">
+      <div class="key-tile">
+        <div class="key-icon">🕊️</div>
+        <div>
+          <div class="key-name">The Spirit Is the Teacher</div>
+          <div class="key-sub">Not scholars or tradition alone</div>
+        </div>
+      </div>
+      <div class="key-tile">
+        <div class="key-icon">💡</div>
+        <div>
+          <div class="key-name">It's Already in the Word</div>
+          <div class="key-sub">No new revelation — eyes opened</div>
+        </div>
+      </div>
+      <div class="key-tile">
+        <div class="key-icon">🙏</div>
+        <div>
+          <div class="key-name">It's Personal</div>
+          <div class="key-sub">Given to every believer, not just scholars</div>
+        </div>
+      </div>
+      <div class="key-tile">
+        <div class="key-icon">📐</div>
+        <div>
+          <div class="key-name">Faithfulness Brings More Light</div>
+          <div class="key-sub">Obey what you see; more comes</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="script-section">
+    <div class="section-title" style="font-size:20px;">Key Passages</div>
+
+    <div class="script-card">
+      <div class="script-ref-pill">John 16:12–15</div>
+      <div class="script-verse">"When the Spirit of truth comes, he will guide you into all the truth… he will take what is mine and declare it to you."</div>
+      <p class="script-body">Jesus promises the Spirit will guide into "all truth" — not new truth beyond what Jesus taught, but the fullness of what Jesus already revealed. The Spirit doesn't replace the Word; He opens it.</p>
+      <div class="script-note"><div class="script-insight">→ The Spirit and the Word work together — never apart.</div></div>
+    </div>
+
+    <div class="script-card">
+      <div class="script-ref-pill">1 Corinthians 2:12</div>
+      <div class="script-verse">"Now we have received not the spirit of the world, but the Spirit who is from God, that we might understand the things freely given us by God."</div>
+      <p class="script-body">God's gifts — including the meaning of His Word — require God's Spirit to grasp. A person without the Spirit reads the Bible as just another book. With the Spirit, it becomes alive and specific.</p>
+      <div class="script-note"><div class="script-insight">→ You don't need a seminary degree. You need the Spirit and a willing heart.</div></div>
+    </div>
+  </div>
+
+  <div class="reflect-block">
+    <div class="reflect-label">Big Idea</div>
+    <div class="reflect-text">God didn't just give us a book and walk away. He put His Spirit inside us to make sure we could actually understand it. Reading the Bible is meant to be a conversation, not a homework assignment.</div>
+  </div>
+
+  <div class="card takeaway-card">
+    <div class="label-pill">Takeaways</div>
+    <div class="section-title" style="font-size:20px;">Living It Out</div>
+    <div class="takeaway-list">
+      <div class="takeaway-item"><div class="ta-bullet">•</div><div class="ta-text">Pray before you open the Bible — ask the Spirit to illuminate what you read.</div></div>
+      <div class="takeaway-item"><div class="ta-bullet">•</div><div class="ta-text">Slow down. The Spirit works when you linger, not when you skim.</div></div>
+      <div class="takeaway-item"><div class="ta-bullet">•</div><div class="ta-text">Act on what you understand. More light comes with obedience.</div></div>
+    </div>
+  </div>
+
+  <div class="close-quote">
+    <div class="close-line"></div>
+    <div class="close-text">Open my eyes, that I may behold wondrous things out of your law.</div>
+    <div class="close-ref">Psalm 119:18</div>
+  </div>
+
+  <div class="footer"><div class="footer-txt">Doctrine Lessons · 2024</div></div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>The Law of Rewards · Doctrine Lessons</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,700;1,6..72,400;1,6..72,700&family=Funnel+Sans:wght@400;500;600;700&family=Geist:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Geist', system-ui, sans-serif; background: #FFF7EF; color: #1A1A1A; min-height: 100vh; }
+    .page { max-width: 600px; margin: 0 auto; padding: 40px 24px 60px; display: flex; flex-direction: column; gap: 32px; }
+    .card { background: #FFFFFF; border-radius: 12px; padding: 24px 28px; box-shadow: 0 2px 4px rgba(0,0,0,.031), 0 12px 32px rgba(0,0,0,.059); }
+    .label-pill { display: inline-block; background: rgba(255,92,0,.094); color: #FF5C00; font-family: 'Funnel Sans', system-ui, sans-serif; font-size: 11px; font-weight: 600; letter-spacing: .8px; padding: 4px 12px; border-radius: 999px; }
+    .hero { display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center; }
+    .breadcrumb { font-family: 'Funnel Sans', system-ui, sans-serif; font-size: 12px; font-weight: 500; color: #888; letter-spacing: 1px; }
+    .breadcrumb a { color: #888; text-decoration: none; } .breadcrumb a:hover { color: #FF5C00; }
+    .hero-title { font-family: 'Newsreader', Georgia, serif; font-size: clamp(26px, 6vw, 34px); font-weight: 700; color: #1A1A1A; line-height: 1.15; }
+    .hero-subtitle { font-family: 'Newsreader', Georgia, serif; font-size: clamp(16px, 3.5vw, 20px); font-style: italic; color: #FF5C00; }
+    .hero-divider { width: 60px; height: 3px; background: #FF5C00; border-radius: 999px; }
+    .hero-meta { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: center; }
+    .hero-meta span { font-family: 'Funnel Sans', system-ui, sans-serif; font-size: 11px; font-weight: 500; color: #666; }
+    .hero-meta .dot { color: #888; }
+    .quote-card { display: flex; flex-direction: column; gap: 16px; }
+    .quote-mark { font-family: 'Newsreader', Georgia, serif; font-size: 48px; font-weight: 700; color: #FF5C00; line-height: .6; }
+    .quote-text { font-family: 'Newsreader', Georgia, serif; font-size: 17px; font-style: italic; color: #1A1A1A; line-height: 1.6; }
+    .quote-ref { font-family: 'Funnel Sans', system-ui, sans-serif; font-size: 12px; font-weight: 500; color: #FF8533; letter-spacing: .5px; }
+    .overview-card { display: flex; flex-direction: column; gap: 16px; }
+    .section-title { font-family: 'Newsreader', Georgia, serif; font-weight: 700; color: #1A1A1A; }
+    .overview-body { font-size: 14px; color: #555; line-height: 1.7; }
+    .overview-body strong { color: #1A1A1A; font-weight: 600; }
+    .key-section { display: flex; flex-direction: column; gap: 16px; }
+    .key-grid { display: flex; flex-direction: column; gap: 10px; }
+    .key-tile { display: flex; align-items: flex-start; gap: 12px; background: #FFF7EF; border-radius: 8px; padding: 14px 18px; }
+    .key-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+    .key-name { font-size: 14px; font-weight: 600; color: #1A1A1A; }
+    .key-sub { font-family: 'Funnel Sans', system-ui, sans-serif; font-size: 12px; font-weight: 500; color: #888; margin-top: 2px; }
+    @media (min-width: 480px) { .key-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; } }
+    .script-section { display: flex; flex-direction: column; gap: 16px; }
+    .script-card { background: #FFFFFF; border-radius: 12px; padding: 20px 24px; display: flex; flex-direction: column; gap: 12px; border: 1px solid #F3F4F6; box-shadow: 0 2px 4px rgba(0,0,0,.031), 0 12px 32px rgba(0,0,0,.059); }
+    .script-ref-pill { display: inline-block; background: rgba(255,92,0,.078); color: #FF5C00; font-family: 'Funnel Sans', system-ui, sans-serif; font-size: 10px; font-weight: 600; letter-spacing: .5px; padding: 3px 10px; border-radius: 999px; align-self: flex-start; }
+    .script-verse { font-family: 'Newsreader', Georgia, serif; font-size: 15px; font-style: italic; color: #333; line-height: 1.6; }
+    .script-body { font-size: 14px; color: #555; line-height: 1.65; }
+    .script-note { display: flex; gap: 8px; background: #FFF7EF; border-radius: 6px; padding: 10px 14px; }
+    .script-insight { font-size: 13px; font-weight: 600; color: #FF5C00; line-height: 1.5; }
+    /* PATTERN STEPS */
+    .pattern-list { display: flex; flex-direction: column; gap: 8px; counter-reset: step; }
+    .pattern-item { display: flex; gap: 12px; align-items: flex-start; }
+    .pattern-num { flex-shrink: 0; width: 24px; height: 24px; background: #FF5C00; color: white; border-radius: 50%; font-family: 'Funnel Sans', system-ui, sans-serif; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; margin-top: 1px; }
+    .pattern-text { font-size: 14px; color: #444; line-height: 1.5; padding-top: 3px; }
+    .reflect-block { background: rgba(255,92,0,.039); border-left: 3px solid #FF5C00; border-radius: 12px; padding: 24px 28px; display: flex; flex-direction: column; gap: 14px; }
+    .reflect-label { font-family: 'Funnel Sans', system-ui, sans-serif; font-size: 10px; font-weight: 700; color: #FF8533; letter-spacing: 1.5px; text-transform: uppercase; }
+    .reflect-text { font-family: 'Newsreader', Georgia, serif; font-size: 16px; font-style: italic; color: #1A1A1A; line-height: 1.7; }
+    .takeaway-card { display: flex; flex-direction: column; gap: 16px; }
+    .takeaway-list { display: flex; flex-direction: column; gap: 10px; }
+    .takeaway-item { display: flex; gap: 10px; align-items: flex-start; }
+    .ta-bullet { font-size: 14px; color: #FF5C00; flex-shrink: 0; margin-top: 1px; }
+    .ta-text { font-size: 13px; color: #666; line-height: 1.6; }
+    .close-quote { display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 16px 0 8px; text-align: center; }
+    .close-line { width: 40px; height: 2px; background: rgba(255,92,0,.25); border-radius: 999px; }
+    .close-text { font-family: 'Newsreader', Georgia, serif; font-size: 14px; font-style: italic; color: #888; line-height: 1.7; max-width: 420px; }
+    .close-ref { font-family: 'Funnel Sans', system-ui, sans-serif; font-size: 11px; font-weight: 500; color: #FF8533; letter-spacing: .5px; }
+    .footer { display: flex; justify-content: center; }
+    .footer-txt { font-family: 'Funnel Sans', system-ui, sans-serif; font-size: 10px; color: #888; letter-spacing: .5px; }
+    @media (max-width: 480px) { .page { padding: 28px 16px 48px; gap: 24px; } .card { padding: 20px; } .script-card { padding: 16px 18px; } .reflect-block { padding: 20px; } }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <div class="hero">
+    <div class="breadcrumb"><a href="./index.html">Lessons</a> &nbsp;/&nbsp; Doctrine &nbsp;/&nbsp; The Law of Rewards</div>
+    <div>
+      <div class="hero-title">The Law of Rewards</div>
+      <div class="hero-subtitle">Doing Things God's Way</div>
+    </div>
+    <div class="hero-divider"></div>
+    <div class="hero-meta">
+      <span>Doctrine Series</span><span class="dot">·</span>
+      <span>1 Samuel 15:22</span><span class="dot">·</span>
+      <span>November 15, 2025</span>
+    </div>
+  </div>
+
+  <div class="card quote-card">
+    <div class="quote-mark">"</div>
+    <div class="quote-text">Has the Lord as great delight in burnt offerings and sacrifices, as in obeying the voice of the Lord? Behold, to obey is better than sacrifice, and to listen than the fat of rams.</div>
+    <div class="quote-ref">— 1 Samuel 15:22 (ESV)</div>
+  </div>
+
+  <div class="card overview-card">
+    <div class="label-pill">Lesson Overview</div>
+    <div class="section-title" style="font-size:22px;">God Means What He Says</div>
+    <p class="overview-body">The Bible is full of stories of people who heard God's instructions and then modified them — usually with good intentions. Every single time, the consequences were serious. This lesson looks at ten of those stories. The pattern is always the same: <strong>God gives specific instructions, and He means them.</strong></p>
+  </div>
+
+  <div class="key-section">
+    <div class="section-title" style="font-size:20px;">10 Stories — One Pattern</div>
+    <div class="key-grid">
+      <div class="key-tile">
+        <div class="key-icon">🔥</div>
+        <div>
+          <div class="key-name">Nadab &amp; Abihu</div>
+          <div class="key-sub">Strange fire — Leviticus 10</div>
+        </div>
+      </div>
+      <div class="key-tile">
+        <div class="key-icon">👑</div>
+        <div>
+          <div class="key-name">King Saul</div>
+          <div class="key-sub">Partial obedience — 1 Samuel 15</div>
+        </div>
+      </div>
+      <div class="key-tile">
+        <div class="key-icon">🪨</div>
+        <div>
+          <div class="key-name">Moses</div>
+          <div class="key-sub">Struck the rock — Numbers 20</div>
+        </div>
+      </div>
+      <div class="key-tile">
+        <div class="key-icon">🏺</div>
+        <div>
+          <div class="key-name">Achan</div>
+          <div class="key-sub">Secret sin — Joshua 7</div>
+        </div>
+      </div>
+      <div class="key-tile">
+        <div class="key-icon">🤴</div>
+        <div>
+          <div class="key-name">King Uzziah</div>
+          <div class="key-sub">Burned incense — 2 Chronicles 26</div>
+        </div>
+      </div>
+      <div class="key-tile">
+        <div class="key-icon">🐄</div>
+        <div>
+          <div class="key-name">The Golden Calf</div>
+          <div class="key-sub">Right God, wrong way — Exodus 32</div>
+        </div>
+      </div>
+      <div class="key-tile">
+        <div class="key-icon">🏗️</div>
+        <div>
+          <div class="key-name">Tower of Babel</div>
+          <div class="key-sub">Our way, not His — Genesis 11</div>
+        </div>
+      </div>
+      <div class="key-tile">
+        <div class="key-icon">💰</div>
+        <div>
+          <div class="key-name">Ananias &amp; Sapphira</div>
+          <div class="key-sub">Pretended obedience — Acts 5</div>
+        </div>
+      </div>
+      <div class="key-tile">
+        <div class="key-icon">🧂</div>
+        <div>
+          <div class="key-name">Lot's Wife</div>
+          <div class="key-sub">One command — Genesis 19</div>
+        </div>
+      </div>
+      <div class="key-tile">
+        <div class="key-icon">🍎</div>
+        <div>
+          <div class="key-name">Adam &amp; Eve</div>
+          <div class="key-sub">The first disobedience — Genesis 3</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="script-section">
+    <div class="section-title" style="font-size:20px;">Three Key Stories</div>
+
+    <div class="script-card">
+      <div class="script-ref-pill">1 Samuel 15 — Saul's "Partial Obedience"</div>
+      <div class="script-verse">"To obey is better than sacrifice, and to listen than the fat of rams." — 1 Samuel 15:22</div>
+      <p class="script-body">God told Saul to destroy everything connected to the Amalekites. Saul kept the best animals — to sacrifice to the Lord. It sounded religious. It looked generous. But it was disobedience dressed up in worship language. Saul lost the kingdom for it.</p>
+      <div class="script-note"><div class="script-insight">→ Partial obedience is disobedience — even when it looks religious.</div></div>
+    </div>
+
+    <div class="script-card">
+      <div class="script-ref-pill">Exodus 32 — The Golden Calf</div>
+      <div class="script-verse">"Tomorrow shall be a feast to the LORD." — Exodus 32:5</div>
+      <p class="script-body">Israel didn't want to worship a different god. They wanted to worship Yahweh — but their own way. Aaron even called the calf "the LORD." They meant well. God judged them anyway. It's not enough to worship the right God the wrong way.</p>
+      <div class="script-note"><div class="script-insight">→ Good intentions don't make disobedience obedience.</div></div>
+    </div>
+
+    <div class="script-card">
+      <div class="script-ref-pill">Acts 5:1–11 — Ananias &amp; Sapphira</div>
+      <div class="script-verse">"…you have not lied to man but to God." — Acts 5:4</div>
+      <p class="script-body">They didn't have to donate everything. The problem was <em>pretending</em> to fully obey while secretly holding back. God struck them both down immediately — not to punish generosity, but to protect the integrity of the early church.</p>
+      <div class="script-note"><div class="script-insight">→ God sees the gap between what we perform and what we actually do.</div></div>
+    </div>
+  </div>
+
+  <div class="card" style="display:flex;flex-direction:column;gap:16px;">
+    <div class="section-title" style="font-size:20px;">The Pattern — Every Time</div>
+    <div class="pattern-list">
+      <div class="pattern-item"><div class="pattern-num">1</div><div class="pattern-text">God gives specific instructions.</div></div>
+      <div class="pattern-item"><div class="pattern-num">2</div><div class="pattern-text">People think they can modify them.</div></div>
+      <div class="pattern-item"><div class="pattern-num">3</div><div class="pattern-text">People assume their motives will "make up" for the disobedience.</div></div>
+      <div class="pattern-item"><div class="pattern-num">4</div><div class="pattern-text">God takes His instructions seriously.</div></div>
+      <div class="pattern-item"><div class="pattern-num">5</div><div class="pattern-text">The consequence reveals the holiness and seriousness of His word.</div></div>
+    </div>
+  </div>
+
+  <div class="reflect-block">
+    <div class="reflect-label">Big Idea</div>
+    <div class="reflect-text">Even great leaders are accountable. Even good intentions don't cover disobedience. Even secret sin has community consequences. God's instructions are not suggestions — and the reward belongs to those who follow them His way, not ours.</div>
+  </div>
+
+  <div class="card takeaway-card">
+    <div class="label-pill">Takeaways</div>
+    <div class="section-title" style="font-size:20px;">Living It Out</div>
+    <div class="takeaway-list">
+      <div class="takeaway-item"><div class="ta-bullet">•</div><div class="ta-text">Don't assume your motives justify modifying God's instructions. Ask: what does He actually say?</div></div>
+      <div class="takeaway-item"><div class="ta-bullet">•</div><div class="ta-text">Partial obedience is not obedience. Half-steps don't count as faithfulness.</div></div>
+      <div class="takeaway-item"><div class="ta-bullet">•</div><div class="ta-text">God takes His word seriously. That's not harsh — it means His promises are serious too.</div></div>
+    </div>
+  </div>
+
+  <div class="close-quote">
+    <div class="close-line"></div>
+    <div class="close-text">To obey is better than sacrifice, and to listen than the fat of rams.</div>
+    <div class="close-ref">1 Samuel 15:22</div>
+  </div>
+
+  <div class="footer"><div class="footer-txt">Doctrine Lessons · 2025</div></div>
+
+</div>
+</body>
+</html>

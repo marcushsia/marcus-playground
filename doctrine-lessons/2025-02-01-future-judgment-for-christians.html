@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Future Judgment for Christians · Doctrine Lessons</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,700;1,6..72,400;1,6..72,700&family=Funnel+Sans:wght@400;500;600;700&family=Geist:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Geist', system-ui, sans-serif; background: #FFF7EF; color: #1A1A1A; min-height: 100vh; }
+    .page { max-width: 600px; margin: 0 auto; padding: 40px 24px 60px; display: flex; flex-direction: column; gap: 32px; }
+    .card { background: #FFFFFF; border-radius: 12px; padding: 24px 28px; box-shadow: 0 2px 4px rgba(0,0,0,.031), 0 12px 32px rgba(0,0,0,.059); }
+    .label-pill { display: inline-block; background: rgba(255,92,0,.094); color: #FF5C00; font-family: 'Funnel Sans', system-ui, sans-serif; font-size: 11px; font-weight: 600; letter-spacing: .8px; padding: 4px 12px; border-radius: 999px; }
+    .hero { display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center; }
+    .breadcrumb { font-family: 'Funnel Sans', system-ui, sans-serif; font-size: 12px; font-weight: 500; color: #888; letter-spacing: 1px; }
+    .breadcrumb a { color: #888; text-decoration: none; } .breadcrumb a:hover { color: #FF5C00; }
+    .hero-title { font-family: 'Newsreader', Georgia, serif; font-size: clamp(24px, 5.5vw, 32px); font-weight: 700; color: #1A1A1A; line-height: 1.15; }
+    .hero-subtitle { font-family: 'Newsreader', Georgia, serif; font-size: clamp(16px, 3.5vw, 20px); font-style: italic; color: #FF5C00; }
+    .hero-divider { width: 60px; height: 3px; background: #FF5C00; border-radius: 999px; }
+    .hero-meta { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: center; }
+    .hero-meta span { font-family: 'Funnel Sans', system-ui, sans-serif; font-size: 11px; font-weight: 500; color: #666; }
+    .hero-meta .dot { color: #888; }
+    .quote-card { display: flex; flex-direction: column; gap: 16px; }
+    .quote-mark { font-family: 'Newsreader', Georgia, serif; font-size: 48px; font-weight: 700; color: #FF5C00; line-height: .6; }
+    .quote-text { font-family: 'Newsreader', Georgia, serif; font-size: 17px; font-style: italic; color: #1A1A1A; line-height: 1.6; }
+    .quote-ref { font-family: 'Funnel Sans', system-ui, sans-serif; font-size: 12px; font-weight: 500; color: #FF8533; letter-spacing: .5px; }
+    .overview-card { display: flex; flex-direction: column; gap: 16px; }
+    .section-title { font-family: 'Newsreader', Georgia, serif; font-weight: 700; color: #1A1A1A; }
+    .overview-body { font-size: 14px; color: #555; line-height: 1.7; }
+    .overview-body strong { color: #1A1A1A; font-weight: 600; }
+    .key-section { display: flex; flex-direction: column; gap: 16px; }
+    .key-grid { display: flex; flex-direction: column; gap: 10px; }
+    .key-tile { display: flex; align-items: flex-start; gap: 12px; background: #FFF7EF; border-radius: 8px; padding: 14px 18px; }
+    .key-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+    .key-name { font-size: 14px; font-weight: 600; color: #1A1A1A; }
+    .key-sub { font-family: 'Funnel Sans', system-ui, sans-serif; font-size: 12px; font-weight: 500; color: #888; margin-top: 2px; }
+    @media (min-width: 480px) { .key-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; } }
+    .script-section { display: flex; flex-direction: column; gap: 16px; }
+    .script-card { background: #FFFFFF; border-radius: 12px; padding: 20px 24px; display: flex; flex-direction: column; gap: 12px; border: 1px solid #F3F4F6; box-shadow: 0 2px 4px rgba(0,0,0,.031), 0 12px 32px rgba(0,0,0,.059); }
+    .script-ref-pill { display: inline-block; background: rgba(255,92,0,.078); color: #FF5C00; font-family: 'Funnel Sans', system-ui, sans-serif; font-size: 10px; font-weight: 600; letter-spacing: .5px; padding: 3px 10px; border-radius: 999px; align-self: flex-start; }
+    .script-verse { font-family: 'Newsreader', Georgia, serif; font-size: 15px; font-style: italic; color: #333; line-height: 1.6; }
+    .script-body { font-size: 14px; color: #555; line-height: 1.65; }
+    .script-note { display: flex; gap: 8px; background: #FFF7EF; border-radius: 6px; padding: 10px 14px; }
+    .script-insight { font-size: 13px; font-weight: 600; color: #FF5C00; line-height: 1.5; }
+    .reflect-block { background: rgba(255,92,0,.039); border-left: 3px solid #FF5C00; border-radius: 12px; padding: 24px 28px; display: flex; flex-direction: column; gap: 14px; }
+    .reflect-label { font-family: 'Funnel Sans', system-ui, sans-serif; font-size: 10px; font-weight: 700; color: #FF8533; letter-spacing: 1.5px; text-transform: uppercase; }
+    .reflect-text { font-family: 'Newsreader', Georgia, serif; font-size: 16px; font-style: italic; color: #1A1A1A; line-height: 1.7; }
+    .takeaway-card { display: flex; flex-direction: column; gap: 16px; }
+    .takeaway-list { display: flex; flex-direction: column; gap: 10px; }
+    .takeaway-item { display: flex; gap: 10px; align-items: flex-start; }
+    .ta-bullet { font-size: 14px; color: #FF5C00; flex-shrink: 0; margin-top: 1px; }
+    .ta-text { font-size: 13px; color: #666; line-height: 1.6; }
+    .close-quote { display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 16px 0 8px; text-align: center; }
+    .close-line { width: 40px; height: 2px; background: rgba(255,92,0,.25); border-radius: 999px; }
+    .close-text { font-family: 'Newsreader', Georgia, serif; font-size: 14px; font-style: italic; color: #888; line-height: 1.7; max-width: 420px; }
+    .close-ref { font-family: 'Funnel Sans', system-ui, sans-serif; font-size: 11px; font-weight: 500; color: #FF8533; letter-spacing: .5px; }
+    .footer { display: flex; justify-content: center; }
+    .footer-txt { font-family: 'Funnel Sans', system-ui, sans-serif; font-size: 10px; color: #888; letter-spacing: .5px; }
+    @media (max-width: 480px) { .page { padding: 28px 16px 48px; gap: 24px; } .card { padding: 20px; } .script-card { padding: 16px 18px; } .reflect-block { padding: 20px; } }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <div class="hero">
+    <div class="breadcrumb"><a href="./index.html">Lessons</a> &nbsp;/&nbsp; Doctrine &nbsp;/&nbsp; Future Judgment for Christians</div>
+    <div>
+      <div class="hero-title">Future Judgment for Christians</div>
+      <div class="hero-subtitle">What the Judgment Seat Means for Us</div>
+    </div>
+    <div class="hero-divider"></div>
+    <div class="hero-meta">
+      <span>Doctrine Series</span><span class="dot">·</span>
+      <span>2 Corinthians 5:10</span><span class="dot">·</span>
+      <span>February 1, 2025</span>
+    </div>
+  </div>
+
+  <div class="card quote-card">
+    <div class="quote-mark">"</div>
+    <div class="quote-text">For we must all appear before the judgment seat of Christ, so that each one may receive what is due for what he has done in the body, whether good or evil.</div>
+    <div class="quote-ref">— 2 Corinthians 5:10 (ESV)</div>
+  </div>
+
+  <div class="card overview-card">
+    <div class="label-pill">Lesson Overview</div>
+    <div class="section-title" style="font-size:22px;">Serious, Not Scary</div>
+    <p class="overview-body">Every Christian will stand before Christ. But this isn't about condemnation — <strong>that question is already settled</strong> for those who belong to Him. The judgment seat is about accountability: how we stewarded our lives for Jesus will determine reward, loss, and the shape of our eternity.</p>
+  </div>
+
+  <div class="key-section">
+    <div class="section-title" style="font-size:20px;">Four Truths About Christian Judgment</div>
+    <div class="key-grid">
+      <div class="key-tile">
+        <div class="key-icon">⚖️</div>
+        <div>
+          <div class="key-name">We All Stand Before Christ</div>
+          <div class="key-sub">No exceptions — every believer</div>
+        </div>
+      </div>
+      <div class="key-tile">
+        <div class="key-icon">🛡️</div>
+        <div>
+          <div class="key-name">No Condemnation</div>
+          <div class="key-sub">Salvation is secure — it's not on trial</div>
+        </div>
+      </div>
+      <div class="key-tile">
+        <div class="key-icon">🏆</div>
+        <div>
+          <div class="key-name">Rewarded for Faithfulness</div>
+          <div class="key-sub">Good deeds — including hidden ones — matter</div>
+        </div>
+      </div>
+      <div class="key-tile">
+        <div class="key-icon">🔥</div>
+        <div>
+          <div class="key-name">Loss for Wasted Living</div>
+          <div class="key-sub">Saved, but some work burns away</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="script-section">
+    <div class="section-title" style="font-size:20px;">Key Passages</div>
+
+    <div class="script-card">
+      <div class="script-ref-pill">Romans 8:1 / John 5:24</div>
+      <div class="script-verse">"There is therefore now no condemnation for those who are in Christ Jesus." — Romans 8:1</div>
+      <p class="script-body">The judgment seat is not about whether you're in or out. That was settled at the cross. A Christian standing before Christ is not a criminal standing before a judge — it's a child standing before a Father who already paid for every sin.</p>
+      <div class="script-note"><div class="script-insight">→ Your salvation is not at risk at the judgment seat. But your rewards are.</div></div>
+    </div>
+
+    <div class="script-card">
+      <div class="script-ref-pill">1 Corinthians 3:11–15</div>
+      <div class="script-verse">"If the work that anyone has built on the foundation survives, he will receive a reward. If anyone's work is burned up, he will suffer loss, though he himself will be saved, but only as through fire."</div>
+      <p class="script-body">Gold, silver, precious stones — work that lasts. Wood, hay, straw — stuff that looks like ministry but isn't. The fire of judgment will reveal which is which. You can be saved and still lose everything you built in this life.</p>
+      <div class="script-note"><div class="script-insight">→ Live so that your work survives the fire — not just so you get in.</div></div>
+    </div>
+
+    <div class="script-card">
+      <div class="script-ref-pill">Luke 19:16–19</div>
+      <div class="script-verse">"Because you have been faithful in a very little, you shall have authority over ten cities." And a second… "And you are to be over five cities."</div>
+      <p class="script-body">Differing rewards — ten cities vs. five cities. The picture Jesus paints is not a uniform eternity where everyone gets the same thing. How you steward this life shapes your next one.</p>
+      <div class="script-note"><div class="script-insight">→ Faithfulness now has real, concrete weight in eternity. Even small things count.</div></div>
+    </div>
+
+    <div class="script-card">
+      <div class="script-ref-pill">1 Corinthians 4:5</div>
+      <div class="script-verse">"…the Lord comes, who will bring to light the things now hidden in darkness and will disclose the purposes of the heart. Then each one will receive his commendation from God."</div>
+      <p class="script-body">Hidden motivations — not just outward actions — will be brought to light. God isn't just grading behavior. He's evaluating the heart behind it. Ephesians 6:8 adds: whatever good you do, you will receive back from the Lord.</p>
+      <div class="script-note"><div class="script-insight">→ Your private obedience is not invisible to God — it echoes into eternity.</div></div>
+    </div>
+  </div>
+
+  <div class="reflect-block">
+    <div class="reflect-label">Big Idea</div>
+    <div class="reflect-text">The judgment seat is not scary for Christians — but it is serious. Every choice you make now echoes into eternity. You can be saved and still waste your life. You can be saved and still receive great reward. The difference is faithfulness.</div>
+  </div>
+
+  <div class="card takeaway-card">
+    <div class="label-pill">Takeaways</div>
+    <div class="section-title" style="font-size:20px;">Living It Out</div>
+    <div class="takeaway-list">
+      <div class="takeaway-item"><div class="ta-bullet">•</div><div class="ta-text">Your salvation is secure. Your rewards are not automatic — they are earned by faithfulness.</div></div>
+      <div class="takeaway-item"><div class="ta-bullet">•</div><div class="ta-text">The things no one sees — your private choices, your heart motivations — matter to God and will be revealed.</div></div>
+      <div class="takeaway-item"><div class="ta-bullet">•</div><div class="ta-text">Live so that the work of your life is gold, silver, and precious stones — not wood, hay, and straw.</div></div>
+    </div>
+  </div>
+
+  <div class="close-quote">
+    <div class="close-line"></div>
+    <div class="close-text">Whatever good anyone does, this he will receive back from the Lord, whether he is a bondservant or is free.</div>
+    <div class="close-ref">Ephesians 6:8</div>
+  </div>
+
+  <div class="footer"><div class="footer-txt">Doctrine Lessons · 2025</div></div>
+
+</div>
+</body>
+</html>

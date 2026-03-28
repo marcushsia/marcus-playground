@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>The Least of These · Doctrine Lessons</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,700;1,6..72,400;1,6..72,700&family=Funnel+Sans:wght@400;500;600;700&family=Geist:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Geist', system-ui, -apple-system, sans-serif;
+      background: #FFF7EF;
+      color: #1A1A1A;
+      min-height: 100vh;
+    }
+
+    .page {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 40px 24px 60px;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    /* ── SHARED CARD ── */
+    .card {
+      background: #FFFFFF;
+      border-radius: 12px;
+      padding: 24px 28px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.031), 0 12px 32px rgba(0,0,0,0.059);
+    }
+
+    /* ── LABEL PILL ── */
+    .label-pill {
+      display: inline-block;
+      background: rgba(255,92,0,0.094);
+      color: #FF5C00;
+      font-family: 'Funnel Sans', 'Geist', system-ui, sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.8px;
+      padding: 4px 12px;
+      border-radius: 999px;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      text-align: center;
+    }
+    .breadcrumb {
+      font-family: 'Funnel Sans', 'Geist', system-ui, sans-serif;
+      font-size: 12px;
+      font-weight: 500;
+      color: #888888;
+      letter-spacing: 1px;
+    }
+    .breadcrumb a {
+      color: #888888;
+      text-decoration: none;
+    }
+    .breadcrumb a:hover { color: #FF5C00; }
+    .hero-title {
+      font-family: 'Newsreader', Georgia, serif;
+      font-size: clamp(28px, 7vw, 36px);
+      font-weight: 700;
+      color: #1A1A1A;
+      line-height: 1.15;
+    }
+    .hero-subtitle {
+      font-family: 'Newsreader', Georgia, serif;
+      font-size: clamp(17px, 4vw, 22px);
+      font-style: italic;
+      color: #FF5C00;
+    }
+    .hero-divider {
+      width: 60px;
+      height: 3px;
+      background: #FF5C00;
+      border-radius: 999px;
+    }
+    .hero-meta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .hero-meta span {
+      font-family: 'Funnel Sans', 'Geist', system-ui, sans-serif;
+      font-size: 11px;
+      font-weight: 500;
+      color: #666666;
+    }
+    .hero-meta .dot { color: #888888; }
+
+    /* ── QUOTE CARD ── */
+    .quote-card {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .quote-mark {
+      font-family: 'Newsreader', Georgia, serif;
+      font-size: 48px;
+      font-weight: 700;
+      color: #FF5C00;
+      line-height: 0.6;
+    }
+    .quote-text {
+      font-family: 'Newsreader', Georgia, serif;
+      font-size: 18px;
+      font-style: italic;
+      color: #1A1A1A;
+      line-height: 1.6;
+    }
+    .quote-ref {
+      font-family: 'Funnel Sans', 'Geist', system-ui, sans-serif;
+      font-size: 12px;
+      font-weight: 500;
+      color: #FF8533;
+      letter-spacing: 0.5px;
+    }
+
+    /* ── OVERVIEW CARD ── */
+    .overview-card {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .section-title {
+      font-family: 'Newsreader', Georgia, serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: #1A1A1A;
+    }
+    .overview-body {
+      font-family: 'Geist', system-ui, sans-serif;
+      font-size: 14px;
+      color: #666666;
+      line-height: 1.7;
+    }
+    .overview-body em { color: #444444; font-style: italic; }
+    .overview-body strong { color: #1A1A1A; font-weight: 600; }
+
+    /* ── KEY THEMES ── */
+    .key-section {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .key-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .key-tile {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: #FFF7EF;
+      border-radius: 8px;
+      padding: 14px 18px;
+    }
+    .key-icon {
+      font-size: 20px;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+    .key-info {}
+    .key-name {
+      font-family: 'Geist', system-ui, sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      color: #1A1A1A;
+    }
+    .key-sub {
+      font-family: 'Funnel Sans', 'Geist', system-ui, sans-serif;
+      font-size: 12px;
+      font-weight: 500;
+      color: #888888;
+      margin-top: 2px;
+    }
+
+    @media (min-width: 480px) {
+      .key-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+    }
+
+    /* ── SCRIPTURE / GROUP SECTION ── */
+    .script-section {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .script-card {
+      background: #FFFFFF;
+      border-radius: 12px;
+      padding: 20px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      border: 1px solid #F3F4F6;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.031), 0 12px 32px rgba(0,0,0,0.059);
+    }
+    .script-ref-pill {
+      display: inline-block;
+      background: rgba(255,92,0,0.078);
+      color: #FF5C00;
+      font-family: 'Funnel Sans', 'Geist', system-ui, sans-serif;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      padding: 3px 10px;
+      border-radius: 999px;
+      align-self: flex-start;
+    }
+    .script-verse {
+      font-family: 'Newsreader', Georgia, serif;
+      font-size: 15px;
+      font-style: italic;
+      color: #333333;
+      line-height: 1.6;
+    }
+    .script-verse .ref-inline {
+      display: block;
+      font-style: normal;
+      font-family: 'Funnel Sans', 'Geist', system-ui, sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      color: #FF5C00;
+      margin-top: 4px;
+    }
+    .script-body {
+      font-family: 'Geist', system-ui, sans-serif;
+      font-size: 14px;
+      color: #555555;
+      line-height: 1.65;
+    }
+    .script-body em { color: #333333; }
+    .script-note {
+      display: flex;
+      gap: 8px;
+      background: #FFF7EF;
+      border-radius: 6px;
+      padding: 10px 14px;
+    }
+    .script-note-icon { font-size: 13px; flex-shrink: 0; margin-top: 1px; }
+    .script-insight {
+      font-family: 'Geist', system-ui, sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      color: #FF5C00;
+      line-height: 1.5;
+    }
+
+    /* ── REFLECTION QUOTE ── */
+    .reflect-block {
+      background: rgba(255,92,0,0.039);
+      border-left: 3px solid #FF5C00;
+      border-radius: 12px;
+      padding: 24px 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .reflect-label {
+      font-family: 'Funnel Sans', 'Geist', system-ui, sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      color: #FF8533;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+    .reflect-text {
+      font-family: 'Newsreader', Georgia, serif;
+      font-size: 16px;
+      font-style: italic;
+      color: #1A1A1A;
+      line-height: 1.7;
+    }
+
+    /* ── TAKEAWAY CARD ── */
+    .takeaway-card {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .takeaway-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .takeaway-item {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+    }
+    .ta-bullet {
+      font-size: 14px;
+      color: #FF5C00;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .ta-text {
+      font-family: 'Geist', system-ui, sans-serif;
+      font-size: 13px;
+      color: #666666;
+      line-height: 1.6;
+    }
+
+    /* ── CLOSE QUOTE ── */
+    .close-quote {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      padding: 16px 0 8px;
+      text-align: center;
+    }
+    .close-line {
+      width: 40px;
+      height: 2px;
+      background: rgba(255,92,0,0.25);
+      border-radius: 999px;
+    }
+    .close-text {
+      font-family: 'Newsreader', Georgia, serif;
+      font-size: 14px;
+      font-style: italic;
+      color: #888888;
+      line-height: 1.7;
+      max-width: 420px;
+    }
+    .close-ref {
+      font-family: 'Funnel Sans', 'Geist', system-ui, sans-serif;
+      font-size: 11px;
+      font-weight: 500;
+      color: #FF8533;
+      letter-spacing: 0.5px;
+    }
+
+    /* ── FOOTER ── */
+    .footer {
+      display: flex;
+      justify-content: center;
+    }
+    .footer-txt {
+      font-family: 'Funnel Sans', 'Geist', system-ui, sans-serif;
+      font-size: 10px;
+      color: #888888;
+      letter-spacing: 0.5px;
+    }
+
+    /* ── MOBILE ── */
+    @media (max-width: 480px) {
+      .page { padding: 28px 16px 48px; gap: 24px; }
+      .card { padding: 20px; }
+      .script-card { padding: 16px 18px; }
+      .reflect-block { padding: 20px; }
+      .takeaway-card .card { padding: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="page">
+
+  <!-- ── HERO ── -->
+  <div class="hero">
+    <div class="breadcrumb">
+      <a href="./index.html">Lessons</a> &nbsp;/&nbsp; Doctrine &nbsp;/&nbsp; The Least of These
+    </div>
+    <div>
+      <div class="hero-title">The Least of These</div>
+      <div class="hero-subtitle">Who Jesus Notices</div>
+    </div>
+    <div class="hero-divider"></div>
+    <div class="hero-meta">
+      <span>Doctrine Series</span>
+      <span class="dot">·</span>
+      <span>Matthew 25:31–46</span>
+      <span class="dot">·</span>
+      <span>March 28, 2026</span>
+    </div>
+  </div>
+
+  <!-- ── KEY VERSE CARD ── -->
+  <div class="card quote-card">
+    <div class="quote-mark">"</div>
+    <div class="quote-text">Truly I tell you, whatever you did for one of the least of these brothers and sisters of mine, you did for me.</div>
+    <div class="quote-ref">— Matthew 25:40 (NIV)</div>
+  </div>
+
+  <!-- ── OVERVIEW CARD ── -->
+  <div class="card overview-card">
+    <div class="label-pill">Lesson Overview</div>
+    <div class="section-title">Who Does Jesus See?</div>
+    <p class="overview-body">In Jesus' culture — and honestly, in ours — certain people were invisible: kids, foreigners, sick people, prisoners, the poor. Jesus didn't just notice them. He said His identity was <em>wrapped up</em> in them. Not just "help them." He says: <strong>when you help them, you're interacting with me.</strong></p>
+  </div>
+
+  <!-- ── KEY THEMES ── -->
+  <div class="key-section">
+    <div class="section-title" style="font-size:20px;">The 6 Groups Jesus Lifts Up</div>
+    <div class="key-grid">
+      <div class="key-tile">
+        <div class="key-icon">👶</div>
+        <div class="key-info">
+          <div class="key-name">Children</div>
+          <div class="key-sub">The Powerless &amp; Overlooked</div>
+        </div>
+      </div>
+      <div class="key-tile">
+        <div class="key-icon">🌍</div>
+        <div class="key-info">
+          <div class="key-name">Strangers &amp; Foreigners</div>
+          <div class="key-sub">The Outsider</div>
+        </div>
+      </div>
+      <div class="key-tile">
+        <div class="key-icon">🤒</div>
+        <div class="key-info">
+          <div class="key-name">The Sick</div>
+          <div class="key-sub">Physically &amp; Socially Isolated</div>
+        </div>
+      </div>
+      <div class="key-tile">
+        <div class="key-icon">⛓️</div>
+        <div class="key-info">
+          <div class="key-name">Prisoners</div>
+          <div class="key-sub">The Forgotten &amp; Judged</div>
+        </div>
+      </div>
+      <div class="key-tile">
+        <div class="key-icon">💸</div>
+        <div class="key-info">
+          <div class="key-name">The Poor</div>
+          <div class="key-sub">Economically Vulnerable</div>
+        </div>
+      </div>
+      <div class="key-tile">
+        <div class="key-icon">😔</div>
+        <div class="key-info">
+          <div class="key-name">Sinners &amp; Outcasts</div>
+          <div class="key-sub">Spiritually &amp; Socially Marginalized</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SCRIPTURE NOTES ── -->
+  <div class="script-section">
+    <div class="section-title" style="font-size:20px;">Stories &amp; Scripture</div>
+
+    <!-- Children -->
+    <div class="script-card">
+      <div class="script-ref-pill">Matthew 19:14</div>
+      <div class="script-verse">
+        "Let the little children come to me… for to such belongs the kingdom of heaven."
+        <span class="ref-inline">Matthew 19:14 (ESV)</span>
+      </div>
+      <p class="script-body">In Jesus' culture, kids had no status, no power, no voice. Adults literally shooed them away. Jesus stops, turns around, and centers them — and says the kingdom <em>belongs</em> to people like them.</p>
+      <div class="script-note">
+        <div class="script-note-icon">→</div>
+        <div class="script-insight">The people others push aside are the ones Jesus pulls close.</div>
+      </div>
+    </div>
+
+    <!-- Strangers -->
+    <div class="script-card">
+      <div class="script-ref-pill">Matthew 25:35 / Luke 10</div>
+      <div class="script-verse">
+        "I was a stranger and you welcomed me…"
+        <span class="ref-inline">Matthew 25:35 (ESV)</span>
+      </div>
+      <p class="script-body">In the Parable of the Good Samaritan (Luke 10:33–35), the <em>hero</em> is the outsider — the Samaritan, someone Jews avoided. Jesus makes him the example of what love looks like.</p>
+      <div class="script-note">
+        <div class="script-note-icon">→</div>
+        <div class="script-insight">Jesus calls us to welcome people who feel unfamiliar or uncomfortable — not just people like us.</div>
+      </div>
+    </div>
+
+    <!-- Sick -->
+    <div class="script-card">
+      <div class="script-ref-pill">Matthew 25:36</div>
+      <div class="script-verse">
+        "I was sick and you visited me…"
+        <span class="ref-inline">Matthew 25:36 (ESV)</span>
+      </div>
+      <p class="script-body">Jesus touched lepers — people everyone else avoided completely. Not just healed them. <em>Touched</em> them. He didn't just fix their bodies; He restored their dignity.</p>
+      <div class="script-note">
+        <div class="script-note-icon">→</div>
+        <div class="script-insight">Showing up for sick people — even when it's inconvenient — is showing up for Jesus.</div>
+      </div>
+    </div>
+
+    <!-- Prisoners -->
+    <div class="script-card">
+      <div class="script-ref-pill">Matthew 25:36</div>
+      <div class="script-verse">
+        "…I was in prison and you came to me."
+        <span class="ref-inline">Matthew 25:36 (ESV)</span>
+      </div>
+      <p class="script-body">Society writes off prisoners — they made their choices, right? Jesus doesn't. He ties His own identity even to people behind bars.</p>
+      <div class="script-note">
+        <div class="script-note-icon">→</div>
+        <div class="script-insight">Jesus doesn't write people off. He invites us to show up for the ones everyone else has forgotten.</div>
+      </div>
+    </div>
+
+    <!-- Poor -->
+    <div class="script-card">
+      <div class="script-ref-pill">Mark 12:43–44</div>
+      <div class="script-verse">
+        "This poor widow has put in more than all of them."
+        <span class="ref-inline">Mark 12:43–44 (ESV)</span>
+      </div>
+      <p class="script-body">The disciples were impressed by the huge donations of the wealthy. Jesus pointed at the woman nobody noticed — two small coins — and said <em>she</em> gave the most. He consistently honors the poor and warns the rich.</p>
+      <div class="script-note">
+        <div class="script-note-icon">→</div>
+        <div class="script-insight">Jesus flips our value system. The one with the least can give the most in His economy.</div>
+      </div>
+    </div>
+
+    <!-- Sinners -->
+    <div class="script-card">
+      <div class="script-ref-pill">Luke 5:32</div>
+      <div class="script-verse">
+        "I have not come to call the righteous but sinners to repentance."
+        <span class="ref-inline">Luke 5:32 (ESV)</span>
+      </div>
+      <p class="script-body">Jesus ate with tax collectors (traitors), talked with prostitutes, spent time with people religious leaders publicly avoided. He intentionally moved <em>toward</em> people with messy reputations.</p>
+      <div class="script-note">
+        <div class="script-note-icon">→</div>
+        <div class="script-insight">The most surprising group Jesus moves toward? People everyone else avoids because of their sin.</div>
+      </div>
+    </div>
+
+  </div><!-- /.script-section -->
+
+  <!-- ── REFLECTION ── -->
+  <div class="reflect-block">
+    <div class="reflect-label">Key Pattern</div>
+    <div class="reflect-text">The common thread isn't just "widows and orphans." It's anyone who is overlooked, powerless, excluded, and can't repay you. Most of these groups can't advance your status and may even cost you socially. That's exactly why Jesus highlights them. And He doesn't just say "help them" — He says: when you do, you're interacting with Him.</div>
+  </div>
+
+  <!-- ── TAKEAWAY CARD ── -->
+  <div class="card takeaway-card">
+    <div class="label-pill">Takeaways</div>
+    <div class="section-title" style="font-size:20px;">Living It Out</div>
+    <div class="takeaway-list">
+      <div class="takeaway-item">
+        <div class="ta-bullet">•</div>
+        <div class="ta-text">Ask God to open your eyes to the people around you who are overlooked, lonely, or in need.</div>
+      </div>
+      <div class="takeaway-item">
+        <div class="ta-bullet">•</div>
+        <div class="ta-text">Choose one act of presence this week: show up for someone sick, share a meal, check in on someone forgotten.</div>
+      </div>
+      <div class="takeaway-item">
+        <div class="ta-bullet">•</div>
+        <div class="ta-text">Memorize Matthew 25:40 and let it shape how you see every interaction this week.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── CLOSE QUOTE ── -->
+  <div class="close-quote">
+    <div class="close-line"></div>
+    <div class="close-text">He has shown you, O mortal, what is good. And what does the Lord require of you? To act justly and to love mercy and to walk humbly with your God.</div>
+    <div class="close-ref">Micah 6:8</div>
+  </div>
+
+  <!-- ── FOOTER ── -->
+  <div class="footer">
+    <div class="footer-txt">Doctrine Lessons · 2026</div>
+  </div>
+
+</div><!-- /.page -->
+
+</body>
+</html>

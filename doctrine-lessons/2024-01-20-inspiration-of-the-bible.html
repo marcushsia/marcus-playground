@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Inspiration of the Bible · Doctrine Lessons</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,700;1,6..72,400;1,6..72,700&family=Funnel+Sans:wght@400;500;600;700&family=Geist:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Geist', system-ui, sans-serif; background: #FFF7EF; color: #1A1A1A; min-height: 100vh; }
+    .page { max-width: 600px; margin: 0 auto; padding: 40px 24px 60px; display: flex; flex-direction: column; gap: 32px; }
+    .card { background: #FFFFFF; border-radius: 12px; padding: 24px 28px; box-shadow: 0 2px 4px rgba(0,0,0,.031), 0 12px 32px rgba(0,0,0,.059); }
+    .label-pill { display: inline-block; background: rgba(255,92,0,.094); color: #FF5C00; font-family: 'Funnel Sans', system-ui, sans-serif; font-size: 11px; font-weight: 600; letter-spacing: .8px; padding: 4px 12px; border-radius: 999px; }
+    /* HERO */
+    .hero { display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center; }
+    .breadcrumb { font-family: 'Funnel Sans', system-ui, sans-serif; font-size: 12px; font-weight: 500; color: #888; letter-spacing: 1px; }
+    .breadcrumb a { color: #888; text-decoration: none; } .breadcrumb a:hover { color: #FF5C00; }
+    .hero-title { font-family: 'Newsreader', Georgia, serif; font-size: clamp(26px, 6vw, 34px); font-weight: 700; color: #1A1A1A; line-height: 1.15; }
+    .hero-subtitle { font-family: 'Newsreader', Georgia, serif; font-size: clamp(16px, 3.5vw, 20px); font-style: italic; color: #FF5C00; }
+    .hero-divider { width: 60px; height: 3px; background: #FF5C00; border-radius: 999px; }
+    .hero-meta { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: center; }
+    .hero-meta span { font-family: 'Funnel Sans', system-ui, sans-serif; font-size: 11px; font-weight: 500; color: #666; }
+    .hero-meta .dot { color: #888; }
+    /* QUOTE CARD */
+    .quote-card { display: flex; flex-direction: column; gap: 16px; }
+    .quote-mark { font-family: 'Newsreader', Georgia, serif; font-size: 48px; font-weight: 700; color: #FF5C00; line-height: .6; }
+    .quote-text { font-family: 'Newsreader', Georgia, serif; font-size: 17px; font-style: italic; color: #1A1A1A; line-height: 1.6; }
+    .quote-ref { font-family: 'Funnel Sans', system-ui, sans-serif; font-size: 12px; font-weight: 500; color: #FF8533; letter-spacing: .5px; }
+    /* OVERVIEW */
+    .overview-card { display: flex; flex-direction: column; gap: 16px; }
+    .section-title { font-family: 'Newsreader', Georgia, serif; font-weight: 700; color: #1A1A1A; }
+    .overview-body { font-size: 14px; color: #555; line-height: 1.7; }
+    .overview-body em { color: #333; font-style: italic; } .overview-body strong { color: #1A1A1A; font-weight: 600; }
+    /* KEY TILES */
+    .key-section { display: flex; flex-direction: column; gap: 16px; }
+    .key-grid { display: flex; flex-direction: column; gap: 10px; }
+    .key-tile { display: flex; align-items: flex-start; gap: 12px; background: #FFF7EF; border-radius: 8px; padding: 14px 18px; }
+    .key-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+    .key-name { font-size: 14px; font-weight: 600; color: #1A1A1A; }
+    .key-sub { font-family: 'Funnel Sans', system-ui, sans-serif; font-size: 12px; font-weight: 500; color: #888; margin-top: 2px; }
+    @media (min-width: 480px) { .key-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; } }
+    /* SCRIPTURE CARDS */
+    .script-section { display: flex; flex-direction: column; gap: 16px; }
+    .script-card { background: #FFFFFF; border-radius: 12px; padding: 20px 24px; display: flex; flex-direction: column; gap: 12px; border: 1px solid #F3F4F6; box-shadow: 0 2px 4px rgba(0,0,0,.031), 0 12px 32px rgba(0,0,0,.059); }
+    .script-ref-pill { display: inline-block; background: rgba(255,92,0,.078); color: #FF5C00; font-family: 'Funnel Sans', system-ui, sans-serif; font-size: 10px; font-weight: 600; letter-spacing: .5px; padding: 3px 10px; border-radius: 999px; align-self: flex-start; }
+    .script-verse { font-family: 'Newsreader', Georgia, serif; font-size: 15px; font-style: italic; color: #333; line-height: 1.6; }
+    .script-body { font-size: 14px; color: #555; line-height: 1.65; }
+    .script-note { display: flex; gap: 8px; background: #FFF7EF; border-radius: 6px; padding: 10px 14px; }
+    .script-insight { font-size: 13px; font-weight: 600; color: #FF5C00; line-height: 1.5; }
+    /* REFLECT */
+    .reflect-block { background: rgba(255,92,0,.039); border-left: 3px solid #FF5C00; border-radius: 12px; padding: 24px 28px; display: flex; flex-direction: column; gap: 14px; }
+    .reflect-label { font-family: 'Funnel Sans', system-ui, sans-serif; font-size: 10px; font-weight: 700; color: #FF8533; letter-spacing: 1.5px; text-transform: uppercase; }
+    .reflect-text { font-family: 'Newsreader', Georgia, serif; font-size: 16px; font-style: italic; color: #1A1A1A; line-height: 1.7; }
+    /* TAKEAWAY */
+    .takeaway-card { display: flex; flex-direction: column; gap: 16px; }
+    .takeaway-list { display: flex; flex-direction: column; gap: 10px; }
+    .takeaway-item { display: flex; gap: 10px; align-items: flex-start; }
+    .ta-bullet { font-size: 14px; color: #FF5C00; flex-shrink: 0; margin-top: 1px; }
+    .ta-text { font-size: 13px; color: #666; line-height: 1.6; }
+    /* CLOSE QUOTE */
+    .close-quote { display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 16px 0 8px; text-align: center; }
+    .close-line { width: 40px; height: 2px; background: rgba(255,92,0,.25); border-radius: 999px; }
+    .close-text { font-family: 'Newsreader', Georgia, serif; font-size: 14px; font-style: italic; color: #888; line-height: 1.7; max-width: 420px; }
+    .close-ref { font-family: 'Funnel Sans', system-ui, sans-serif; font-size: 11px; font-weight: 500; color: #FF8533; letter-spacing: .5px; }
+    .footer { display: flex; justify-content: center; }
+    .footer-txt { font-family: 'Funnel Sans', system-ui, sans-serif; font-size: 10px; color: #888; letter-spacing: .5px; }
+    @media (max-width: 480px) { .page { padding: 28px 16px 48px; gap: 24px; } .card { padding: 20px; } .script-card { padding: 16px 18px; } .reflect-block { padding: 20px; } }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <div class="hero">
+    <div class="breadcrumb"><a href="./index.html">Lessons</a> &nbsp;/&nbsp; Doctrine &nbsp;/&nbsp; Inspiration of the Bible</div>
+    <div>
+      <div class="hero-title">Inspiration of the Bible</div>
+      <div class="hero-subtitle">God Breathed His Word</div>
+    </div>
+    <div class="hero-divider"></div>
+    <div class="hero-meta">
+      <span>Doctrine Series</span><span class="dot">·</span>
+      <span>2 Timothy 3:16–17</span><span class="dot">·</span>
+      <span>January 20, 2024</span>
+    </div>
+  </div>
+
+  <div class="card quote-card">
+    <div class="quote-mark">"</div>
+    <div class="quote-text">All Scripture is breathed out by God and profitable for teaching, for reproof, for correction, and for training in righteousness, that the man of God may be complete, equipped for every good work.</div>
+    <div class="quote-ref">— 2 Timothy 3:16–17 (ESV)</div>
+  </div>
+
+  <div class="card overview-card">
+    <div class="label-pill">Lesson Overview</div>
+    <div class="section-title" style="font-size:22px;">Where Did the Bible Come From?</div>
+    <p class="overview-body">The Bible isn't a human book that God approved. It's God's actual word, carried through human writers by the Holy Spirit. <strong>"God-breathed"</strong> means the source is God Himself — which means what it says about your life, your sin, and your salvation is true.</p>
+  </div>
+
+  <div class="key-section">
+    <div class="section-title" style="font-size:20px;">What Inspiration Means</div>
+    <div class="key-grid">
+      <div class="key-tile">
+        <div class="key-icon">🫁</div>
+        <div>
+          <div class="key-name">God-Breathed</div>
+          <div class="key-sub">Authored by God, through humans</div>
+        </div>
+      </div>
+      <div class="key-tile">
+        <div class="key-icon">📖</div>
+        <div>
+          <div class="key-name">Profitable for Everything</div>
+          <div class="key-sub">Doctrine, correction, training</div>
+        </div>
+      </div>
+      <div class="key-tile">
+        <div class="key-icon">🕊️</div>
+        <div>
+          <div class="key-name">Spirit-Moved Writers</div>
+          <div class="key-sub">Not their will — God's initiative</div>
+        </div>
+      </div>
+      <div class="key-tile">
+        <div class="key-icon">🛡️</div>
+        <div>
+          <div class="key-name">Complete &amp; Sufficient</div>
+          <div class="key-sub">Fully equips us for every good work</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="script-section">
+    <div class="section-title" style="font-size:20px;">Key Passages</div>
+
+    <div class="script-card">
+      <div class="script-ref-pill">2 Timothy 3:16–17</div>
+      <div class="script-verse">"All Scripture is breathed out by God and profitable for teaching, for reproof, for correction, and for training in righteousness…"</div>
+      <p class="script-body">"Breathed out" — not dictated word-for-word like a robot, but God's breath, God's life behind every word. Every page has a purpose: to shape you into someone equipped to live God's way.</p>
+      <div class="script-note"><div class="script-insight">→ When Scripture corrects you, that's God correcting you.</div></div>
+    </div>
+
+    <div class="script-card">
+      <div class="script-ref-pill">2 Peter 1:20–21</div>
+      <div class="script-verse">"…prophecy never came by the will of man, but holy men of God spoke as they were moved by the Holy Spirit."</div>
+      <p class="script-body">The human writers were real people — with personalities, emotions, vocabulary — but God's Spirit was behind every word. It wasn't their idea. It was His.</p>
+      <div class="script-note"><div class="script-insight">→ The Bible's authority doesn't come from who wrote it. It comes from who breathed it.</div></div>
+    </div>
+  </div>
+
+  <div class="reflect-block">
+    <div class="reflect-label">Big Idea</div>
+    <div class="reflect-text">The Bible isn't one option among many for moral guidance. It's God's actual voice. When you ignore it, you're not ignoring a book — you're ignoring Him.</div>
+  </div>
+
+  <div class="card takeaway-card">
+    <div class="label-pill">Takeaways</div>
+    <div class="section-title" style="font-size:20px;">Living It Out</div>
+    <div class="takeaway-list">
+      <div class="takeaway-item"><div class="ta-bullet">•</div><div class="ta-text">Read it like God is speaking to you — because He is.</div></div>
+      <div class="takeaway-item"><div class="ta-bullet">•</div><div class="ta-text">When Scripture corrects you, don't argue with it. Trust it.</div></div>
+      <div class="takeaway-item"><div class="ta-bullet">•</div><div class="ta-text">You don't have to understand everything to obey what you do understand.</div></div>
+    </div>
+  </div>
+
+  <div class="close-quote">
+    <div class="close-line"></div>
+    <div class="close-text">Your word is a lamp to my feet and a light to my path.</div>
+    <div class="close-ref">Psalm 119:105</div>
+  </div>
+
+  <div class="footer"><div class="footer-txt">Doctrine Lessons · 2024</div></div>
+
+</div>
+</body>
+</html>
