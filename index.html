@@ -30,6 +30,11 @@
     .card-date { font-size: 0.75rem; color: var(--muted); opacity: 0.7; }
     .card-arrow { font-size: 0.85rem; color: var(--accent); opacity: 0; transition: opacity 0.15s, transform 0.15s; }
     .card:hover .card-arrow { opacity: 1; transform: translateX(3px); }
+    /* Archived section */
+    .archive-divider { max-width: 900px; margin: 3rem auto 2rem; border: none; border-top: 1px solid var(--border); }
+    .card.archived { opacity: 0.55; }
+    .card.archived:hover { opacity: 0.85; border-color: var(--accent); transform: translateY(-2px); box-shadow: 0 8px 28px rgba(108,142,247,0.08); }
+    .card-badge { font-size: 0.65rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: 4px; padding: 0.15rem 0.4rem; align-self: flex-start; }
     footer { max-width: 900px; margin: 4rem auto 0; font-size: 0.8rem; color: var(--muted); opacity: 0.5; text-align: center; }
   </style>
 </head>
@@ -40,7 +45,7 @@
     <p>A personal hub for experiments, tools, and things I've built — mostly to learn, sometimes to share.</p>
   </header>
   <hr class="divider" />
-  <p class="section-title">Projects</p>
+  <p class="section-title">Active Projects</p>
   <div class="grid">
     <a class="card" href="./doctrine-lessons/">
       <div class="card-icon">✝️</div>
@@ -78,28 +83,10 @@
         <span class="card-arrow">&#8594;</span>
       </div>
     </a>
-    <a class="card" href="./tesla/">
-      <div class="card-icon">&#9889;</div>
-      <h2>Tesla Decision Guide</h2>
-      <p>Interactive family guide for the Tesla purchase — models, costs, financing options, and a recommendation.</p>
-      <div class="card-meta">
-        <span class="card-date">March 2026</span>
-        <span class="card-arrow">&#8594;</span>
-      </div>
-    </a>
     <a class="card" href="./mya-swimming/">
       <div class="card-icon">&#127946;</div>
       <h2>Mya's Swimming Plan</h2>
       <p>Training plan to take Mya from A Standard to AA Standard in the 100 Free and 50 Free.</p>
-      <div class="card-meta">
-        <span class="card-date">March 2026</span>
-        <span class="card-arrow">&#8594;</span>
-      </div>
-    </a>
-    <a class="card" href="./spring-break-trip/">
-      <div class="card-icon">🏔️</div>
-      <h2>Spring Break 2026</h2>
-      <p>Yeng/Hsia family trip itinerary — Zion, Brian Head skiing, and Las Vegas. Mar 15–20.</p>
       <div class="card-meta">
         <span class="card-date">March 2026</span>
         <span class="card-arrow">&#8594;</span>
@@ -115,6 +102,32 @@
       </div>
     </a>
   </div>
+
+  <hr class="archive-divider" />
+  <p class="section-title">Archived Projects</p>
+  <div class="grid">
+    <a class="card archived" href="./spring-break-trip/">
+      <div class="card-icon">🏔️</div>
+      <h2>Spring Break 2026</h2>
+      <span class="card-badge">Archived</span>
+      <p>Yeng/Hsia family trip itinerary — Zion, Brian Head skiing, and Las Vegas. Mar 15–20.</p>
+      <div class="card-meta">
+        <span class="card-date">March 2026</span>
+        <span class="card-arrow">&#8594;</span>
+      </div>
+    </a>
+    <a class="card archived" href="./tesla/">
+      <div class="card-icon">&#9889;</div>
+      <h2>Tesla Decision Guide</h2>
+      <span class="card-badge">Archived</span>
+      <p>Interactive family guide for the Tesla purchase — models, costs, financing options, and a recommendation.</p>
+      <div class="card-meta">
+        <span class="card-date">March 2026</span>
+        <span class="card-arrow">&#8594;</span>
+      </div>
+    </a>
+  </div>
+
   <footer>Built with HTML &amp; CSS &middot; Hosted on GitHub Pages</footer>
 </body>
 </html>
