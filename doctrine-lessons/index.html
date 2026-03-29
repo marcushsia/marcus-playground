@@ -76,30 +76,6 @@
     .spark-2 { font-size: 10px; color: #FF5C00; }
     .spark-3 { font-size: 9px;  color: #FF8533; }
 
-    /* ── TABS ── */
-    .tabs {
-      display: flex;
-      gap: 12px;
-    }
-    .tab-btn {
-      flex: 1;
-      padding: 10px 14px;
-      border-radius: 999px;
-      font-family: 'Funnel Sans', 'Geist', system-ui, sans-serif;
-      font-size: 14px;
-      font-weight: 700;
-      text-align: center;
-      cursor: pointer;
-      border: none;
-      outline: none;
-      transition: background 0.18s, color 0.18s;
-    }
-    .tab-btn.active   { background: #FF5C00; color: #FFFFFF; }
-    .tab-btn.inactive { background: #FFFFFF;  color: #8A5A44; }
-
-    /* ── TAB PANELS ── */
-    .tab-panel { display: none; }
-    .tab-panel.active { display: block; }
 
     /* ── LIST CARD ── */
     .list-card {
@@ -216,79 +192,8 @@
       text-align: center;
     }
 
-    /* ── TODAY TAB ── */
-    .today-feature {
-      background: #FFFFFF;
-      border-radius: 12px;
-      padding: 28px;
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.031), 0 16px 40px rgba(0,0,0,0.071);
-    }
-    .today-eyebrow {
-      font-family: 'Funnel Sans', 'Geist', system-ui, sans-serif;
-      font-size: 11px;
-      font-weight: 600;
-      color: #FF8533;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-    }
-    .today-title {
-      font-family: 'Newsreader', Georgia, serif;
-      font-size: clamp(22px, 5vw, 30px);
-      font-weight: 700;
-      color: #1A1A1A;
-      line-height: 1.2;
-    }
-    .today-subtitle {
-      font-family: 'Newsreader', Georgia, serif;
-      font-size: 18px;
-      font-style: italic;
-      color: #FF5C00;
-    }
-    .today-meta {
-      font-family: 'Geist', system-ui, sans-serif;
-      font-size: 13px;
-      color: #888888;
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-    .today-meta span { display: flex; align-items: center; gap: 4px; }
-    .today-divider {
-      width: 48px;
-      height: 3px;
-      background: #FF5C00;
-      border-radius: 999px;
-    }
-    .today-desc {
-      font-family: 'Geist', system-ui, sans-serif;
-      font-size: 15px;
-      color: #444444;
-      line-height: 1.7;
-    }
-    .today-open-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 13px 24px;
-      background: #FF5C00;
-      color: #FFFFFF;
-      font-family: 'Funnel Sans', 'Geist', system-ui, sans-serif;
-      font-size: 15px;
-      font-weight: 700;
-      border-radius: 999px;
-      text-decoration: none;
-      align-self: flex-start;
-      transition: opacity 0.15s;
-    }
-    .today-open-btn:hover { opacity: 0.85; }
 
     /* ── MOBILE ── */
-    .back-link { display: inline-flex; align-items: center; gap: 0.4rem; font-family: 'Funnel Sans', 'Geist', system-ui, sans-serif; font-size: 0.82rem; font-weight: 500; color: #8A5A44; text-decoration: none; transition: color 0.15s; margin-bottom: 4px; }
-    .back-link:hover { color: #FF5C00; }
-
     @media (max-width: 600px) {
       .page { padding: 16px 14px 40px; gap: 16px; }
 
@@ -305,7 +210,6 @@
 
       .col-action { margin-top: 4px; }
 
-      .today-feature { padding: 20px; }
     }
 
     @media (min-width: 601px) and (max-width: 720px) {
@@ -319,8 +223,6 @@
 <body>
 
 <div class="page">
-
-  <a class="back-link" href="../">&#8592; Marcus's Playground</a>
 
   <!-- HEADER CARD -->
   <div class="header-card">
@@ -337,15 +239,8 @@
     <span class="spark spark-3">✦</span>
   </div>
 
-  <!-- TABS -->
-  <div class="tabs">
-    <button class="tab-btn active"   onclick="showTab('all',this)">🗂 All Lessons</button>
-    <button class="tab-btn inactive" onclick="showTab('today',this)">📖 Today</button>
-  </div>
-
-  <!-- ── TAB: ALL LESSONS ── -->
-  <div class="tab-panel active" id="panel-all">
-    <div class="list-card">
+  <!-- LESSONS TABLE -->
+  <div class="list-card">
 
       <!-- Table header (desktop only) -->
       <div class="tbl-head">
@@ -426,44 +321,12 @@
       </div><!-- /.tbl -->
 
     </div><!-- /.list-card -->
-  </div><!-- /#panel-all -->
-
-  <!-- ── TAB: TODAY ── -->
-  <div class="tab-panel" id="panel-today">
-    <div class="today-feature">
-      <div class="today-eyebrow">March 28, 2026 · Today's Lesson</div>
-      <div class="today-title">The Least of These</div>
-      <div class="today-subtitle">Who Jesus Notices</div>
-      <div class="today-divider"></div>
-      <div class="today-meta">
-        <span>Doctrine Series</span>
-        <span>·</span>
-        <span>Matthew 25:31–46</span>
-        <span>·</span>
-        <span>~12 min</span>
-      </div>
-      <p class="today-desc">Jesus doesn't just care about the respectable and powerful. He specifically — repeatedly — moves toward people everyone else overlooks. Kids, outsiders, the sick, prisoners, the poor, sinners. And He says His identity is <em>wrapped up</em> in how we treat them.</p>
-      <a class="today-open-btn" href="./2026-03-28-the-least-of-these.html">Open Lesson →</a>
-    </div>
-  </div><!-- /#panel-today -->
 
   <!-- FOOTER NOTE -->
-  <div class="footer-note">Each lesson row is tab-ready for future individual lesson pages.</div>
+  <div class="footer-note">Each lesson row links to its individual lesson page.</div>
 
 </div><!-- /.page -->
 
-<script>
-  function showTab(name, btn) {
-    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-    document.querySelectorAll('.tab-btn').forEach(b => {
-      b.classList.remove('active');
-      b.classList.add('inactive');
-    });
-    document.getElementById('panel-' + name).classList.add('active');
-    btn.classList.remove('inactive');
-    btn.classList.add('active');
-  }
-</script>
 
 </body>
 </html>
