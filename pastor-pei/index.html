@@ -3,27 +3,52 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Pastor Pei — Next Steps Review</title>
+<title>Pastor Pei — Project Status</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: Arial, sans-serif; background: #f4f4f4; color: #222; font-size: 16px; }
 
-  header { background: #1a1a1a; color: #fff; padding: 32px 40px; }
+  header { background: #0f1e3d; color: #fff; padding: 32px 40px; }
   header h1 { font-size: 26px; margin-bottom: 6px; }
-  header p  { color: #aaa; font-size: 15px; }
+  header .sub { color: #b4a06a; font-size: 15px; font-style: italic; margin-bottom: 6px; }
+  header p  { color: #aaa; font-size: 14px; }
 
-  .container { max-width: 860px; margin: 0 auto; padding: 32px 20px 60px; }
+  .container { max-width: 900px; margin: 0 auto; padding: 32px 20px 60px; }
 
   .section { background: #fff; border-radius: 8px; padding: 28px 32px; margin-bottom: 24px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
   .section h2 { font-size: 18px; color: #1a1a1a; margin-bottom: 18px; padding-bottom: 10px; border-bottom: 2px solid #f0f0f0; }
 
-  .stat-row { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 4px; }
-  .stat { background: #f4f4f4; border-radius: 6px; padding: 14px 20px; flex: 1; min-width: 140px; text-align: center; }
-  .stat .num { font-size: 28px; font-weight: bold; color: #cc0000; }
+  .stat-row { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 16px; }
+  .stat { background: #f4f4f4; border-radius: 6px; padding: 14px 20px; flex: 1; min-width: 130px; text-align: center; }
+  .stat .num { font-size: 28px; font-weight: bold; color: #0f1e3d; }
+  .stat .num.green { color: #16a34a; }
   .stat .label { font-size: 13px; color: #666; margin-top: 4px; }
 
+  /* pipeline */
+  .pipeline { display: flex; gap: 0; margin: 20px 0 8px; flex-wrap: wrap; }
+  .pipe-step { flex: 1; min-width: 120px; text-align: center; padding: 12px 8px; background: #f4f4f4; border-right: 2px solid #fff; font-size: 13px; color: #555; position: relative; }
+  .pipe-step:last-child { border-right: none; }
+  .pipe-step .icon { font-size: 20px; display: block; margin-bottom: 4px; }
+  .pipe-step.done { background: #dcfce7; color: #166534; }
+  .pipe-step.active { background: #dbeafe; color: #1e40af; font-weight: bold; }
+  .pipe-step.next { background: #fef9c3; color: #854d0e; }
+
+  /* draft cards */
+  .draft-card { border: 1px solid #e5e5e5; border-radius: 8px; padding: 18px 20px; margin-bottom: 14px; display: flex; gap: 16px; align-items: flex-start; }
+  .draft-card .cover { width: 96px; height: 50px; object-fit: cover; border-radius: 4px; flex-shrink: 0; background: #0f1e3d; }
+  .draft-card .meta { flex: 1; }
+  .draft-card .titles { font-size: 15px; font-weight: bold; color: #1a1a1a; margin-bottom: 4px; }
+  .draft-card .preview { font-size: 13px; color: #555; line-height: 1.5; margin-bottom: 8px; font-style: italic; }
+  .draft-card .date-tag { font-size: 12px; color: #888; margin-bottom: 8px; }
+  .draft-card a.btn { display: inline-block; font-size: 13px; font-weight: bold; padding: 5px 14px; border-radius: 4px; text-decoration: none; background: #0f1e3d; color: #fff; }
+  .draft-card a.btn:hover { background: #1a3060; }
+
+  .warn-card { background: #fff7ed; border-left: 4px solid #f97316; border-radius: 4px; padding: 12px 16px; font-size: 14px; color: #444; margin-bottom: 14px; line-height: 1.6; }
+
+  /* steps */
   .step { display: flex; gap: 16px; align-items: flex-start; margin-bottom: 20px; }
-  .step-num { background: #cc0000; color: #fff; border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 15px; flex-shrink: 0; margin-top: 2px; }
+  .step-num { background: #0f1e3d; color: #fff; border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 15px; flex-shrink: 0; margin-top: 2px; }
+  .step-num.done-num { background: #16a34a; }
   .step-body h3 { font-size: 16px; margin-bottom: 4px; color: #1a1a1a; }
   .step-body p  { font-size: 15px; color: #444; line-height: 1.6; }
   .step-body .who { display: inline-block; font-size: 12px; font-weight: bold; padding: 2px 8px; border-radius: 3px; margin-top: 6px; }
@@ -35,113 +60,163 @@
   .done-list li:last-child { border-bottom: none; }
   .done-list li::before { content: "✓ "; color: #16a34a; font-weight: bold; }
 
+  .code-block { background: #1e1e2e; color: #cdd6f4; font-family: monospace; font-size: 13px; padding: 14px 18px; border-radius: 6px; margin-top: 10px; line-height: 1.7; overflow-x: auto; }
+  .code-block .comment { color: #6c7086; }
+  .code-block .flag { color: #cba6f7; }
+  .code-block .val { color: #a6e3a1; }
+
+  .note { background: #fffbeb; border-left: 4px solid #f59e0b; padding: 14px 18px; border-radius: 4px; font-size: 14px; color: #444; margin-top: 16px; line-height: 1.6; }
+
   .phase { margin-bottom: 14px; }
   .phase-title { font-weight: bold; color: #1a1a1a; margin-bottom: 4px; font-size: 15px; }
   .phase-desc  { font-size: 14px; color: #555; line-height: 1.5; padding-left: 12px; border-left: 3px solid #e5e5e5; }
 
-  .note { background: #fffbeb; border-left: 4px solid #f59e0b; padding: 14px 18px; border-radius: 4px; font-size: 14px; color: #444; margin-top: 16px; line-height: 1.6; }
-
+  a { color: #0f1e3d; }
   footer { text-align: center; font-size: 13px; color: #999; padding: 24px; }
 </style>
 </head>
 <body>
 
 <header>
-  <h1>Pastor Pei (裴牧師) — Project Review</h1>
-  <p>Prepared for Marcus & Pastor Pei · March 8, 2026</p>
+  <h1>Pastor Pei 夏牧師 — Substack Project</h1>
+  <div class="sub">pastorpei.substack.com</div>
+  <p>Updated April 24, 2026 · Automation live · 3 posts processed · 344 remaining</p>
 </header>
 
 <div class="container">
 
-  <!-- WHAT WE'VE DONE -->
+  <!-- STATS -->
   <div class="section">
-    <h2>✅ What's Been Done So Far</h2>
+    <h2>📊 Project Snapshot</h2>
     <div class="stat-row">
-      <div class="stat"><div class="num">347</div><div class="label">Blog posts exported from pastorpei.com</div></div>
-      <div class="stat"><div class="num">338</div><div class="label">Posts with original images</div></div>
-      <div class="stat"><div class="num">375</div><div class="label">Links checked inside posts</div></div>
-      <div class="stat"><div class="num">26</div><div class="label">Broken links found</div></div>
+      <div class="stat"><div class="num">347</div><div class="label">Total posts from Tumblr</div></div>
+      <div class="stat"><div class="num green">3</div><div class="label">Posts processed</div></div>
+      <div class="stat"><div class="num">344</div><div class="label">Posts remaining</div></div>
+      <div class="stat"><div class="num green">2</div><div class="label">Drafts ready to review</div></div>
     </div>
-    <br/>
-    <ul class="done-list">
-      <li>All 347 posts downloaded from Tumblr and catalogued (title, date, images, links)</li>
-      <li>Posts span December 2013 → December 2019 — about 6 years of writing</li>
-      <li>Every hyperlink in every post tested — only 26 are broken (7%)</li>
-      <li>Master spreadsheet built with full post inventory and link audit</li>
-    </ul>
+
+    <!-- Pipeline -->
+    <div class="pipeline">
+      <div class="pipe-step done"><span class="icon">📦</span>Export &amp; Parse</div>
+      <div class="pipe-step done"><span class="icon">🤖</span>Translate (Sonnet)</div>
+      <div class="pipe-step done"><span class="icon">🖼</span>Cover Image</div>
+      <div class="pipe-step done"><span class="icon">📝</span>Draft to Substack</div>
+      <div class="pipe-step active"><span class="icon">👀</span>Review with Pastor Pei</div>
+      <div class="pipe-step next"><span class="icon">📅</span>Schedule 2×/week</div>
+      <div class="pipe-step next"><span class="icon">🚀</span>Publish 344 posts</div>
+    </div>
   </div>
 
-  <!-- DECISIONS NEEDED -->
+  <!-- DRAFTS READY -->
   <div class="section">
-    <h2>📋 Decisions Needed Before We Continue</h2>
+    <h2>👀 Drafts Ready for Review</h2>
+    <p style="font-size:14px;color:#555;margin-bottom:16px;">These two posts are sitting in the Substack editor as drafts — nothing is published yet. Click to open in Substack and review the layout, translation, and cover image.</p>
+
+    <div class="draft-card">
+      <img class="cover" src="https://substack-post-media.s3.amazonaws.com/public/images/276b9068-71f8-49a7-a5dc-92a363c17dca_1200x630.jpeg" alt="cover" onerror="this.style.display='none'"/>
+      <div class="meta">
+        <div class="date-tag">December 24, 2013 · Post #2</div>
+        <div class="titles">信心是關係，不是物品 | Faith Is a Relationship, Not a Possession</div>
+        <div class="preview">"You can't lose it like keys. You can't borrow it from someone else. So what actually is faith — and why does yours keep changing size?"</div>
+        <a class="btn" href="https://pastorpei.substack.com/publish/post/195397991" target="_blank">Open in Substack →</a>
+      </div>
+    </div>
+
+    <div class="draft-card">
+      <img class="cover" src="https://substack-post-media.s3.amazonaws.com/public/images/ffd20951-b69b-44e7-b7dc-c1feebc6b9eb_1200x630.jpeg" alt="cover" onerror="this.style.display='none'"/>
+      <div class="meta">
+        <div class="date-tag">December 29, 2013 · Post #3</div>
+        <div class="titles">缺乏信心？ | Lacking Faith?</div>
+        <div class="preview">"Most of us think weak faith is about feeling distant from God. But what if it's actually something else entirely?"</div>
+        <a class="btn" href="https://pastorpei.substack.com/publish/post/195398012" target="_blank">Open in Substack →</a>
+      </div>
+    </div>
+
+    <div class="warn-card">
+      ⚠️ <strong>Post #1 — 信心是甚麼 (What Is Faith?)</strong> was accidentally published during an early API test. Please log in to <a href="https://pastorpei.substack.com" target="_blank">pastorpei.substack.com</a>, find that post in the editor, and revert it to Draft before proceeding.
+    </div>
+  </div>
+
+  <!-- AUTOMATION -->
+  <div class="section">
+    <h2>⚙️ How the Automation Works</h2>
+    <ul class="done-list">
+      <li>Reads next unprocessed post from the Tumblr export (chronological order)</li>
+      <li>Extracts Chinese title + body paragraphs</li>
+      <li>Translates to English using Claude Sonnet — preserves pastoral tone, handles idioms naturally</li>
+      <li>Generates a 145-character English social preview hook</li>
+      <li>Creates a 1200×630 cover image with "Pastor Pei 夏牧師" branding in navy + gold</li>
+      <li>Uploads cover to Substack CDN</li>
+      <li>Posts bilingual draft (Chinese body → "English Translation" heading → English body → Subscribe widget)</li>
+      <li>Logs everything to progress.json so no post is ever processed twice</li>
+    </ul>
+
+    <div class="code-block">
+      <span class="comment"># Run from the Pastor Pei project folder</span><br/>
+      python3 automate.py &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment"># 2 posts, Sonnet (default)</span><br/>
+      python3 automate.py <span class="flag">--n</span> <span class="val">1</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment"># 1 post at a time</span><br/>
+      python3 automate.py <span class="flag">--model</span> <span class="val">haiku</span> &nbsp;&nbsp;&nbsp;<span class="comment"># cheaper, slightly less polished</span>
+    </div>
+  </div>
+
+  <!-- NEXT STEPS -->
+  <div class="section">
+    <h2>📋 Next Steps</h2>
 
     <div class="step">
       <div class="step-num">1</div>
       <div class="step-body">
-        <h3>Review the 26 Broken Links</h3>
-        <p>The spreadsheet (Link Audit tab) lists every broken link with the post it came from. For each one, Marcus marks it "Remove" (just delete the link) or "Replace" (swap in a new URL). Most can simply be removed — they are old news articles that no longer exist.</p>
-        <span class="who marcus">Marcus</span>
+        <h3>Review the 2 Drafts with Pastor Pei</h3>
+        <p>Open both Substack drafts above. Check: Is the translation faithful to the original? Does the cover image feel right? Is the layout clean? Collect any feedback before locking down the format for all 344 remaining posts.</p>
+        <span class="who both">Marcus + Pastor Pei</span>
       </div>
     </div>
 
     <div class="step">
       <div class="step-num">2</div>
       <div class="step-body">
-        <h3>Create the Substack Account</h3>
-        <p>We need a Substack account before we can upload anything. Marcus will set it up first and manage it, then gradually hand it over to Pastor Pei. Go to <strong>substack.com</strong> to get started — it's free.</p>
-        <span class="who marcus">Marcus</span>
+        <h3>Decide on a Go-Live Date</h3>
+        <p>Once the format is approved, when does the first post go public? The automation will then be scheduled to run 2× per week — Tuesday and Friday mornings work well. At that pace all 347 posts are published by late 2029.</p>
+        <span class="who both">Marcus + Pastor Pei</span>
       </div>
     </div>
 
     <div class="step">
       <div class="step-num">3</div>
       <div class="step-body">
-        <h3>Decide on a Go-Live Date</h3>
-        <p>When does the first post go out on Substack? Once we have a date, the schedule is automatic — 2 posts per week, oldest post first, running all the way through 2029. We don't need to rush this; the posts will be ready whenever Pastor Pei wants to launch.</p>
-        <span class="who both">Marcus + Pastor Pei</span>
+        <h3>Set Up the Scheduled Publishing Task</h3>
+        <p>A Cowork scheduled task will run <code>automate.py</code> automatically twice a week — drafting the next post, uploading the cover, and queuing it for publication. No manual work needed once this is set up.</p>
+        <span class="who claude">Claude sets this up</span>
       </div>
     </div>
 
     <div class="step">
       <div class="step-num">4</div>
       <div class="step-body">
-        <h3>Decide on Images</h3>
-        <p>About 300 of the 347 post images were originally downloaded from the internet and may be copyrighted. We have two options:</p>
-        <p style="margin-top:8px"><strong>Option A — Keep the originals.</strong> Low risk for a small newsletter, but technically the images aren't ours.</p>
-        <p style="margin-top:8px"><strong>Option B — Generate new AI images.</strong> Using a tool called Nano Banana, we can create a unique, original image for each post based on its content. This takes more time but gives the newsletter a consistent, professional, fully original look.</p>
-        <p style="margin-top:8px">Either way, the 14 original photos taken by Pastor Pei or family will be kept as-is.</p>
-        <span class="who both">Marcus + Pastor Pei</span>
+        <h3>Process Remaining 344 Posts</h3>
+        <p>Once the schedule is running, the remaining posts process automatically 2 at a time. The full backlog will be in Substack as drafts within a few weeks, scheduled out over the next 3+ years.</p>
+        <span class="who claude">Fully automated</span>
       </div>
     </div>
 
+    <div class="note">
+      💡 <strong>The big picture:</strong> Once approved and scheduled, Pastor Pei's 6 years of writing will be automatically delivered to subscribers by email twice a week — in both Chinese and English — with no ongoing work required. New readers can find and subscribe through Substack's discovery network.
+    </div>
   </div>
 
-  <!-- WHAT'S COMING -->
+  <!-- LINKS -->
   <div class="section">
-    <h2>🗓 What's Coming Next</h2>
-
-    <div class="phase">
-      <div class="phase-title">Phase 4 — Format Posts for Substack</div>
-      <div class="phase-desc">Each post will be cleaned up and formatted properly for Substack. Images will be attached. Any broken links will be fixed or removed based on the decisions above. A sample of 10 posts will be reviewed before bulk upload.</div>
-    </div>
-
-    <div class="phase">
-      <div class="phase-title">Phase 5 — Upload & Schedule</div>
-      <div class="phase-desc">All 347 posts will be loaded into Substack and scheduled at 2 posts per week in chronological order. That's about 3.5 years of content ready to go out automatically.</div>
-    </div>
-
-    <div class="phase">
-      <div class="phase-title">Phase 6 — Handoff to Pastor Pei</div>
-      <div class="phase-desc">Once everything is live, Marcus will walk Pastor Pei through how to use Substack — how to see subscribers, respond to comments, and eventually write new posts directly on the platform.</div>
-    </div>
-
-    <div class="note">
-      💡 <strong>The big picture:</strong> Once set up, Substack will automatically send Pastor Pei's writing to subscribers by email twice a week — with no extra work required. People can subscribe for free, share posts easily, and new readers can find the blog through Substack's own discovery tools.
-    </div>
+    <h2>🔗 Quick Links</h2>
+    <ul class="done-list">
+      <li><a href="https://pastorpei.substack.com" target="_blank">pastorpei.substack.com</a> — The Substack publication</li>
+      <li><a href="https://pastorpei.substack.com/publish/post/195397991" target="_blank">Draft #2 — 信心是關係，不是物品</a></li>
+      <li><a href="https://pastorpei.substack.com/publish/post/195398012" target="_blank">Draft #3 — 缺乏信心？</a></li>
+      <li><a href="https://console.anthropic.com/settings/billing" target="_blank">Anthropic API Billing</a> — Top up credits for translation API</li>
+    </ul>
   </div>
 
 </div>
 
-<footer>Pastor Pei Project · pastorpei.com → Substack · Prepared by Marcus Hsia</footer>
+<footer>Pastor Pei Project · pastorpei.com → pastorpei.substack.com · Updated by Claude · April 24, 2026</footer>
 </body>
 </html>
