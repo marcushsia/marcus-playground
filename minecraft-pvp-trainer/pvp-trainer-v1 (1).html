@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Minecraft PVP Trainer — Phase 1</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #000; overflow: hidden; font-family: 'Courier New', monospace; }
+  #c { display: block; width: 100vw; height: 100vh; }
+
+  /* Crosshair */
+  #crosshair {
+    position: fixed; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none; display: none;
+  }
+  #crosshair::before, #crosshair::after {
+    content: ''; position: absolute; background: rgba(255,255,255,0.85);
+  }
+  #crosshair::before { width: 2px; height: 18px; top: -9px; left: -1px; }
+  #crosshair::after  { width: 18px; height: 2px; top: -1px; left: -9px; }
+
+  /* HUD bottom-left */
+  #sprint-hud {
+    position: fixed; bottom: 16px; left: 16px;
+    color: #FFD700; font-size: 15px; font-weight: bold;
+    text-shadow: 1px 1px 0 #000, -1px 1px 0 #000, 1px -1px 0 #000, -1px -1px 0 #000;
+    pointer-events: none; min-height: 20px;
+  }
+
+  /* HUD bottom-right */
+  #persp-hud {
+    position: fixed; bottom: 16px; right: 16px;
+    color: #fff; font-size: 13px;
+    text-shadow: 1px 1px 0 #000, -1px 1px 0 #000, 1px -1px 0 #000, -1px -1px 0 #000;
+    pointer-events: none;
+  }
+
+  /* Overlay */
+  #overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.72);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    color: #fff;
+  }
+  #overlay h1 {
+    font-size: 32px; margin-bottom: 10px;
+    color: #7CFC00;
+    text-shadow: 2px 2px 0 #000;
+    letter-spacing: 2px;
+  }
+  #overlay p.sub {
+    font-size: 14px; color: #aaa; margin-bottom: 28px;
+  }
+  #overlay .controls {
+    background: rgba(0,0,0,0.5);
+    border: 1px solid #555;
+    padding: 18px 28px;
+    border-radius: 4px;
+    margin-bottom: 24px;
+    min-width: 260px;
+  }
+  #overlay .controls table { border-collapse: collapse; width: 100%; }
+  #overlay .controls td { padding: 4px 10px; font-size: 14px; }
+  #overlay .controls td:first-child { color: #FFD700; text-align: right; font-weight: bold; }
+  #overlay .controls td:last-child { color: #ccc; }
+  #overlay .click-hint {
+    font-size: 18px; color: #7CFC00;
+    animation: blink 1.2s infinite;
+  }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="crosshair"></div>
+<div id="sprint-hud"></div>
+<div id="persp-hud">PERSPECTIVE: FIRST PERSON</div>
+
+<div id="overlay">
+  <h1>⚔ PVP TRAINER</h1>
+  <p class="sub">Phase 1 — Arena &amp; Movement</p>
+  <div class="controls">
+    <table>
+      <tr><td>W A S D</td><td>Move</td></tr>
+      <tr><td>Mouse</td><td>Look</td></tr>
+      <tr><td>Space</td><td>Jump</td></tr>
+      <tr><td>R</td><td>Toggle Sprint</td></tr>
+      <tr><td>G</td><td>Toggle Perspective</td></tr>
+      <tr><td>Esc</td><td>Pause</td></tr>
+    </table>
+  </div>
+  <div class="click-hint">Click to Play</div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+// ─── RENDERER ────────────────────────────────────────────────────────────────
+const canvas = document.getElementById('c');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: false });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.setClearColor(0x87CEEB);
+
+// ─── SCENE ───────────────────────────────────────────────────────────────────
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x87CEEB);
+scene.fog = new THREE.Fog(0x87CEEB, 20, 60);
+
+// ─── CAMERA ──────────────────────────────────────────────────────────────────
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.05, 200);
+
+// ─── LIGHTING ────────────────────────────────────────────────────────────────
+const ambient = new THREE.AmbientLight(0xffffff, 0.55);
+scene.add(ambient);
+
+const sun = new THREE.DirectionalLight(0xFFF8E7, 1.1);
+sun.position.set(12, 20, 8);
+sun.castShadow = true;
+sun.shadow.mapSize.set(2048, 2048);
+sun.shadow.camera.near = 0.5;
+sun.shadow.camera.far = 80;
+sun.shadow.camera.left = -25;
+sun.shadow.camera.right = 25;
+sun.shadow.camera.top = 25;
+sun.shadow.camera.bottom = -25;
+sun.shadow.bias = -0.001;
+scene.add(sun);
+
+// ─── TEXTURE FACTORY ─────────────────────────────────────────────────────────
+function makePixelTex(drawFn, size = 16) {
+  const cv = document.createElement('canvas');
+  cv.width = cv.height = size;
+  const ctx = cv.getContext('2d');
+  drawFn(ctx, size);
+  const tex = new THREE.CanvasTexture(cv);
+  tex.magFilter = THREE.NearestFilter;
+  tex.minFilter = THREE.NearestFilter;
+  return tex;
+}
+
+// Stone texture
+const stoneTex = makePixelTex((ctx) => {
+  ctx.fillStyle = '#888';
+  ctx.fillRect(0, 0, 16, 16);
+  const cracks = [[2,2,5,1],[8,1,3,1],[1,6,4,1],[10,5,3,1],[5,10,4,1],[12,9,2,1],[3,13,5,1],[9,12,3,1]];
+  ctx.fillStyle = '#666';
+  cracks.forEach(([x,y,w,h]) => ctx.fillRect(x,y,w,h));
+  ctx.fillStyle = '#999';
+  ctx.fillRect(0,0,1,16); ctx.fillRect(0,0,16,1);
+});
+
+// Grass top texture
+const grassTopTex = makePixelTex((ctx) => {
+  ctx.fillStyle = '#5A9E2F';
+  ctx.fillRect(0, 0, 16, 16);
+  const darks = [[1,1],[4,0],[7,2],[11,1],[14,3],[2,5],[9,4],[13,6],[3,8],[6,7],[12,9],[1,11],[8,12],[15,10],[5,14],[10,13]];
+  darks.forEach(([x,y]) => { ctx.fillStyle = (Math.random()>0.5)?'#4A8A22':'#6AAD3F'; ctx.fillRect(x,y,1,1); });
+});
+
+// Grass side texture
+const grassSideTex = makePixelTex((ctx) => {
+  ctx.fillStyle = '#8B6340';
+  ctx.fillRect(0, 4, 16, 12);
+  ctx.fillStyle = '#5A9E2F';
+  ctx.fillRect(0, 0, 16, 5);
+  // dirt noise
+  for(let i=0;i<8;i++){
+    ctx.fillStyle='#7A5430';
+    ctx.fillRect(Math.floor(Math.random()*16), 4+Math.floor(Math.random()*12), 2, 1);
+  }
+});
+
+// Dirt texture
+const dirtTex = makePixelTex((ctx) => {
+  ctx.fillStyle = '#8B6340';
+  ctx.fillRect(0,0,16,16);
+  for(let i=0;i<12;i++){
+    ctx.fillStyle=(i%2===0)?'#7A5430':'#9B7350';
+    ctx.fillRect(Math.floor(Math.random()*15),Math.floor(Math.random()*15),2,1);
+  }
+});
+
+// Plank texture (for stair risers)
+const plankTex = makePixelTex((ctx) => {
+  ctx.fillStyle = '#A0722A';
+  ctx.fillRect(0,0,16,16);
+  ctx.fillStyle = '#8B6220';
+  for(let y=0;y<16;y+=4){ ctx.fillRect(0,y,16,1); }
+  ctx.fillStyle = '#B08030';
+  ctx.fillRect(0,0,1,16); ctx.fillRect(8,0,1,16);
+});
+
+// ─── MATERIALS ───────────────────────────────────────────────────────────────
+function mat(tex, color) {
+  return new THREE.MeshLambertMaterial({ map: tex || null, color: color || 0xffffff });
+}
+const mStone = mat(stoneTex);
+const mGrassTop = mat(grassTopTex);
+const mGrassSide = mat(grassSideTex);
+const mDirt = mat(dirtTex);
+const mPlank = mat(plankTex);
+
+// Grass block uses multi-material: +x, -x, +y (top), -y (bottom), +z, -z
+function grassMat() {
+  return [mGrassSide, mGrassSide, mGrassTop, mDirt, mGrassSide, mGrassSide];
+}
+
+// ─── COLLIDERS ───────────────────────────────────────────────────────────────
+const colliders = []; // Array of {minX,maxX,minY,maxY,minZ,maxZ}
+
+function addBox(mesh, hw, hh, hd) {
+  const p = mesh.position;
+  colliders.push({
+    minX: p.x - hw, maxX: p.x + hw,
+    minY: p.y - hh, maxY: p.y + hh,
+    minZ: p.z - hd, maxZ: p.z + hd
+  });
+}
+
+// ─── BLOCK BUILDER ───────────────────────────────────────────────────────────
+function block(x, y, z, w, h, d, materials) {
+  const geo = new THREE.BoxGeometry(w, h, d);
+  let meshMat;
+  if (Array.isArray(materials)) {
+    meshMat = materials;
+  } else {
+    meshMat = materials;
+  }
+  const mesh = new THREE.Mesh(geo, meshMat);
+  mesh.position.set(x, y, z);
+  mesh.castShadow = true;
+  mesh.receiveShadow = true;
+  scene.add(mesh);
+  addBox(mesh, w/2, h/2, d/2);
+  return mesh;
+}
+
+// ─── ARENA ───────────────────────────────────────────────────────────────────
+// Main floor: large stone platform, y-center at -0.5 (top surface at y=0)
+block(0, -0.5, 0, 26, 1, 26, grassMat());
+
+// Border walls (short, stone) to define arena edges
+// Left wall
+block(-13, 0.5, 0, 1, 2, 26, mStone);
+// Right wall
+block(13, 0.5, 0, 1, 2, 26, mStone);
+// Front wall
+block(0, 0.5, 13, 26, 2, 1, mStone);
+// Back wall
+block(0, 0.5, -13, 26, 2, 1, mStone);
+
+// ── Platform A (left side): top at y=3 ──────────────────────────────────────
+// Main block: center at x=-7, z=-4, top=3 → center y = 3 - 1.5 = 1.5, height=3
+block(-7, 1.5, -4, 5, 3, 5, mStone);
+
+// Stairs to Platform A (2 steps from ground)
+// Step 1: top at y=1.5 → center y=0.75, height=1.5
+block(-4, 0.75, -4, 2, 1.5, 4, mPlank);
+// Step 2: top at y=3 → center y=2.25, height=1.5 (same as platform, serves as side access)
+// Actually let's do 2 proper steps:
+// Step 1: top at y=1.2, height=1.2, connects ground to step 2
+block(-3.5, 0.6, -4, 1.5, 1.2, 3.5, mPlank);
+// Step 2: top at y=2.4, height=1.2
+block(-4.5, 1.8, -4, 1.5, 1.2, 3.5, mPlank);
+
+// ── Platform B (right side): top at y=4 ─────────────────────────────────────
+// Main block: center at x=7, z=-4, top=4 → center y=2, height=4
+block(7, 2, -4, 5, 4, 5, mStone);
+
+// Stairs to Platform B (3 steps)
+// Step 1: top at y=1.2
+block(4.5, 0.6, -4, 1.5, 1.2, 4, mPlank);
+// Step 2: top at y=2.4
+block(5.5, 1.8, -4, 1.5, 1.2, 4, mPlank);
+// Step 3: top at y=4 → center y=3.2, height=1.6
+block(6.5, 3.2, -4, 1.5, 1.6, 4, mPlank);
+
+// ── Platform C (back center, highest): top at y=5 ──────────────────────────
+// Main block: center at x=0, z=-9, top=5 → center y=2.5, height=5
+block(0, 2.5, -9, 6, 5, 4, mStone);
+
+// Stairs to Platform C (4 steps from ground, from front)
+// Step 1: top=1.2
+block(0, 0.6, -6, 5, 1.2, 1.5, mPlank);
+// Step 2: top=2.4
+block(0, 1.8, -7, 5, 1.2, 1.5, mPlank);
+// Step 3: top=3.6
+block(0, 3.0, -7.8, 5, 1.2, 1.5, mPlank);
+// Step 4: top=5
+block(0, 4.4, -8.6, 5, 1.2, 1.5, mPlank);
+
+// ─── TORCHES ─────────────────────────────────────────────────────────────────
+const torchData = [
+  [-11, 1.5, -11], [11, 1.5, -11],
+  [-11, 1.5, 11],  [11, 1.5, 11],
+  [-7, 4, -4],     [7, 5, -4],
+  [0, 6, -9],
+];
+
+const torches = [];
+torchData.forEach(([x, y, z]) => {
+  // Torch stick
+  const stick = new THREE.Mesh(
+    new THREE.BoxGeometry(0.15, 0.6, 0.15),
+    new THREE.MeshLambertMaterial({ color: 0x8B6340 })
+  );
+  stick.position.set(x, y, z);
+  scene.add(stick);
+
+  // Flame point light
+  const light = new THREE.PointLight(0xFF8C00, 1.0, 5);
+  light.position.set(x, y + 0.45, z);
+  scene.add(light);
+
+  // Flame mesh (small box)
+  const flame = new THREE.Mesh(
+    new THREE.BoxGeometry(0.18, 0.25, 0.18),
+    new THREE.MeshBasicMaterial({ color: 0xFF6600 })
+  );
+  flame.position.set(x, y + 0.5, z);
+  scene.add(flame);
+
+  torches.push({ light, flame, baseY: y + 0.5 });
+});
+
+// ─── PLAYER SETUP ────────────────────────────────────────────────────────────
+const PLAYER_HEIGHT = 1.8;
+const PLAYER_RADIUS = 0.4;
+const GRAVITY = -28;
+const JUMP_VEL = 9;
+const WALK_SPEED = 5;
+const SPRINT_SPEED = 8;
+const STEP_HEIGHT = 0.55;
+
+const player = {
+  pos: new THREE.Vector3(0, PLAYER_HEIGHT / 2, 4),
+  vel: new THREE.Vector3(0, 0, 0),
+  yaw: 0,    // horizontal rotation (radians)
+  pitch: 0,  // vertical look (radians)
+  onGround: false,
+  sprinting: false,
+};
+
+// ─── PLAYER MESH (visible in 3rd person) ─────────────────────────────────────
+const playerGroup = new THREE.Group();
+scene.add(playerGroup);
+
+function makeLimb(w, h, d, color, ox, oy, oz) {
+  const m = new THREE.Mesh(
+    new THREE.BoxGeometry(w, h, d),
+    new THREE.MeshLambertMaterial({ color })
+  );
+  m.position.set(ox, oy, oz);
+  playerGroup.add(m);
+  return m;
+}
+// Body
+makeLimb(0.6, 0.75, 0.3, 0x3355FF, 0, 0.2, 0);
+// Head
+makeLimb(0.6, 0.6, 0.6, 0xFFCC99, 0, 0.875, 0);
+// Eyes
+makeLimb(0.15, 0.1, 0.31, 0x3355FF, -0.15, 0.92, 0);
+makeLimb(0.15, 0.1, 0.31, 0x3355FF,  0.15, 0.92, 0);
+// Left leg
+makeLimb(0.28, 0.75, 0.28, 0x2244AA, -0.17, -0.375, 0);
+// Right leg
+makeLimb(0.28, 0.75, 0.28, 0x2244AA,  0.17, -0.375, 0);
+// Left arm
+makeLimb(0.22, 0.7, 0.22, 0x3355FF, -0.43, 0.15, 0);
+// Right arm
+makeLimb(0.22, 0.7, 0.22, 0x3355FF,  0.43, 0.15, 0);
+
+playerGroup.visible = false; // hidden in first-person
+
+// ─── PERSPECTIVE ─────────────────────────────────────────────────────────────
+// 0 = first-person, 1 = third-person back, 2 = third-person front
+let perspMode = 0;
+const PERSP_LABELS = ['FIRST PERSON', 'THIRD PERSON (BACK)', 'THIRD PERSON (FRONT)'];
+const perspHud = document.getElementById('persp-hud');
+
+// ─── INPUT STATE ─────────────────────────────────────────────────────────────
+const keys = {};
+let pointerLocked = false;
+let mouseDX = 0, mouseDY = 0;
+
+document.addEventListener('keydown', e => {
+  keys[e.code] = true;
+
+  if (e.code === 'KeyR' && pointerLocked) {
+    player.sprinting = !player.sprinting;
+    document.getElementById('sprint-hud').textContent = player.sprinting ? '⚡ SPRINTING' : '';
+  }
+
+  if (e.code === 'KeyG' && pointerLocked) {
+    perspMode = (perspMode + 1) % 3;
+    perspHud.textContent = 'PERSPECTIVE: ' + PERSP_LABELS[perspMode];
+    playerGroup.visible = (perspMode !== 0);
+    document.getElementById('crosshair').style.display = (perspMode === 0) ? 'block' : 'none';
+  }
+});
+document.addEventListener('keyup', e => { keys[e.code] = false; });
+
+document.addEventListener('mousemove', e => {
+  if (!pointerLocked) return;
+  mouseDX += e.movementX;
+  mouseDY += e.movementY;
+});
+
+// ─── POINTER LOCK ────────────────────────────────────────────────────────────
+const overlay = document.getElementById('overlay');
+
+// Click anywhere (canvas or overlay) to request pointer lock
+function requestLock() {
+  if (!pointerLocked) canvas.requestPointerLock();
+}
+canvas.addEventListener('click', requestLock);
+overlay.addEventListener('click', requestLock);
+
+document.addEventListener('pointerlockchange', () => {
+  pointerLocked = document.pointerLockElement === canvas;
+  if (pointerLocked) {
+    overlay.style.display = 'none';
+    if (perspMode === 0) document.getElementById('crosshair').style.display = 'block';
+  } else {
+    overlay.style.display = 'flex';
+    document.getElementById('crosshair').style.display = 'none';
+  }
+});
+
+// ─── COLLISION HELPERS ───────────────────────────────────────────────────────
+function getFloorY(px, pz) {
+  // Returns the highest surface Y directly below the player's feet
+  let best = -Infinity;
+  for (const c of colliders) {
+    if (px + PLAYER_RADIUS * 0.6 > c.minX && px - PLAYER_RADIUS * 0.6 < c.maxX &&
+        pz + PLAYER_RADIUS * 0.6 > c.minZ && pz - PLAYER_RADIUS * 0.6 < c.maxZ) {
+      if (c.maxY > best) best = c.maxY;
+    }
+  }
+  return best;
+}
+
+function resolveXZ(pos, dx, dz) {
+  // Push back if overlapping a collider horizontally (only for solid surfaces above feet)
+  const footY = pos.y - PLAYER_HEIGHT / 2;
+  const headY = pos.y + PLAYER_HEIGHT / 2;
+  let nx = pos.x + dx;
+  let nz = pos.z + dz;
+
+  for (const c of colliders) {
+    const cTop = c.maxY;
+    const cBot = c.minY;
+    // Only collide if the collider is in our vertical range (not just the floor under us)
+    if (cTop <= footY + STEP_HEIGHT) continue; // step over it
+    if (cBot >= headY) continue; // above head
+
+    const overlapX = nx > c.minX - PLAYER_RADIUS && nx < c.maxX + PLAYER_RADIUS;
+    const overlapZ = nz > c.minZ - PLAYER_RADIUS && nz < c.maxZ + PLAYER_RADIUS;
+    if (!overlapX || !overlapZ) continue;
+
+    // Resolve by pushing back the shorter axis
+    const pushLeft  = nx - (c.minX - PLAYER_RADIUS);
+    const pushRight = (c.maxX + PLAYER_RADIUS) - nx;
+    const pushBack  = nz - (c.minZ - PLAYER_RADIUS);
+    const pushFront = (c.maxZ + PLAYER_RADIUS) - nz;
+
+    const minPushX = Math.min(pushLeft, pushRight);
+    const minPushZ = Math.min(pushBack, pushFront);
+
+    if (minPushX < minPushZ) {
+      nx += pushLeft < pushRight ? -pushLeft : pushRight;
+    } else {
+      nz += pushBack < pushFront ? -pushBack : pushFront;
+    }
+  }
+  return { nx, nz };
+}
+
+// ─── MAIN LOOP ───────────────────────────────────────────────────────────────
+const clock = new THREE.Clock();
+const _euler = new THREE.Euler(0, 0, 0, 'YXZ');
+
+function animate() {
+  requestAnimationFrame(animate);
+
+  const dt = Math.min(clock.getDelta(), 0.05);
+  const time = performance.now() / 1000;
+
+  // ── Torch flicker ─────────────────────────────────────────────────────────
+  torches.forEach((t, i) => {
+    const flicker = 0.7 + 0.5 * Math.sin(time * 7.3 + i * 2.1) * Math.sin(time * 11.7 + i);
+    t.light.intensity = flicker;
+    t.flame.position.y = t.baseY + 0.04 * Math.sin(time * 9 + i * 1.7);
+    const s = 0.85 + 0.3 * Math.sin(time * 13 + i);
+    t.flame.scale.set(s, 0.8 + 0.4 * Math.sin(time * 8 + i), s);
+    t.flame.material.color.setHSL(0.07 - 0.05 * Math.sin(time * 6 + i), 1, 0.5 + 0.1 * Math.sin(time * 10 + i));
+  });
+
+  if (!pointerLocked) {
+    renderer.render(scene, camera);
+    return;
+  }
+
+  // ── Mouse look ────────────────────────────────────────────────────────────
+  const SENS = 0.002;
+  player.yaw   -= mouseDX * SENS;
+  player.pitch -= mouseDY * SENS;
+  player.pitch  = Math.max(-Math.PI / 2 + 0.01, Math.min(Math.PI / 2 - 0.01, player.pitch));
+  mouseDX = 0; mouseDY = 0;
+
+  // ── Movement ──────────────────────────────────────────────────────────────
+  const speed = player.sprinting ? SPRINT_SPEED : WALK_SPEED;
+  let moveX = 0, moveZ = 0;
+  if (keys['KeyW'] || keys['ArrowUp'])    moveZ -= 1;
+  if (keys['KeyS'] || keys['ArrowDown'])  moveZ += 1;
+  if (keys['KeyA'] || keys['ArrowLeft'])  moveX -= 1;
+  if (keys['KeyD'] || keys['ArrowRight']) moveX += 1;
+
+  // Normalize diagonal
+  const moveLen = Math.sqrt(moveX * moveX + moveZ * moveZ);
+  if (moveLen > 0) { moveX /= moveLen; moveZ /= moveLen; }
+
+  // Rotate movement by yaw
+  const cos = Math.cos(player.yaw), sin = Math.sin(player.yaw);
+  const dx = (moveX * cos - moveZ * sin) * speed * dt;
+  const dz = (moveX * sin + moveZ * cos) * speed * dt;
+
+  // ── Gravity & jump ────────────────────────────────────────────────────────
+  player.vel.y += GRAVITY * dt;
+  if (keys['Space'] && player.onGround) {
+    player.vel.y = JUMP_VEL;
+    player.onGround = false;
+  }
+
+  // ── Apply vertical movement ───────────────────────────────────────────────
+  player.pos.y += player.vel.y * dt;
+
+  // ── Floor collision ───────────────────────────────────────────────────────
+  const footY = player.pos.y - PLAYER_HEIGHT / 2;
+  const floorY = getFloorY(player.pos.x, player.pos.z);
+
+  if (floorY !== -Infinity && footY <= floorY) {
+    player.pos.y = floorY + PLAYER_HEIGHT / 2;
+    player.vel.y = 0;
+    player.onGround = true;
+  } else {
+    player.onGround = false;
+  }
+
+  // ── Apply horizontal movement with step-up ────────────────────────────────
+  // Try step-up: if blocked, check if stepping up STEP_HEIGHT clears it
+  const footBefore = player.pos.y - PLAYER_HEIGHT / 2;
+  const { nx, nz } = resolveXZ(player.pos, dx, dz);
+
+  // Step-up: if we're essentially blocked (moved less than intended), try stepping up
+  const actualDX = nx - player.pos.x;
+  const actualDZ = nz - player.pos.z;
+  const intendedLen = Math.sqrt(dx * dx + dz * dz);
+  const actualLen   = Math.sqrt(actualDX * actualDX + actualDZ * actualDZ);
+
+  if (intendedLen > 0.001 && actualLen < intendedLen * 0.5 && player.onGround) {
+    // Try step up
+    const stepPos = player.pos.clone();
+    stepPos.y += STEP_HEIGHT;
+    const { nx: snx, nz: snz } = resolveXZ(stepPos, dx, dz);
+    const stepFloor = getFloorY(snx, snz);
+    if (stepFloor !== -Infinity && stepFloor > footBefore && stepFloor <= footBefore + STEP_HEIGHT + 0.05) {
+      player.pos.x = snx;
+      player.pos.z = snz;
+      player.pos.y = stepFloor + PLAYER_HEIGHT / 2;
+      player.vel.y = 0;
+      player.onGround = true;
+    } else {
+      player.pos.x = nx;
+      player.pos.z = nz;
+    }
+  } else {
+    player.pos.x = nx;
+    player.pos.z = nz;
+  }
+
+  // ── World boundary ────────────────────────────────────────────────────────
+  player.pos.x = Math.max(-13, Math.min(13, player.pos.x));
+  player.pos.z = Math.max(-13, Math.min(13, player.pos.z));
+
+  // ── Void fall recovery ────────────────────────────────────────────────────
+  if (player.pos.y < -10) {
+    player.pos.set(0, PLAYER_HEIGHT / 2, 4);
+    player.vel.set(0, 0, 0);
+    player.onGround = false;
+  }
+
+  // ── Camera placement ──────────────────────────────────────────────────────
+  _euler.set(player.pitch, player.yaw, 0, 'YXZ');
+  const eyePos = player.pos.clone();
+  eyePos.y += PLAYER_HEIGHT / 2 - 0.1; // eye level
+
+  if (perspMode === 0) {
+    // First person
+    camera.position.copy(eyePos);
+    camera.rotation.copy(_euler);
+  } else {
+    // Direction player faces
+    const fwd = new THREE.Vector3(-Math.sin(player.yaw), 0, -Math.cos(player.yaw));
+    if (perspMode === 1) {
+      // 3rd person back
+      camera.position.copy(eyePos).addScaledVector(fwd, -4);
+      camera.position.y += 1.5;
+      camera.lookAt(eyePos);
+    } else {
+      // 3rd person front
+      camera.position.copy(eyePos).addScaledVector(fwd, 4);
+      camera.position.y += 1.5;
+      camera.lookAt(eyePos);
+    }
+  }
+
+  // ── Player mesh update ────────────────────────────────────────────────────
+  if (perspMode !== 0) {
+    playerGroup.position.copy(player.pos);
+    playerGroup.rotation.y = player.yaw;
+  }
+
+  renderer.render(scene, camera);
+}
+
+// ─── RESIZE ──────────────────────────────────────────────────────────────────
+window.addEventListener('resize', () => {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
+
+// ─── GO ──────────────────────────────────────────────────────────────────────
+animate();
+</script>
+</body>
+</html>

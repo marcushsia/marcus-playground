@@ -8,7 +8,7 @@ SSH_KEY="$BASE/Projects/Website/.ssh_key"
 cd "$REPO"
 
 # Clear any stale lock
-rm -f .git/index.lock
+rm -f .git/index.lock .git/HEAD.lock
 
 # Stage all changes
 git add -A
@@ -17,7 +17,7 @@ git add -A
 if git diff --cached --quiet; then
   echo "Nothing new to commit — already up to date."
 else
-  git commit -m "Update Pastor Pei page with latest review"
+  git commit -m "Publish Pastor Pei project summary + update homepage card"
 fi
 
 # Push using the SSH key

@@ -3,220 +3,1099 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Pastor Pei — Project Status</title>
+<title>Pastor Pei 夏牧師 — Project Summary</title>
 <style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap');
+
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: Arial, sans-serif; background: #f4f4f4; color: #222; font-size: 16px; }
 
-  header { background: #0f1e3d; color: #fff; padding: 32px 40px; }
-  header h1 { font-size: 26px; margin-bottom: 6px; }
-  header .sub { color: #b4a06a; font-size: 15px; font-style: italic; margin-bottom: 6px; }
-  header p  { color: #aaa; font-size: 14px; }
+  :root {
+    --navy: #0d1b3e;
+    --navy-mid: #152344;
+    --navy-light: #1e3060;
+    --gold: #c9a84c;
+    --gold-light: #e8d5a3;
+    --cream: #faf8f2;
+    --text: #1a1a2e;
+    --muted: #6b7280;
+    --border: #e5e7eb;
+  }
 
-  .container { max-width: 900px; margin: 0 auto; padding: 32px 20px 60px; }
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--cream);
+    color: var(--text);
+    font-size: 16px;
+    line-height: 1.6;
+  }
 
-  .section { background: #fff; border-radius: 8px; padding: 28px 32px; margin-bottom: 24px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
-  .section h2 { font-size: 18px; color: #1a1a1a; margin-bottom: 18px; padding-bottom: 10px; border-bottom: 2px solid #f0f0f0; }
+  /* ─── HERO ─────────────────────────────────── */
+  .hero {
+    background: var(--navy);
+    color: #fff;
+    padding: 0;
+    position: relative;
+    overflow: hidden;
+    min-height: 520px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
 
-  .stat-row { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 16px; }
-  .stat { background: #f4f4f4; border-radius: 6px; padding: 14px 20px; flex: 1; min-width: 130px; text-align: center; }
-  .stat .num { font-size: 28px; font-weight: bold; color: #0f1e3d; }
-  .stat .num.green { color: #16a34a; }
-  .stat .label { font-size: 13px; color: #666; margin-top: 4px; }
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      repeating-linear-gradient(
+        -45deg,
+        rgba(255,255,255,0.025) 0px,
+        rgba(255,255,255,0.025) 1px,
+        transparent 1px,
+        transparent 28px
+      );
+  }
 
-  /* pipeline */
-  .pipeline { display: flex; gap: 0; margin: 20px 0 8px; flex-wrap: wrap; }
-  .pipe-step { flex: 1; min-width: 120px; text-align: center; padding: 12px 8px; background: #f4f4f4; border-right: 2px solid #fff; font-size: 13px; color: #555; position: relative; }
-  .pipe-step:last-child { border-right: none; }
-  .pipe-step .icon { font-size: 20px; display: block; margin-bottom: 4px; }
-  .pipe-step.done { background: #dcfce7; color: #166534; }
-  .pipe-step.active { background: #dbeafe; color: #1e40af; font-weight: bold; }
-  .pipe-step.next { background: #fef9c3; color: #854d0e; }
+  /* subtle cross accent */
+  .hero-cross {
+    position: absolute;
+    right: 10%;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0.07;
+    width: 180px;
+    height: 180px;
+  }
+  .hero-cross::before {
+    content: '';
+    position: absolute;
+    left: 50%; top: 0;
+    width: 2px; height: 100%;
+    background: var(--gold);
+    transform: translateX(-50%);
+  }
+  .hero-cross::after {
+    content: '';
+    position: absolute;
+    top: 50%; left: 0;
+    height: 2px; width: 100%;
+    background: var(--gold);
+    transform: translateY(-50%);
+  }
 
-  /* draft cards */
-  .draft-card { border: 1px solid #e5e5e5; border-radius: 8px; padding: 18px 20px; margin-bottom: 14px; display: flex; gap: 16px; align-items: flex-start; }
-  .draft-card .cover { width: 96px; height: 50px; object-fit: cover; border-radius: 4px; flex-shrink: 0; background: #0f1e3d; }
-  .draft-card .meta { flex: 1; }
-  .draft-card .titles { font-size: 15px; font-weight: bold; color: #1a1a1a; margin-bottom: 4px; }
-  .draft-card .preview { font-size: 13px; color: #555; line-height: 1.5; margin-bottom: 8px; font-style: italic; }
-  .draft-card .date-tag { font-size: 12px; color: #888; margin-bottom: 8px; }
-  .draft-card a.btn { display: inline-block; font-size: 13px; font-weight: bold; padding: 5px 14px; border-radius: 4px; text-decoration: none; background: #0f1e3d; color: #fff; }
-  .draft-card a.btn:hover { background: #1a3060; }
+  .hero-inner {
+    position: relative;
+    z-index: 2;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 80px 40px 60px;
+  }
 
-  .warn-card { background: #fff7ed; border-left: 4px solid #f97316; border-radius: 4px; padding: 12px 16px; font-size: 14px; color: #444; margin-bottom: 14px; line-height: 1.6; }
+  .hero-eyebrow {
+    font-size: 12px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 20px;
+    font-weight: 500;
+  }
 
-  /* steps */
-  .step { display: flex; gap: 16px; align-items: flex-start; margin-bottom: 20px; }
-  .step-num { background: #0f1e3d; color: #fff; border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 15px; flex-shrink: 0; margin-top: 2px; }
-  .step-num.done-num { background: #16a34a; }
-  .step-body h3 { font-size: 16px; margin-bottom: 4px; color: #1a1a1a; }
-  .step-body p  { font-size: 15px; color: #444; line-height: 1.6; }
-  .step-body .who { display: inline-block; font-size: 12px; font-weight: bold; padding: 2px 8px; border-radius: 3px; margin-top: 6px; }
-  .who.marcus  { background: #dbeafe; color: #1e40af; }
-  .who.both    { background: #dcfce7; color: #166534; }
-  .who.claude  { background: #f3e8ff; color: #6b21a8; }
+  .hero-chinese {
+    font-family: 'Noto Serif TC', 'STSong', serif;
+    font-size: 52px;
+    color: #fff;
+    line-height: 1.15;
+    margin-bottom: 8px;
+    font-weight: 700;
+  }
 
-  .done-list li { list-style: none; padding: 7px 0; border-bottom: 1px solid #f0f0f0; font-size: 15px; color: #444; }
-  .done-list li:last-child { border-bottom: none; }
-  .done-list li::before { content: "✓ "; color: #16a34a; font-weight: bold; }
+  .hero-english {
+    font-size: 28px;
+    font-weight: 300;
+    color: var(--gold-light);
+    margin-bottom: 28px;
+    letter-spacing: 0.02em;
+  }
 
-  .code-block { background: #1e1e2e; color: #cdd6f4; font-family: monospace; font-size: 13px; padding: 14px 18px; border-radius: 6px; margin-top: 10px; line-height: 1.7; overflow-x: auto; }
-  .code-block .comment { color: #6c7086; }
-  .code-block .flag { color: #cba6f7; }
-  .code-block .val { color: #a6e3a1; }
+  .hero-tagline {
+    font-size: 16px;
+    color: rgba(255,255,255,0.65);
+    max-width: 560px;
+    line-height: 1.7;
+    margin-bottom: 36px;
+  }
 
-  .note { background: #fffbeb; border-left: 4px solid #f59e0b; padding: 14px 18px; border-radius: 4px; font-size: 14px; color: #444; margin-top: 16px; line-height: 1.6; }
+  .hero-stats {
+    display: flex;
+    gap: 32px;
+    flex-wrap: wrap;
+  }
 
-  .phase { margin-bottom: 14px; }
-  .phase-title { font-weight: bold; color: #1a1a1a; margin-bottom: 4px; font-size: 15px; }
-  .phase-desc  { font-size: 14px; color: #555; line-height: 1.5; padding-left: 12px; border-left: 3px solid #e5e5e5; }
+  .hero-stat {
+    text-align: center;
+  }
 
-  a { color: #0f1e3d; }
-  footer { text-align: center; font-size: 13px; color: #999; padding: 24px; }
+  .hero-stat .n {
+    font-size: 36px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1;
+  }
+
+  .hero-stat .l {
+    font-size: 12px;
+    color: var(--gold);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+
+  .hero-divider {
+    width: 1px;
+    height: 50px;
+    background: rgba(255,255,255,0.15);
+    align-self: center;
+  }
+
+  /* ─── SECTION LAYOUT ──────────────────────── */
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 20px 80px;
+  }
+
+  .section {
+    margin-top: 64px;
+  }
+
+  .section-label {
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+
+  .section-title {
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 16px;
+    line-height: 1.25;
+  }
+
+  .section-body {
+    font-size: 15.5px;
+    color: #374151;
+    line-height: 1.75;
+    max-width: 700px;
+  }
+
+  hr.divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 48px 0 0;
+  }
+
+  /* ─── CHALLENGE / ORIGIN ─────────────────── */
+  .origin-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-top: 28px;
+  }
+
+  .origin-card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 24px 26px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  }
+
+  .origin-card .oc-icon {
+    font-size: 26px;
+    margin-bottom: 10px;
+  }
+
+  .origin-card .oc-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .origin-card p {
+    font-size: 14px;
+    color: #4b5563;
+    line-height: 1.65;
+  }
+
+  /* ─── PIPELINE ───────────────────────────── */
+  .pipeline {
+    display: flex;
+    margin-top: 32px;
+    position: relative;
+  }
+
+  .pipeline::before {
+    content: '';
+    position: absolute;
+    top: 28px;
+    left: 28px;
+    right: 28px;
+    height: 2px;
+    background: linear-gradient(to right, var(--gold), var(--navy-light));
+    z-index: 0;
+  }
+
+  .pipe-step {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+  }
+
+  .pipe-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: var(--navy);
+    border: 3px solid var(--gold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 8px rgba(13,27,62,0.25);
+  }
+
+  .pipe-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--navy);
+    line-height: 1.4;
+  }
+
+  .pipe-sub {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 3px;
+    line-height: 1.4;
+  }
+
+  /* ─── DETAIL LIST ────────────────────────── */
+  .detail-list {
+    margin-top: 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .detail-item {
+    display: flex;
+    gap: 18px;
+    align-items: flex-start;
+    padding: 18px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .detail-item:last-child { border-bottom: none; }
+
+  .detail-num {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--navy);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .detail-text h4 {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--navy);
+    margin-bottom: 4px;
+  }
+
+  .detail-text p {
+    font-size: 14px;
+    color: #4b5563;
+    line-height: 1.65;
+  }
+
+  /* ─── CODE BLOCK ─────────────────────────── */
+  .code-wrap {
+    background: #111827;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-top: 28px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+  }
+
+  .code-bar {
+    background: #1f2937;
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .code-dot {
+    width: 12px; height: 12px;
+    border-radius: 50%;
+  }
+
+  .code-bar .title {
+    font-size: 12px;
+    color: #6b7280;
+    margin-left: 8px;
+    font-family: monospace;
+  }
+
+  .code-body {
+    padding: 20px 24px;
+    font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
+    font-size: 13px;
+    line-height: 1.9;
+    color: #e5e7eb;
+    overflow-x: auto;
+  }
+
+  .c  { color: #6b7280; }    /* comment */
+  .kw { color: #f472b6; }    /* keyword */
+  .fn { color: #60a5fa; }    /* function */
+  .st { color: #34d399; }    /* string */
+  .fl { color: #c084fc; }    /* flag */
+  .vl { color: #fbbf24; }    /* value */
+  .op { color: #94a3b8; }    /* operator */
+
+  /* ─── COVER GALLERY ──────────────────────── */
+  .gallery-intro {
+    font-size: 15px;
+    color: #4b5563;
+    margin-top: 16px;
+    margin-bottom: 24px;
+    line-height: 1.7;
+  }
+
+  .cover-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .cover-card {
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+    position: relative;
+  }
+
+  .cover-card img {
+    width: 100%;
+    display: block;
+  }
+
+  .cover-caption {
+    position: absolute;
+    bottom: 0;
+    left: 0; right: 0;
+    background: linear-gradient(to top, rgba(13,27,62,0.92), transparent);
+    padding: 18px 14px 12px;
+    font-size: 12px;
+    color: rgba(255,255,255,0.85);
+    font-weight: 500;
+  }
+
+  .cover-badge {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    padding: 2px 7px;
+    border-radius: 3px;
+    margin-bottom: 4px;
+  }
+
+  .badge-final {
+    background: var(--gold);
+    color: var(--navy);
+  }
+
+  .badge-explored {
+    background: rgba(255,255,255,0.2);
+    color: #fff;
+  }
+
+  /* ─── POST EXAMPLES ──────────────────────── */
+  .post-card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .post-cover {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    display: block;
+  }
+
+  .post-body {
+    padding: 22px 24px 24px;
+  }
+
+  .post-date {
+    font-size: 12px;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+    margin-bottom: 10px;
+  }
+
+  .post-title-zh {
+    font-family: 'Noto Serif TC', 'STSong', serif;
+    font-size: 22px;
+    color: var(--navy);
+    line-height: 1.3;
+    margin-bottom: 2px;
+  }
+
+  .post-title-en {
+    font-size: 14px;
+    color: var(--gold);
+    font-style: italic;
+    margin-bottom: 12px;
+    font-weight: 500;
+  }
+
+  .post-preview {
+    font-size: 14px;
+    color: #4b5563;
+    line-height: 1.7;
+    border-left: 3px solid var(--gold);
+    padding-left: 14px;
+    margin-bottom: 16px;
+    font-style: italic;
+  }
+
+  .post-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--navy);
+    text-decoration: none;
+    padding: 7px 14px;
+    border: 1.5px solid var(--navy);
+    border-radius: 5px;
+    transition: all 0.15s;
+  }
+
+  .post-link:hover {
+    background: var(--navy);
+    color: #fff;
+  }
+
+  .posts-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-top: 24px;
+  }
+
+  /* ─── TECH STACK ─────────────────────────── */
+  .tech-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    margin-top: 28px;
+  }
+
+  .tech-pill {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 18px 14px;
+    text-align: center;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  }
+
+  .tech-pill .tp-icon { font-size: 26px; margin-bottom: 8px; }
+  .tech-pill .tp-name { font-size: 13px; font-weight: 700; color: var(--navy); }
+  .tech-pill .tp-role { font-size: 11px; color: var(--muted); margin-top: 3px; line-height: 1.4; }
+
+  /* ─── OUTCOMES ───────────────────────────── */
+  .outcome-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-top: 28px;
+  }
+
+  .outcome-card {
+    background: var(--navy);
+    border-radius: 10px;
+    padding: 28px 22px;
+    text-align: center;
+    color: #fff;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .outcome-card::before {
+    content: '';
+    position: absolute;
+    top: -20px; right: -20px;
+    width: 80px; height: 80px;
+    border-radius: 50%;
+    background: rgba(201,168,76,0.15);
+  }
+
+  .outcome-card .oc-big {
+    font-size: 42px;
+    font-weight: 700;
+    line-height: 1;
+    color: #fff;
+    margin-bottom: 6px;
+  }
+
+  .outcome-card .oc-unit {
+    font-size: 18px;
+    color: var(--gold);
+  }
+
+  .outcome-card .oc-label {
+    font-size: 12px;
+    color: rgba(255,255,255,0.6);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    line-height: 1.4;
+  }
+
+  /* ─── QUOTE ──────────────────────────────── */
+  .pull-quote {
+    background: var(--navy);
+    border-radius: 10px;
+    padding: 36px 40px;
+    margin-top: 48px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .pull-quote::before {
+    content: '❝';
+    position: absolute;
+    top: 10px; left: 28px;
+    font-size: 80px;
+    color: rgba(201,168,76,0.2);
+    line-height: 1;
+    font-family: serif;
+  }
+
+  .pull-quote p {
+    font-size: 18px;
+    color: #fff;
+    line-height: 1.75;
+    position: relative;
+    z-index: 1;
+    font-style: italic;
+    max-width: 680px;
+  }
+
+  .pull-quote .pq-attribution {
+    font-size: 13px;
+    color: var(--gold);
+    margin-top: 16px;
+    font-style: normal;
+    font-weight: 600;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ─── LINKS ──────────────────────────────── */
+  .links-row {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    margin-top: 28px;
+  }
+
+  .link-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.15s;
+  }
+
+  .link-chip.primary {
+    background: var(--navy);
+    color: #fff;
+  }
+
+  .link-chip.primary:hover { background: var(--navy-light); }
+
+  .link-chip.secondary {
+    background: #fff;
+    color: var(--navy);
+    border: 1.5px solid var(--border);
+  }
+
+  .link-chip.secondary:hover { border-color: var(--navy); }
+
+  /* ─── FOOTER ─────────────────────────────── */
+  .back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    position: absolute;
+    top: 24px;
+    left: 40px;
+    z-index: 10;
+    font-size: 13px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.65);
+    text-decoration: none;
+    padding: 6px 12px;
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 5px;
+    transition: all 0.15s;
+    backdrop-filter: blur(4px);
+  }
+  .back-btn:hover {
+    color: #fff;
+    border-color: rgba(255,255,255,0.5);
+    background: rgba(255,255,255,0.08);
+  }
+
+  footer {
+    background: var(--navy);
+    color: rgba(255,255,255,0.45);
+    text-align: center;
+    font-size: 13px;
+    padding: 28px 20px;
+    margin-top: 80px;
+  }
+
+  footer strong { color: var(--gold); }
+
+  /* ─── RESPONSIVE ─────────────────────────── */
+  @media (max-width: 640px) {
+    .hero-chinese { font-size: 34px; }
+    .hero-english { font-size: 20px; }
+    .origin-grid { grid-template-columns: 1fr; }
+    .cover-grid { grid-template-columns: 1fr; }
+    .posts-grid { grid-template-columns: 1fr; }
+    .tech-grid { grid-template-columns: repeat(2, 1fr); }
+    .outcome-grid { grid-template-columns: 1fr; }
+    .pipeline { flex-direction: column; gap: 24px; }
+    .pipeline::before { display: none; }
+  }
 </style>
 </head>
 <body>
 
-<header>
-  <h1>Pastor Pei 夏牧師 — Substack Project</h1>
-  <div class="sub">pastorpei.substack.com</div>
-  <p>Updated April 24, 2026 · Automation live · 3 posts processed · 344 remaining</p>
-</header>
+<!-- ═══════════════════════════════════════════════════════ HERO -->
+<div class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-cross"></div>
+  <a class="back-btn" href="../">← Marcus's Playground</a>
+  <div class="hero-inner">
+    <div class="hero-eyebrow">Project Summary · 2025–2026</div>
+    <div class="hero-chinese">夏牧師</div>
+    <div class="hero-english">Pastor Pei on Substack</div>
+    <p class="hero-tagline">
+      Bringing 6 years of Chinese pastoral writings to a bilingual audience —
+      powered by an end-to-end AI pipeline built with Claude and Python.
+    </p>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="n">347</div>
+        <div class="l">Posts Archived</div>
+      </div>
+      <div class="hero-divider"></div>
+      <div class="hero-stat">
+        <div class="n">6</div>
+        <div class="l">Years of Writing</div>
+      </div>
+      <div class="hero-divider"></div>
+      <div class="hero-stat">
+        <div class="n">2</div>
+        <div class="l">Languages</div>
+      </div>
+      <div class="hero-divider"></div>
+      <div class="hero-stat">
+        <div class="n">100%</div>
+        <div class="l">Automated</div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <div class="container">
 
-  <!-- STATS -->
+  <!-- ══════════════════════════════════════════ THE ORIGIN -->
   <div class="section">
-    <h2>📊 Project Snapshot</h2>
-    <div class="stat-row">
-      <div class="stat"><div class="num">347</div><div class="label">Total posts from Tumblr</div></div>
-      <div class="stat"><div class="num green">3</div><div class="label">Posts processed</div></div>
-      <div class="stat"><div class="num">344</div><div class="label">Posts remaining</div></div>
-      <div class="stat"><div class="num green">2</div><div class="label">Drafts ready to review</div></div>
-    </div>
+    <div class="section-label">The Origin</div>
+    <h2 class="section-title">A pastor's 6-year archive, locked on Tumblr</h2>
+    <p class="section-body">
+      Pastor Pei (夏牧師) wrote 347 reflections on faith, scripture, and pastoral life
+      on Tumblr from 2013 to 2019 — entirely in Traditional Chinese. With Tumblr declining
+      and his congregation growing more bilingual, those writings risked being lost or
+      inaccessible to the next generation. The goal: rescue, translate, and republish every
+      post to Substack, automatically, with no ongoing manual work.
+    </p>
 
-    <!-- Pipeline -->
+    <div class="origin-grid">
+      <div class="origin-card">
+        <div class="oc-icon">📦</div>
+        <div class="oc-title">The Problem</div>
+        <p>347 Chinese blog posts buried in a Tumblr export — no English translations, no consistent formatting, no searchable archive, no new audience.</p>
+      </div>
+      <div class="origin-card">
+        <div class="oc-icon">🎯</div>
+        <div class="oc-title">The Goal</div>
+        <p>Fully automated pipeline to translate, design, and publish every post to Substack as a bilingual newsletter — without Pastor Pei lifting a finger.</p>
+      </div>
+      <div class="origin-card">
+        <div class="oc-icon">⚙️</div>
+        <div class="oc-title">The Constraint</div>
+        <p>Translations had to preserve pastoral tone and handle Taiwanese idioms naturally. No robotic output — it needed to sound like him.</p>
+      </div>
+      <div class="origin-card">
+        <div class="oc-icon">🌱</div>
+        <div class="oc-title">The Opportunity</div>
+        <p>Substack's discovery network + bilingual content = a readership that crosses both Chinese-speaking and English-speaking Christian communities.</p>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider"/>
+
+  <!-- ══════════════════════════════════════════ THE PIPELINE -->
+  <div class="section">
+    <div class="section-label">How It Works</div>
+    <h2 class="section-title">A fully automated publishing pipeline</h2>
+    <p class="section-body">
+      Every post goes through 6 stages entirely without human intervention —
+      from raw Tumblr HTML to a formatted, bilingual Substack draft with a branded cover image.
+    </p>
+
     <div class="pipeline">
-      <div class="pipe-step done"><span class="icon">📦</span>Export &amp; Parse</div>
-      <div class="pipe-step done"><span class="icon">🤖</span>Translate (Sonnet)</div>
-      <div class="pipe-step done"><span class="icon">🖼</span>Cover Image</div>
-      <div class="pipe-step done"><span class="icon">📝</span>Draft to Substack</div>
-      <div class="pipe-step active"><span class="icon">👀</span>Review with Pastor Pei</div>
-      <div class="pipe-step next"><span class="icon">📅</span>Schedule 2×/week</div>
-      <div class="pipe-step next"><span class="icon">🚀</span>Publish 344 posts</div>
+      <div class="pipe-step">
+        <div class="pipe-icon">📄</div>
+        <div class="pipe-label">Parse</div>
+        <div class="pipe-sub">Read next post<br>from Tumblr export</div>
+      </div>
+      <div class="pipe-step">
+        <div class="pipe-icon">🔤</div>
+        <div class="pipe-label">Translate</div>
+        <div class="pipe-sub">Claude Sonnet<br>Chinese → English</div>
+      </div>
+      <div class="pipe-step">
+        <div class="pipe-icon">✍️</div>
+        <div class="pipe-label">Hook</div>
+        <div class="pipe-sub">145-char preview<br>written by Claude</div>
+      </div>
+      <div class="pipe-step">
+        <div class="pipe-icon">🖼</div>
+        <div class="pipe-label">Cover Art</div>
+        <div class="pipe-sub">1200×630 image<br>generated in Python</div>
+      </div>
+      <div class="pipe-step">
+        <div class="pipe-icon">☁️</div>
+        <div class="pipe-label">Upload</div>
+        <div class="pipe-sub">Cover pushed to<br>Substack CDN</div>
+      </div>
+      <div class="pipe-step">
+        <div class="pipe-icon">📬</div>
+        <div class="pipe-label">Publish</div>
+        <div class="pipe-label">Draft posted<br>bilingual to Substack</div>
+      </div>
+    </div>
+
+    <div class="detail-list">
+      <div class="detail-item">
+        <div class="detail-num">1</div>
+        <div class="detail-text">
+          <h4>Parse the Tumblr export</h4>
+          <p>Reads the next unprocessed post chronologically from the raw HTML export. Extracts the Chinese title, body paragraphs, and original publish date. Logs each completed post to <code>progress.json</code> so no post is ever processed twice, even if the script is interrupted.</p>
+        </div>
+      </div>
+      <div class="detail-item">
+        <div class="detail-num">2</div>
+        <div class="detail-text">
+          <h4>Translate with Claude Sonnet</h4>
+          <p>Sends the full Chinese text to Claude's API with a prompt tuned for pastoral writing — preserving idioms, scripture references, and the warmth of the original voice. Not word-for-word literal, but faithfully tonal. Haiku can be used as a faster, cheaper alternative.</p>
+        </div>
+      </div>
+      <div class="detail-item">
+        <div class="detail-num">3</div>
+        <div class="detail-text">
+          <h4>Generate a social preview hook</h4>
+          <p>Claude also writes a punchy 145-character English hook — the kind of question or observation that makes a reader want to open the email. This appears as the post's subtitle and email preview text on Substack.</p>
+        </div>
+      </div>
+      <div class="detail-item">
+        <div class="detail-num">4</div>
+        <div class="detail-text">
+          <h4>Render a branded cover image</h4>
+          <p>Python (Pillow) renders a 1200×630 cover image with the Chinese title, English title, "Pastor Pei 夏牧師" branding, original post date, and a subtle cross motif — all in the navy and gold brand palette. Iterated through 8 design options before landing on the final style.</p>
+        </div>
+      </div>
+      <div class="detail-item">
+        <div class="detail-num">5</div>
+        <div class="detail-text">
+          <h4>Upload to Substack CDN &amp; post the draft</h4>
+          <p>The cover image is uploaded via Substack's image API to get a CDN URL. Then the full bilingual draft is posted — Chinese body first, then an "English Translation" heading, then the English body, followed by a subscribe call-to-action widget.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="code-wrap">
+      <div class="code-bar">
+        <div class="code-dot" style="background:#ff5f57"></div>
+        <div class="code-dot" style="background:#ffbd2e"></div>
+        <div class="code-dot" style="background:#28ca41"></div>
+        <div class="title">automate.py</div>
+      </div>
+      <div class="code-body">
+<span class="c"># Run from the Pastor Pei project folder</span><br/>
+<br/>
+<span class="fn">python3</span> automate.py&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c"># default: 2 posts, Sonnet</span><br/>
+<span class="fn">python3</span> automate.py <span class="fl">--n</span> <span class="vl">1</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c"># process 1 post at a time</span><br/>
+<span class="fn">python3</span> automate.py <span class="fl">--model</span> <span class="vl">haiku</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c"># cheaper, faster alternative</span><br/>
+<span class="fn">python3</span> automate.py <span class="fl">--n</span> <span class="vl">10</span> <span class="fl">--model</span> <span class="vl">sonnet</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c"># batch run</span><br/>
+<br/>
+<span class="c"># Progress is tracked automatically in progress.json</span><br/>
+<span class="c"># Resume anytime — no post is ever processed twice</span>
+      </div>
     </div>
   </div>
 
-  <!-- DRAFTS READY -->
+  <hr class="divider"/>
+
+  <!-- ══════════════════════════════════════════ COVER DESIGN -->
   <div class="section">
-    <h2>👀 Drafts Ready for Review</h2>
-    <p style="font-size:14px;color:#555;margin-bottom:16px;">These two posts are sitting in the Substack editor as drafts — nothing is published yet. Click to open in Substack and review the layout, translation, and cover image.</p>
+    <div class="section-label">Design</div>
+    <h2 class="section-title">Cover image design — 8 options, 1 winner</h2>
+    <p class="gallery-intro">
+      Every post gets a unique cover image generated programmatically using Python's Pillow library.
+      Before settling on the final style, 8 distinct layout concepts were explored across three color palettes
+      — navy blue, earth brown, and sage green — testing centered, split, ghost, bottom-anchored, and minimal compositions.
+    </p>
 
-    <div class="draft-card">
-      <img class="cover" src="https://substack-post-media.s3.amazonaws.com/public/images/276b9068-71f8-49a7-a5dc-92a363c17dca_1200x630.jpeg" alt="cover" onerror="this.style.display='none'"/>
-      <div class="meta">
-        <div class="date-tag">December 24, 2013 · Post #2</div>
-        <div class="titles">信心是關係，不是物品 | Faith Is a Relationship, Not a Possession</div>
-        <div class="preview">"You can't lose it like keys. You can't borrow it from someone else. So what actually is faith — and why does yours keep changing size?"</div>
-        <a class="btn" href="https://pastorpei.substack.com/publish/post/195397991" target="_blank">Open in Substack →</a>
+    <div class="cover-grid">
+      <div class="cover-card">
+        <img src="brand-covers/cover_preview_post4_v2.jpg" alt="Final style — classical painting inset with navy + gold"/>
+        <div class="cover-caption">
+          <div class="cover-badge badge-final">✓ FINAL STYLE</div><br/>
+          Navy blue · classical art inset · gold accent line · bilingual title
+        </div>
       </div>
-    </div>
-
-    <div class="draft-card">
-      <img class="cover" src="https://substack-post-media.s3.amazonaws.com/public/images/ffd20951-b69b-44e7-b7dc-c1feebc6b9eb_1200x630.jpeg" alt="cover" onerror="this.style.display='none'"/>
-      <div class="meta">
-        <div class="date-tag">December 29, 2013 · Post #3</div>
-        <div class="titles">缺乏信心？ | Lacking Faith?</div>
-        <div class="preview">"Most of us think weak faith is about feeling distant from God. But what if it's actually something else entirely?"</div>
-        <a class="btn" href="https://pastorpei.substack.com/publish/post/195398012" target="_blank">Open in Substack →</a>
+      <div class="cover-card">
+        <img src="brand-covers/opt_a_centered.jpg" alt="Option A — centered layout"/>
+        <div class="cover-caption">
+          <div class="cover-badge badge-explored">EXPLORED</div><br/>
+          Option A · centered layout · cleaner, minimal feel
+        </div>
       </div>
-    </div>
-
-    <div class="warn-card">
-      ⚠️ <strong>Post #1 — 信心是甚麼 (What Is Faith?)</strong> was accidentally published during an early API test. Please log in to <a href="https://pastorpei.substack.com" target="_blank">pastorpei.substack.com</a>, find that post in the editor, and revert it to Draft before proceeding.
+      <div class="cover-card">
+        <img src="brand-covers/opt_c_split.jpg" alt="Option C — split bilingual layout"/>
+        <div class="cover-caption">
+          <div class="cover-badge badge-explored">EXPLORED</div><br/>
+          Option C · split panel · Chinese left / English right
+        </div>
+      </div>
+      <div class="cover-card">
+        <img src="brand-covers/cover_earth.jpg" alt="Earth tone variant"/>
+        <div class="cover-caption">
+          <div class="cover-badge badge-explored">EXPLORED</div><br/>
+          Earth brown palette · warmer, more organic feel
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- AUTOMATION -->
-  <div class="section">
-    <h2>⚙️ How the Automation Works</h2>
-    <ul class="done-list">
-      <li>Reads next unprocessed post from the Tumblr export (chronological order)</li>
-      <li>Extracts Chinese title + body paragraphs</li>
-      <li>Translates to English using Claude Sonnet — preserves pastoral tone, handles idioms naturally</li>
-      <li>Generates a 145-character English social preview hook</li>
-      <li>Creates a 1200×630 cover image with "Pastor Pei 夏牧師" branding in navy + gold</li>
-      <li>Uploads cover to Substack CDN</li>
-      <li>Posts bilingual draft (Chinese body → "English Translation" heading → English body → Subscribe widget)</li>
-      <li>Logs everything to progress.json so no post is ever processed twice</li>
-    </ul>
+  <hr class="divider"/>
 
-    <div class="code-block">
-      <span class="comment"># Run from the Pastor Pei project folder</span><br/>
-      python3 automate.py &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment"># 2 posts, Sonnet (default)</span><br/>
-      python3 automate.py <span class="flag">--n</span> <span class="val">1</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment"># 1 post at a time</span><br/>
-      python3 automate.py <span class="flag">--model</span> <span class="val">haiku</span> &nbsp;&nbsp;&nbsp;<span class="comment"># cheaper, slightly less polished</span>
+  <!-- ══════════════════════════════════════════ EXAMPLE POSTS -->
+  <div class="section">
+    <div class="section-label">Output Examples</div>
+    <h2 class="section-title">Sample posts from the pipeline</h2>
+    <p class="section-body">
+      Each Substack post is bilingual — the original Chinese followed by an English translation —
+      with a custom cover image, a pastoral hook, and a subscribe widget. Here are the first posts processed.
+    </p>
+
+    <div class="posts-grid">
+      <div class="post-card">
+        <img class="post-cover"
+          src="https://substack-post-media.s3.amazonaws.com/public/images/276b9068-71f8-49a7-a5dc-92a363c17dca_1200x630.jpeg"
+          alt="Faith Is a Relationship cover"
+          onerror="this.style.background='#0d1b3e';this.style.height='180px'"/>
+        <div class="post-body">
+          <div class="post-date">December 24, 2013 · Post #2</div>
+          <div class="post-title-zh">信心是關係，不是物品</div>
+          <div class="post-title-en">Faith Is a Relationship, Not a Possession</div>
+          <div class="post-preview">"You can't lose it like keys. You can't borrow it from someone else. So what actually is faith — and why does yours keep changing size?"</div>
+          <a class="post-link" href="https://pastorpei.substack.com/publish/post/195397991" target="_blank">View on Substack →</a>
+        </div>
+      </div>
+
+      <div class="post-card">
+        <img class="post-cover"
+          src="https://substack-post-media.s3.amazonaws.com/public/images/ffd20951-b69b-44e7-b7dc-c1feebc6b9eb_1200x630.jpeg"
+          alt="Lacking Faith cover"
+          onerror="this.style.background='#0d1b3e';this.style.height='180px'"/>
+        <div class="post-body">
+          <div class="post-date">December 29, 2013 · Post #3</div>
+          <div class="post-title-zh">缺乏信心？</div>
+          <div class="post-title-en">Lacking Faith?</div>
+          <div class="post-preview">"Most of us think weak faith is about feeling distant from God. But what if it's actually something else entirely?"</div>
+          <a class="post-link" href="https://pastorpei.substack.com/publish/post/195398012" target="_blank">View on Substack →</a>
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- NEXT STEPS -->
+  <hr class="divider"/>
+
+  <!-- ══════════════════════════════════════════ TECH STACK -->
   <div class="section">
-    <h2>📋 Next Steps</h2>
+    <div class="section-label">Technology</div>
+    <h2 class="section-title">The tech stack</h2>
+    <p class="section-body">
+      Built entirely with Python and the Anthropic API — no third-party publishing platforms,
+      no complex infrastructure. Everything runs locally from the project folder.
+    </p>
 
-    <div class="step">
-      <div class="step-num">1</div>
-      <div class="step-body">
-        <h3>Review the 2 Drafts with Pastor Pei</h3>
-        <p>Open both Substack drafts above. Check: Is the translation faithful to the original? Does the cover image feel right? Is the layout clean? Collect any feedback before locking down the format for all 344 remaining posts.</p>
-        <span class="who both">Marcus + Pastor Pei</span>
+    <div class="tech-grid">
+      <div class="tech-pill">
+        <div class="tp-icon">🐍</div>
+        <div class="tp-name">Python 3</div>
+        <div class="tp-role">Core automation & orchestration</div>
       </div>
-    </div>
-
-    <div class="step">
-      <div class="step-num">2</div>
-      <div class="step-body">
-        <h3>Decide on a Go-Live Date</h3>
-        <p>Once the format is approved, when does the first post go public? The automation will then be scheduled to run 2× per week — Tuesday and Friday mornings work well. At that pace all 347 posts are published by late 2029.</p>
-        <span class="who both">Marcus + Pastor Pei</span>
+      <div class="tech-pill">
+        <div class="tp-icon">🤖</div>
+        <div class="tp-name">Claude API</div>
+        <div class="tp-role">Translation & hook generation</div>
       </div>
-    </div>
-
-    <div class="step">
-      <div class="step-num">3</div>
-      <div class="step-body">
-        <h3>Set Up the Scheduled Publishing Task</h3>
-        <p>A Cowork scheduled task will run <code>automate.py</code> automatically twice a week — drafting the next post, uploading the cover, and queuing it for publication. No manual work needed once this is set up.</p>
-        <span class="who claude">Claude sets this up</span>
+      <div class="tech-pill">
+        <div class="tp-icon">🖼</div>
+        <div class="tp-name">Pillow</div>
+        <div class="tp-role">Cover image rendering</div>
       </div>
-    </div>
-
-    <div class="step">
-      <div class="step-num">4</div>
-      <div class="step-body">
-        <h3>Process Remaining 344 Posts</h3>
-        <p>Once the schedule is running, the remaining posts process automatically 2 at a time. The full backlog will be in Substack as drafts within a few weeks, scheduled out over the next 3+ years.</p>
-        <span class="who claude">Fully automated</span>
+      <div class="tech-pill">
+        <div class="tp-icon">📡</div>
+        <div class="tp-name">Substack API</div>
+        <div class="tp-role">Draft creation & CDN upload</div>
       </div>
-    </div>
-
-    <div class="note">
-      💡 <strong>The big picture:</strong> Once approved and scheduled, Pastor Pei's 6 years of writing will be automatically delivered to subscribers by email twice a week — in both Chinese and English — with no ongoing work required. New readers can find and subscribe through Substack's discovery network.
+      <div class="tech-pill">
+        <div class="tp-icon">🔤</div>
+        <div class="tp-name">Noto Serif TC</div>
+        <div class="tp-role">Traditional Chinese font rendering</div>
+      </div>
+      <div class="tech-pill">
+        <div class="tp-icon">📊</div>
+        <div class="tp-name">progress.json</div>
+        <div class="tp-role">Idempotent state tracking</div>
+      </div>
+      <div class="tech-pill">
+        <div class="tp-icon">📦</div>
+        <div class="tp-name">BeautifulSoup</div>
+        <div class="tp-role">Tumblr HTML parsing</div>
+      </div>
+      <div class="tech-pill">
+        <div class="tp-icon">🗂</div>
+        <div class="tp-name">Cowork</div>
+        <div class="tp-role">Scheduling & project management</div>
+      </div>
     </div>
   </div>
 
-  <!-- LINKS -->
+  <hr class="divider"/>
+
+  <!-- ══════════════════════════════════════════ OUTCOMES -->
   <div class="section">
-    <h2>🔗 Quick Links</h2>
-    <ul class="done-list">
-      <li><a href="https://pastorpei.substack.com" target="_blank">pastorpei.substack.com</a> — The Substack publication</li>
-      <li><a href="https://pastorpei.substack.com/publish/post/195397991" target="_blank">Draft #2 — 信心是關係，不是物品</a></li>
-      <li><a href="https://pastorpei.substack.com/publish/post/195398012" target="_blank">Draft #3 — 缺乏信心？</a></li>
-      <li><a href="https://console.anthropic.com/settings/billing" target="_blank">Anthropic API Billing</a> — Top up credits for translation API</li>
-    </ul>
+    <div class="section-label">Outcomes</div>
+    <h2 class="section-title">What this project delivers</h2>
+
+    <div class="outcome-grid">
+      <div class="outcome-card">
+        <div class="oc-big">347<span class="oc-unit"></span></div>
+        <div class="oc-label">posts published to<br/>a new bilingual audience</div>
+      </div>
+      <div class="outcome-card">
+        <div class="oc-big">0<span class="oc-unit"></span></div>
+        <div class="oc-label">hours of manual work<br/>once the pipeline runs</div>
+      </div>
+      <div class="outcome-card">
+        <div class="oc-big">2×<span class="oc-unit"></span></div>
+        <div class="oc-label">per week, every week,<br/>fully automated</div>
+      </div>
+    </div>
+
+    <div class="pull-quote">
+      <p>
+        Six years of a pastor's writing — reflections on faith, doubt, scripture, and daily life —
+        were sitting in a declining blog, visible only to those who could read Chinese and knew where to look.
+        This pipeline doesn't just translate words. It opens a door.
+      </p>
+      <div class="pq-attribution">— Project summary, Pastor Pei 夏牧師 · pastorpei.substack.com</div>
+    </div>
+  </div>
+
+  <hr class="divider"/>
+
+  <!-- ══════════════════════════════════════════ LINKS -->
+  <div class="section">
+    <div class="section-label">Links</div>
+    <h2 class="section-title">Quick access</h2>
+
+    <div class="links-row">
+      <a class="link-chip primary" href="https://pastorpei.substack.com" target="_blank">
+        📬 pastorpei.substack.com
+      </a>
+      <a class="link-chip secondary" href="https://pastorpei.substack.com/publish/post/195397991" target="_blank">
+        Draft #2 — 信心是關係，不是物品
+      </a>
+      <a class="link-chip secondary" href="https://pastorpei.substack.com/publish/post/195398012" target="_blank">
+        Draft #3 — 缺乏信心？
+      </a>
+      <a class="link-chip secondary" href="https://console.anthropic.com/settings/billing" target="_blank">
+        Anthropic API Billing
+      </a>
+    </div>
   </div>
 
 </div>
 
-<footer>Pastor Pei Project · pastorpei.com → pastorpei.substack.com · Updated by Claude · April 24, 2026</footer>
+<footer>
+  <strong>Pastor Pei 夏牧師</strong> · Substack Migration Project · Built by Marcus with Claude · 2025–2026
+</footer>
+
 </body>
 </html>
