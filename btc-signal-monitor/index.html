@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BTC Signal Monitor</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg-secondary: #f5f5f4;
+    --bg-tertiary: #eeecea;
+    --text: #1a1a1a;
+    --text-secondary: #666;
+    --text-tertiary: #999;
+    --border: rgba(0,0,0,0.1);
+    --border-med: rgba(0,0,0,0.2);
+    --green: #3B6D11; --green-bg: #EAF3DE;
+    --amber: #854F0B; --amber-bg: #FAEEDA;
+    --red: #A32D2D; --red-bg: #FCEBEB;
+    --blue: #185FA5; --blue-bg: #E6F1FB;
+    --r: 8px; --rl: 12px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1c1c1a; --bg-secondary: #252522; --bg-tertiary: #2c2c2a;
+      --text: #f0ede8; --text-secondary: #aaa; --text-tertiary: #666;
+      --border: rgba(255,255,255,0.09); --border-med: rgba(255,255,255,0.18);
+      --green: #97C459; --green-bg: #173404;
+      --amber: #EF9F27; --amber-bg: #412402;
+      --red: #F09595; --red-bg: #501313;
+      --blue: #85B7EB; --blue-bg: #042C53;
+    }
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg-tertiary); color: var(--text); line-height: 1.5; min-height: 100vh; }
+  .container { max-width: 980px; margin: 0 auto; padding: 2rem 1.25rem 4rem; }
+
+  /* Header */
+  .header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 10px; }
+  .header h1 { font-size: 20px; font-weight: 500; }
+  .header-right { display: flex; align-items: center; gap: 10px; }
+  .updated { font-size: 12px; color: var(--text-tertiary); }
+  .refresh-btn { font-size: 13px; padding: 6px 14px; border-radius: var(--r); border: 0.5px solid var(--border-med); background: var(--bg); color: var(--text); cursor: pointer; }
+  .refresh-btn:hover { background: var(--bg-secondary); }
+
+  /* Score cards */
+  .scores { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 1.5rem; }
+  .score-card { background: var(--bg-secondary); border-radius: var(--r); padding: 12px 14px; }
+  .sc-label { font-size: 11px; color: var(--text-secondary); margin-bottom: 4px; }
+  .sc-value { font-size: 18px; font-weight: 500; margin-bottom: 3px; }
+  .sc-sub { font-size: 11px; color: var(--text-tertiary); }
+  .bullish { color: var(--green); } .bearish { color: var(--red); } .neutral { color: var(--amber); }
+
+  /* Sections */
+  .section { margin-bottom: 1.5rem; }
+  .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+  .section-label { font-size: 11px; font-weight: 500; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.06em; }
+  .section-tag { font-size: 10px; color: var(--amber); margin-left: 8px; font-weight: 400; text-transform: none; letter-spacing: 0; }
+  .section-link { font-size: 12px; color: var(--blue); text-decoration: none; }
+  hr { border: none; border-top: 0.5px solid var(--border); margin: 1.5rem 0; }
+
+  /* Signal cards */
+  .signals { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; }
+  .signal-card { background: var(--bg); border: 0.5px solid var(--border); border-radius: var(--r); padding: 12px 13px; text-decoration: none; color: inherit; display: block; transition: border-color 0.15s; }
+  .signal-card:hover { border-color: var(--border-med); }
+  .sig-name { font-size: 11px; color: var(--text-secondary); margin-bottom: 5px; }
+  .sig-val { font-size: 15px; font-weight: 500; margin-bottom: 4px; }
+  .sig-change { font-size: 11px; margin-bottom: 8px; }
+  .pill { display: inline-block; font-size: 11px; font-weight: 500; padding: 2px 8px; border-radius: 20px; }
+  .pill-bull { background: var(--green-bg); color: var(--green); }
+  .pill-bear { background: var(--red-bg); color: var(--red); }
+  .pill-watch { background: var(--amber-bg); color: var(--amber); }
+
+  /* Geo events */
+  .geo-list { display: flex; flex-direction: column; gap: 8px; }
+  .geo-item { background: var(--bg); border: 0.5px solid var(--border); border-left-width: 3px; border-radius: 0 var(--r) var(--r) 0; padding: 12px 14px; display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+  .geo-item.g-bull { border-left-color: #639922; } .geo-item.g-bear { border-left-color: #E24B4A; } .geo-item.g-watch { border-left-color: #EF9F27; }
+  .geo-content { flex: 1; }
+  .geo-title { font-size: 13px; font-weight: 500; margin-bottom: 4px; }
+  .geo-desc { font-size: 12px; color: var(--text-secondary); line-height: 1.5; }
+  .geo-source { font-size: 11px; color: var(--blue); text-decoration: none; display: inline-block; margin-top: 4px; }
+  .geo-right { display: flex; flex-direction: column; align-items: flex-end; gap: 5px; flex-shrink: 0; }
+  .geo-date { font-size: 11px; color: var(--text-tertiary); }
+  .geo-dismiss { font-size: 12px; color: var(--text-tertiary); cursor: pointer; background: none; border: none; padding: 2px 4px; line-height: 1; border-radius: 4px; }
+  .geo-dismiss:hover { color: var(--red); background: var(--red-bg); }
+
+  /* News inbox */
+  .news-inbox { display: flex; flex-direction: column; gap: 6px; }
+  .news-item { background: var(--bg); border: 0.5px solid var(--border); border-radius: var(--r); padding: 10px 13px; display: flex; align-items: flex-start; gap: 10px; }
+  .news-item.dismissed { display: none; }
+  .news-body { flex: 1; }
+  .news-title { font-size: 12px; color: var(--text); line-height: 1.4; }
+  .news-title a { color: inherit; text-decoration: none; }
+  .news-title a:hover { color: var(--blue); }
+  .news-meta { font-size: 10px; color: var(--text-tertiary); margin-top: 3px; }
+  .news-actions { display: flex; gap: 5px; flex-shrink: 0; flex-wrap: wrap; justify-content: flex-end; }
+  .nbtn { font-size: 11px; padding: 3px 8px; border-radius: 4px; border: 0.5px solid var(--border); cursor: pointer; background: var(--bg-secondary); color: var(--text-secondary); white-space: nowrap; }
+  .nbtn:hover { border-color: var(--border-med); }
+  .nbtn.bull { background: var(--green-bg); color: var(--green); border-color: transparent; }
+  .nbtn.watch { background: var(--amber-bg); color: var(--amber); border-color: transparent; }
+  .nbtn.bear { background: var(--red-bg); color: var(--red); border-color: transparent; }
+
+  /* Forms */
+  .add-form { background: var(--bg); border: 0.5px solid var(--border); border-radius: var(--rl); padding: 1rem 1.25rem; margin-top: 10px; display: none; }
+  .add-form.open { display: block; }
+  .form-title { font-size: 13px; font-weight: 500; margin-bottom: 12px; }
+  .form-row { display: flex; gap: 8px; margin-bottom: 8px; flex-wrap: wrap; }
+  .form-row input, .form-row textarea, .form-row select { flex: 1; min-width: 120px; padding: 7px 10px; border-radius: var(--r); border: 0.5px solid var(--border-med); background: var(--bg-secondary); color: var(--text); font-size: 13px; font-family: inherit; outline: none; }
+  .form-row input:focus, .form-row textarea:focus, .form-row select:focus { border-color: var(--blue); }
+  .form-row textarea { resize: vertical; min-height: 64px; }
+  .form-actions { display: flex; gap: 8px; margin-top: 4px; }
+  .btn { padding: 7px 14px; border-radius: var(--r); font-size: 13px; border: 0.5px solid var(--border-med); cursor: pointer; background: var(--bg); color: var(--text); font-family: inherit; }
+  .btn:hover { background: var(--bg-secondary); }
+  .btn-primary { background: var(--blue-bg); color: var(--blue); border-color: transparent; }
+  .btn-primary:hover { opacity: 0.85; }
+  .edit-link { font-size: 12px; color: var(--blue); background: none; border: none; cursor: pointer; padding: 0; font-family: inherit; }
+  .edit-link:hover { text-decoration: underline; }
+
+  /* Bias bar */
+  .bias-wrap { background: var(--bg); border: 0.5px solid var(--border); border-radius: var(--rl); padding: 1rem 1.25rem; margin-bottom: 1.5rem; }
+  .bias-label { font-size: 12px; color: var(--text-secondary); margin-bottom: 12px; }
+  .track { height: 8px; background: linear-gradient(90deg, #E24B4A 0%, #EF9F27 38%, #639922 70%, #1D9E75 100%); border-radius: 4px; position: relative; }
+  .needle { position: absolute; top: 50%; width: 14px; height: 14px; background: var(--text); border-radius: 50%; transform: translate(-50%, -50%); border: 2px solid var(--bg); transition: left 0.6s cubic-bezier(0.34,1.56,0.64,1); }
+  .track-labels { display: flex; justify-content: space-between; margin-top: 7px; font-size: 11px; color: var(--text-tertiary); }
+
+  /* Chart */
+  .chart-wrap { background: var(--bg); border: 0.5px solid var(--border); border-radius: var(--rl); padding: 1rem 1.25rem; margin-bottom: 1.5rem; }
+  .chart-title { font-size: 12px; color: var(--text-secondary); margin-bottom: 12px; display: flex; justify-content: space-between; }
+  .chart-canvas-wrap { position: relative; height: 180px; }
+
+  /* Loading / error */
+  .state-msg { font-size: 12px; color: var(--text-tertiary); padding: 8px 0; }
+  .state-err { color: var(--red); }
+
+  @media (max-width: 600px) {
+    .scores { grid-template-columns: repeat(2, 1fr); }
+    .signals { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <h1>BTC signal monitor</h1>
+    <div class="header-right">
+      <span class="updated" id="lastUpdated">Loading…</span>
+      <button class="refresh-btn" onclick="init()">↻ Refresh</button>
+    </div>
+  </div>
+
+  <!-- Summary scores -->
+  <div class="scores">
+    <div class="score-card"><div class="sc-label">Macro</div><div class="sc-value" id="sc-macro">—</div><div class="sc-sub" id="sc-macro-sub">—</div></div>
+    <div class="score-card"><div class="sc-label">Technicals</div><div class="sc-value" id="sc-tech">—</div><div class="sc-sub" id="sc-tech-sub">—</div></div>
+    <div class="score-card"><div class="sc-label">Geopolitical</div><div class="sc-value" id="sc-geo">—</div><div class="sc-sub" id="sc-geo-sub">—</div></div>
+    <div class="score-card"><div class="sc-label">Overall verdict</div><div class="sc-value" id="sc-overall">—</div><div class="sc-sub" id="sc-overall-sub">—</div></div>
+  </div>
+
+  <!-- Bias bar -->
+  <div class="bias-wrap">
+    <div class="bias-label">Accumulation bias — all signals combined</div>
+    <div class="track"><div class="needle" id="needle" style="left:50%"></div></div>
+    <div class="track-labels"><span>Strong headwind</span><span>Neutral</span><span>Strong tailwind</span></div>
+  </div>
+
+  <hr>
+
+  <!-- Price chart -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-label">BTC price — 90 days</span>
+      <a href="https://www.coingecko.com/en/coins/bitcoin" target="_blank" class="section-link">CoinGecko ↗</a>
+    </div>
+    <div class="chart-wrap">
+      <div class="chart-canvas-wrap">
+        <canvas id="priceChart" role="img" aria-label="Bitcoin 90-day price chart">Bitcoin price chart loading…</canvas>
+      </div>
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- Technical signals -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-label">Technical signals</span>
+      <a href="https://www.tradingview.com/chart/?symbol=BTCUSD" target="_blank" class="section-link">TradingView ↗</a>
+    </div>
+    <div class="signals" id="tech-signals"><div class="state-msg">Fetching data…</div></div>
+  </div>
+
+  <hr>
+
+  <!-- Macro signals -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-label">Macro signals <span class="section-tag">manual update</span></span>
+      <button class="edit-link" onclick="toggleMacroForm()">Edit values</button>
+    </div>
+    <div class="signals" id="macro-signals"></div>
+    <div class="add-form" id="macro-form">
+      <div class="form-title">Update macro values</div>
+      <div id="macro-form-fields"></div>
+      <div class="form-actions">
+        <button class="btn btn-primary" onclick="saveMacro()">Save</button>
+        <button class="btn" onclick="toggleMacroForm()">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- Geopolitical events -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-label">Geopolitical events</span>
+      <button class="btn" style="font-size:12px;padding:4px 12px;" onclick="toggleGeoForm()">+ Add event</button>
+    </div>
+    <div class="geo-list" id="geo-list"></div>
+    <div class="add-form" id="geo-form">
+      <div class="form-title">Add geopolitical event</div>
+      <div class="form-row">
+        <input id="g-title" type="text" placeholder="Event title (e.g. US strategic BTC reserve)" style="flex:3">
+        <select id="g-signal">
+          <option value="bull">Bullish</option>
+          <option value="watch">Watch</option>
+          <option value="bear">Bearish</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <textarea id="g-desc" placeholder="Why does this matter for BTC accumulation?"></textarea>
+      </div>
+      <div class="form-row">
+        <input id="g-url" type="text" placeholder="Source URL (optional)">
+        <input id="g-date" type="text" placeholder="Date (e.g. Apr 2025)" style="max-width:140px">
+      </div>
+      <div class="form-actions">
+        <button class="btn btn-primary" onclick="addGeoEvent()">Add to board</button>
+        <button class="btn" onclick="toggleGeoForm()">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- News inbox -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-label">News inbox <span class="section-tag">classify → approve → board</span></span>
+      <button class="btn" style="font-size:12px;padding:4px 12px;" onclick="loadNews()">Load headlines</button>
+    </div>
+    <div id="news-inbox">
+      <div class="state-msg">Click "Load headlines" to pull recent crypto &amp; macro news. Approve each item to add it to the geopolitical board above.</div>
+    </div>
+  </div>
+
+  <div style="font-size:11px;color:var(--text-tertiary);text-align:center;margin-top:2rem;">
+    BTC Signal Monitor · Technical data: <a href="https://coingecko.com" target="_blank" style="color:inherit">CoinGecko</a> &amp; <a href="https://alternative.me/crypto/fear-and-greed-index/" target="_blank" style="color:inherit">Alternative.me</a> · Macro: manually updated · On-chain: <a href="https://www.lookintobitcoin.com" target="_blank" style="color:inherit">LookIntoBitcoin</a> · Built with Claude
+  </div>
+
+</div><!-- /container -->
+
+<script>
+// ── DEFAULT DATA ────────────────────────────────────────────────
+const DEFAULT_MACRO = [
+  { id:'fedRate',   name:'Fed funds rate',  value:'4.25%',     note:'Cut 25bps Mar 2026',    signal:'bull',  src:'https://fred.stlouisfed.org/series/FEDFUNDS',          srcLabel:'FRED' },
+  { id:'rateTraj',  name:'Rate trajectory', value:'Easing',    note:"2 cuts priced '26",     signal:'bull',  src:'https://www.cmegroup.com/markets/interest-rates/cme-fedwatch-tool.html', srcLabel:'CME FedWatch' },
+  { id:'qt',        name:'QT pace',         value:'Slowing',   note:'Not yet QE',            signal:'watch', src:'https://fred.stlouisfed.org/series/WALCL',             srcLabel:'FRED' },
+  { id:'m2',        name:'Global M2',       value:'Expanding', note:'+3.2% YoY',             signal:'bull',  src:'https://fred.stlouisfed.org/series/M2SL',              srcLabel:'FRED' },
+  { id:'tga',       name:'Treasury TGA',    value:'$650B',     note:'Drawdown likely',       signal:'watch', src:'https://fiscaldata.treasury.gov/datasets/daily-treasury-statement/', srcLabel:'Treasury' },
+  { id:'rrp',       name:'Reverse repo',    value:'$120B',     note:'Near zero floor',       signal:'bull',  src:'https://www.newyorkfed.org/markets/desk-operations/repo-reverse-repo-agreements', srcLabel:'NY Fed' },
+  { id:'cpi',       name:'CPI YoY',         value:'3.1%',      note:'Sticky above 2%',       signal:'watch', src:'https://www.bls.gov/cpi/',                             srcLabel:'BLS' },
+  { id:'realRates', name:'Real rates',      value:'+1.1%',     note:'Still restrictive',     signal:'bear',  src:'https://fred.stlouisfed.org/series/DFII10',            srcLabel:'FRED' },
+  { id:'dxy',       name:'DXY (dollar)',    value:'99.2',      note:'Weakening',             signal:'bull',  src:'https://www.marketwatch.com/investing/index/dxy',      srcLabel:'MarketWatch' },
+  { id:'credSpr',   name:'Credit spreads',  value:'Wide',      note:'Risk-off signal',       signal:'bear',  src:'https://fred.stlouisfed.org/series/BAMLH0A0HYM2',      srcLabel:'FRED' },
+];
+
+const DEFAULT_GEO = [
+  { id:1, title:'US strategic Bitcoin reserve',    desc:'Executive order directing Treasury to hold BTC as a national reserve asset. Signals sovereign-level demand floor.',                         signal:'bull',  url:'https://www.whitehouse.gov/presidential-actions/2025/03/establishing-a-strategic-bitcoin-reserve/', date:'Mar 2025' },
+  { id:2, title:'BRICS de-dollarization',          desc:'Member nations reducing USD reserves and exploring commodity-backed settlement. Increases demand for non-sovereign store of value.',        signal:'bull',  url:'https://www.reuters.com/',  date:'Ongoing' },
+  { id:3, title:'US tariff shock → DXY selloff',   desc:'April 2025 tariff escalation triggered dollar weakness and flight from Treasuries. Capital seeking dollar-alternative hard assets.',        signal:'bull',  url:'',          date:'Apr 2025' },
+  { id:4, title:'US debt ceiling suspended',       desc:'Ceiling suspended through Jan 2027. Long-term deficit path reinforces hard money thesis but creates short-term uncertainty.',              signal:'watch', url:'https://fiscaldata.treasury.gov/',  date:'Ongoing' },
+  { id:5, title:'Global recession risk',           desc:'Trade war fallout could trigger risk-off liquidation. BTC historically sells off with equities in early recession before recovering.',     signal:'bear',  url:'',          date:'Watch Q2–Q3' },
+];
+
+// ── STATE ───────────────────────────────────────────────────────
+let macroData = JSON.parse(localStorage.getItem('btcm_macro') || 'null') || DEFAULT_MACRO;
+let geoData   = JSON.parse(localStorage.getItem('btcm_geo')   || 'null') || DEFAULT_GEO;
+let sigTech = [], sigMacro = [], sigGeo = [];
+let priceChart = null;
+
+// ── UTILS ───────────────────────────────────────────────────────
+const pc = s => s==='bull' ? 'pill-bull' : s==='bear' ? 'pill-bear' : 'pill-watch';
+const pl = s => s==='bull' ? 'Bullish'   : s==='bear' ? 'Bearish'   : 'Watch';
+const sv = s => s==='bull' ? 1 : s==='bear' ? -1 : 0;
+function scoreLabel(sum, n) {
+  const a = sum / n;
+  if (a >= 0.5)  return ['Bullish',         'bullish'];
+  if (a >= 0.15) return ['Leaning bullish',  'bullish'];
+  if (a >= -0.15)return ['Neutral',          'neutral'];
+  if (a >= -0.5) return ['Leaning bearish',  'bearish'];
+  return             ['Bearish',             'bearish'];
+}
+function sma(arr, n) {
+  if (arr.length < n) return null;
+  return arr.slice(-n).reduce((a,b)=>a+b,0)/n;
+}
+function rsi14(arr) {
+  if (arr.length < 15) return null;
+  const tail = arr.slice(-28);
+  let g=0, l=0;
+  for (let i=1; i<=14; i++) { const d=tail[i]-tail[i-1]; d>0?g+=d:l-=d; }
+  let ag=g/14, al=l/14;
+  for (let i=15; i<tail.length; i++) {
+    const d=tail[i]-tail[i-1];
+    ag=(ag*13+(d>0?d:0))/14;
+    al=(al*13+(d<0?-d:0))/14;
+  }
+  return al===0 ? 100 : +(100-100/(1+ag/al)).toFixed(1);
+}
+function noteColor(s) {
+  return s==='bull' ? 'var(--green)' : s==='bear' ? 'var(--red)' : 'var(--amber)';
+}
+
+// ── FETCH ───────────────────────────────────────────────────────
+async function fetchBTC() {
+  const [priceR, histR, fgR] = await Promise.all([
+    fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd&include_24hr_change=true&include_7d_change=true'),
+    fetch('https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=200&interval=daily'),
+    fetch('https://api.alternative.me/fng/?limit=1')
+  ]);
+  const pj = await priceR.json();
+  const hj = await histR.json();
+  const fj = await fgR.json();
+
+  const price   = pj.bitcoin.usd;
+  const d24     = pj.bitcoin.usd_24h_change;
+  const d7      = pj.bitcoin.usd_7d_change;
+  const closes  = hj.prices.map(p=>p[1]);
+  const dates   = hj.prices.map(p=>p[0]);
+  const ma50    = sma(closes, 50);
+  const ma200   = sma(closes, 200);
+  const rsi     = rsi14(closes);
+  const fg      = fj.data[0];
+  const fgv     = parseInt(fg.value);
+
+  // Signals
+  const vs200sig  = price > ma200 ? 'bull' : 'bear';
+  const vs200pct  = ma200 ? ((price-ma200)/ma200*100).toFixed(1) : '—';
+  const crossSig  = ma50 && ma200 && ma50 > ma200 ? 'bull' : 'bear';
+  const crossLbl  = ma50 && ma200 && ma50 > ma200 ? 'Golden cross' : 'Death cross';
+  const rsiSig    = !rsi ? 'watch' : rsi > 75 ? 'bear' : rsi > 65 ? 'watch' : 'bull';
+  const rsiNote   = !rsi ? '—' : rsi > 75 ? 'Overbought — reduce buys' : rsi > 65 ? 'Elevated' : 'Room to run';
+  const trendSig  = price > ma50 && ma50 > ma200 ? 'bull' : price < ma50 && ma50 < ma200 ? 'bear' : 'watch';
+  const trendLbl  = price > ma50 && ma50 > ma200 ? 'HH / HL uptrend' : price < ma50 && ma50 < ma200 ? 'LL / LH downtrend' : 'Mixed structure';
+  const fgSig     = fgv >= 75 ? 'bear' : fgv >= 55 ? 'watch' : fgv >= 45 ? 'bull' : fgv >= 25 ? 'watch' : 'bull';
+
+  return { price, d24, d7, closes, dates, ma50, ma200, rsi, fg, fgv, fgSig,
+           vs200sig, vs200pct, crossSig, crossLbl, rsiSig, rsiNote, trendSig, trendLbl };
+}
+
+// ── RENDER CHART ─────────────────────────────────────────────────
+function renderChart(d) {
+  const slice = 90;
+  const labels = d.dates.slice(-slice).map(ts => {
+    const dt = new Date(ts);
+    return dt.toLocaleDateString('en-US',{month:'short',day:'numeric'});
+  });
+  const prices = d.closes.slice(-slice);
+  const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const lineColor = '#378ADD';
+  const fillColor = isDark ? 'rgba(55,138,221,0.12)' : 'rgba(55,138,221,0.08)';
+  const gridColor = isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)';
+  const textColor = isDark ? '#888' : '#aaa';
+
+  if (priceChart) priceChart.destroy();
+  priceChart = new Chart(document.getElementById('priceChart'), {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [{
+        label: 'BTC/USD',
+        data: prices,
+        borderColor: lineColor,
+        borderWidth: 1.5,
+        fill: true,
+        backgroundColor: fillColor,
+        pointRadius: 0,
+        tension: 0.3
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: {
+        callbacks: { label: ctx => '$' + Math.round(ctx.raw).toLocaleString() }
+      }},
+      scales: {
+        x: { ticks: { color: textColor, font: { size: 10 }, maxTicksLimit: 8, autoSkip: true }, grid: { color: gridColor } },
+        y: { ticks: { color: textColor, font: { size: 10 }, callback: v => '$'+Math.round(v/1000)+'k' }, grid: { color: gridColor } }
+      }
+    }
+  });
+}
+
+// ── RENDER TECHNICALS ────────────────────────────────────────────
+function renderTech(d) {
+  const cards = [
+    { name:'BTC price',       val:'$'+d.price.toLocaleString('en-US',{maximumFractionDigits:0}), note:(d.d24>=0?'▲':'▼')+Math.abs(d.d24).toFixed(1)+'% 24h', signal: d.d24>=0?'bull':'bear', src:'https://www.coingecko.com/en/coins/bitcoin', lbl:'CoinGecko' },
+    { name:'vs 200-day MA',   val: d.vs200sig==='bull'?'Above MA':'Below MA',  note:(+d.vs200pct>0?'+':'')+d.vs200pct+'% from MA200', signal:d.vs200sig, src:'https://www.coingecko.com/en/coins/bitcoin', lbl:'CoinGecko' },
+    { name:'50/200d cross',   val: d.crossLbl, note:d.crossSig==='bull'?'Uptrend structure':'Downtrend structure', signal:d.crossSig, src:'https://www.tradingview.com/chart/?symbol=BTCUSD', lbl:'TradingView' },
+    { name:'RSI (14d)',        val: d.rsi?d.rsi.toString():'—', note:d.rsiNote, signal:d.rsiSig, src:'https://www.tradingview.com/chart/?symbol=BTCUSD', lbl:'TradingView' },
+    { name:'Market structure', val: d.trendLbl.split(' ')[0]+' '+d.trendLbl.split(' ')[1], note:d.trendLbl, signal:d.trendSig, src:'https://www.tradingview.com/chart/?symbol=BTCUSD', lbl:'TradingView' },
+    { name:'Fear & Greed',    val: d.fgv+' — '+d.fg.value_classification, note:'Updated '+new Date(d.fg.timestamp*1000).toLocaleDateString('en-US',{month:'short',day:'numeric'}), signal:d.fgSig, src:'https://alternative.me/crypto/fear-and-greed-index/', lbl:'Alternative.me' },
+    { name:'MVRV-Z score',    val:'See source ↗', note:'Manual check — Glassnode', signal:'watch', src:'https://www.lookintobitcoin.com/charts/mvrv-zscore/', lbl:'LookIntoBitcoin' },
+    { name:'Pi cycle top',    val:'See source ↗', note:'Not triggered = bullish', signal:'watch', src:'https://www.lookintobitcoin.com/charts/pi-cycle-top-indicator/', lbl:'LookIntoBitcoin' },
+  ];
+  sigTech = cards.map(c=>c.signal);
+  document.getElementById('tech-signals').innerHTML = cards.map(c=>`
+    <a class="signal-card" href="${c.src}" target="_blank" title="Source: ${c.lbl}">
+      <div class="sig-name">${c.name}</div>
+      <div class="sig-val">${c.val}</div>
+      <div class="sig-change" style="color:${noteColor(c.signal)}">${c.note}</div>
+      <span class="pill ${pc(c.signal)}">${pl(c.signal)}</span>
+    </a>
+  `).join('');
+  updateScores();
+}
+
+// ── RENDER MACRO ─────────────────────────────────────────────────
+function renderMacro() {
+  sigMacro = macroData.map(m=>m.signal);
+  document.getElementById('macro-signals').innerHTML = macroData.map(m=>`
+    <a class="signal-card" href="${m.src}" target="_blank" title="Source: ${m.srcLabel}">
+      <div class="sig-name">${m.name}</div>
+      <div class="sig-val">${m.value}</div>
+      <div class="sig-change" style="color:${noteColor(m.signal)}">${m.note}</div>
+      <span class="pill ${pc(m.signal)}">${pl(m.signal)}</span>
+    </a>
+  `).join('');
+  // Rebuild edit fields
+  document.getElementById('macro-form-fields').innerHTML = macroData.map((m,i)=>`
+    <div class="form-row" style="align-items:center;">
+      <span style="font-size:12px;color:var(--text-secondary);min-width:110px;flex-shrink:0">${m.name}</span>
+      <input id="mv_${i}" type="text" value="${m.value}" placeholder="Value" style="max-width:90px">
+      <input id="mn_${i}" type="text" value="${m.note}"  placeholder="Note">
+      <select id="ms_${i}" style="max-width:100px">
+        <option value="bull"  ${m.signal==='bull' ?'selected':''}>Bullish</option>
+        <option value="watch" ${m.signal==='watch'?'selected':''}>Watch</option>
+        <option value="bear"  ${m.signal==='bear' ?'selected':''}>Bearish</option>
+      </select>
+    </div>
+  `).join('');
+  updateScores();
+}
+function toggleMacroForm() { document.getElementById('macro-form').classList.toggle('open'); }
+function saveMacro() {
+  macroData.forEach((m,i) => {
+    m.value  = document.getElementById('mv_'+i).value;
+    m.note   = document.getElementById('mn_'+i).value;
+    m.signal = document.getElementById('ms_'+i).value;
+  });
+  localStorage.setItem('btcm_macro', JSON.stringify(macroData));
+  toggleMacroForm();
+  renderMacro();
+}
+
+// ── RENDER GEO ───────────────────────────────────────────────────
+function renderGeo() {
+  sigGeo = geoData.map(g=>g.signal);
+  const bull=geoData.filter(g=>g.signal==='bull').length;
+  const bear=geoData.filter(g=>g.signal==='bear').length;
+  document.getElementById('geo-list').innerHTML = geoData.length ? geoData.map(g=>`
+    <div class="geo-item g-${g.signal}">
+      <div class="geo-content">
+        <div class="geo-title">${g.title}</div>
+        <div class="geo-desc">${g.desc}</div>
+        ${g.url ? `<a href="${g.url}" target="_blank" class="geo-source">Source ↗</a>` : ''}
+      </div>
+      <div class="geo-right">
+        <span class="pill ${pc(g.signal)}">${pl(g.signal)}</span>
+        <span class="geo-date">${g.date}</span>
+        <button class="geo-dismiss" onclick="removeGeo(${g.id})" title="Remove">✕</button>
+      </div>
+    </div>
+  `).join('') : '<div class="state-msg">No events yet — pull headlines or add one manually.</div>';
+
+  const [lbl,cls] = sigGeo.length ? scoreLabel(sigGeo.reduce((a,s)=>a+sv(s),0), sigGeo.length) : ['—','neutral'];
+  document.getElementById('sc-geo').textContent = lbl;
+  document.getElementById('sc-geo').className = 'sc-value '+cls;
+  document.getElementById('sc-geo-sub').textContent = `${bull} bullish · ${bear} bearish`;
+  updateScores();
+}
+function removeGeo(id) {
+  geoData = geoData.filter(g=>g.id!==id);
+  localStorage.setItem('btcm_geo', JSON.stringify(geoData));
+  renderGeo();
+}
+function toggleGeoForm() { document.getElementById('geo-form').classList.toggle('open'); }
+function addGeoEvent() {
+  const title = document.getElementById('g-title').value.trim();
+  if (!title) return;
+  geoData.unshift({
+    id: Date.now(),
+    title,
+    desc:   document.getElementById('g-desc').value.trim(),
+    signal: document.getElementById('g-signal').value,
+    url:    document.getElementById('g-url').value.trim(),
+    date:   document.getElementById('g-date').value.trim() || new Date().toLocaleDateString('en-US',{month:'short',year:'numeric'})
+  });
+  localStorage.setItem('btcm_geo', JSON.stringify(geoData));
+  ['g-title','g-desc','g-url','g-date'].forEach(id => document.getElementById(id).value='');
+  toggleGeoForm();
+  renderGeo();
+}
+
+// ── SCORES & NEEDLE ──────────────────────────────────────────────
+function updateScores() {
+  if (sigMacro.length) {
+    const sum = sigMacro.reduce((a,s)=>a+sv(s),0);
+    const [l,c] = scoreLabel(sum,sigMacro.length);
+    document.getElementById('sc-macro').textContent = l;
+    document.getElementById('sc-macro').className = 'sc-value '+c;
+    document.getElementById('sc-macro-sub').textContent = sigMacro.filter(s=>s==='bull').length+'/'+sigMacro.length+' favorable';
+  }
+  if (sigTech.length) {
+    const sum = sigTech.reduce((a,s)=>a+sv(s),0);
+    const [l,c] = scoreLabel(sum,sigTech.length);
+    document.getElementById('sc-tech').textContent = l;
+    document.getElementById('sc-tech').className = 'sc-value '+c;
+    document.getElementById('sc-tech-sub').textContent = sigTech.filter(s=>s==='bull').length+'/'+sigTech.length+' favorable';
+  }
+  const all = [...sigMacro,...sigTech,...sigGeo];
+  if (all.length) {
+    const sum = all.reduce((a,s)=>a+sv(s),0);
+    const avg = sum/all.length;
+    const [l,c] = scoreLabel(sum,all.length);
+    document.getElementById('sc-overall').textContent = l;
+    document.getElementById('sc-overall').className = 'sc-value '+c;
+    const advice = avg >= 0.4 ? 'DCA + dip buys' : avg >= 0.1 ? 'DCA steadily' : avg >= -0.1 ? 'DCA with caution' : 'Hold — wait for clarity';
+    document.getElementById('sc-overall-sub').textContent = advice;
+    const pct = Math.max(5, Math.min(95, ((avg+1)/2*90)+5)).toFixed(1);
+    document.getElementById('needle').style.left = pct+'%';
+  }
+}
+
+// ── NEWS INBOX ───────────────────────────────────────────────────
+async function loadNews() {
+  const el = document.getElementById('news-inbox');
+  el.innerHTML = '<div class="state-msg">Fetching headlines…</div>';
+  const FEEDS = [
+    'https://api.rss2json.com/v1/api.json?rss_url=https%3A%2F%2Fcointelegraph.com%2Frss&count=12',
+    'https://api.rss2json.com/v1/api.json?rss_url=https%3A%2F%2Fwww.coindesk.com%2Farc%2Foutboundfeeds%2Frss%2F&count=12',
+  ];
+  try {
+    const results = await Promise.allSettled(FEEDS.map(f=>fetch(f).then(r=>r.json())));
+    let articles = [];
+    results.forEach(r => {
+      if (r.status==='fulfilled' && r.value?.items) {
+        articles = articles.concat(r.value.items.map(a=>({
+          title: a.title,
+          url:   a.link,
+          date:  new Date(a.pubDate).toLocaleDateString('en-US',{month:'short',day:'numeric'}),
+          src:   a.link.includes('coindesk') ? 'CoinDesk' : 'CoinTelegraph'
+        })));
+      }
+    });
+    if (!articles.length) { el.innerHTML='<div class="state-msg state-err">No articles loaded — feeds may be temporarily unavailable.</div>'; return; }
+    articles = articles.slice(0,16);
+    el.innerHTML = `
+      <div style="font-size:11px;color:var(--text-tertiary);margin-bottom:8px;">Approve each headline to add it to the geopolitical board with a signal.</div>
+      <div class="news-inbox">
+        ${articles.map((a,i)=>`
+          <div class="news-item" id="ni_${i}">
+            <div class="news-body">
+              <div class="news-title"><a href="${a.url}" target="_blank">${a.title}</a></div>
+              <div class="news-meta">${a.src} · ${a.date}</div>
+            </div>
+            <div class="news-actions">
+              <button class="nbtn bull"  onclick="approveNews(${i},'bull','${encodeURIComponent(a.title)}','${encodeURIComponent(a.url)}','${a.date}')">Bullish</button>
+              <button class="nbtn watch" onclick="approveNews(${i},'watch','${encodeURIComponent(a.title)}','${encodeURIComponent(a.url)}','${a.date}')">Watch</button>
+              <button class="nbtn bear"  onclick="approveNews(${i},'bear','${encodeURIComponent(a.title)}','${encodeURIComponent(a.url)}','${a.date}')">Bearish</button>
+              <button class="nbtn"       onclick="document.getElementById('ni_${i}').classList.add('dismissed')">Dismiss</button>
+            </div>
+          </div>
+        `).join('')}
+      </div>`;
+  } catch(e) {
+    el.innerHTML='<div class="state-msg state-err">Failed to load feeds. Check your connection.</div>';
+  }
+}
+function approveNews(i, signal, titleEnc, urlEnc, date) {
+  const title = decodeURIComponent(titleEnc);
+  const url   = decodeURIComponent(urlEnc);
+  geoData.unshift({ id:Date.now(), title, desc:'Added from news inbox.', signal, url, date });
+  localStorage.setItem('btcm_geo', JSON.stringify(geoData));
+  document.getElementById('ni_'+i).classList.add('dismissed');
+  renderGeo();
+}
+
+// ── INIT ────────────────────────────────────────────────────────
+async function init() {
+  document.getElementById('lastUpdated').textContent = 'Refreshing…';
+  renderMacro();
+  renderGeo();
+  document.getElementById('tech-signals').innerHTML = '<div class="state-msg">Fetching BTC data…</div>';
+  try {
+    const d = await fetchBTC();
+    renderChart(d);
+    renderTech(d);
+    document.getElementById('lastUpdated').textContent =
+      'Updated ' + new Date().toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});
+  } catch(e) {
+    document.getElementById('tech-signals').innerHTML =
+      '<div class="state-msg state-err">Failed to load — CoinGecko may be rate-limiting. Try again in a moment.</div>';
+    document.getElementById('lastUpdated').textContent = 'Update failed';
+  }
+}
+
+init();
+</script>
+</body>
+</html>
