@@ -137,10 +137,15 @@
     .scores { grid-template-columns: repeat(2, 1fr); }
     .signals { grid-template-columns: repeat(2, 1fr); }
   }
+
+  .back-link { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.85rem; color: var(--text-tertiary); margin-bottom: 1.5rem; text-decoration: none; transition: color 0.15s; }
+  .back-link:hover { color: var(--blue); }
 </style>
 </head>
 <body>
 <div class="container">
+
+  <a class="back-link" href="../">&#8592; Back</a>
 
   <div class="header">
     <h1>BTC signal monitor</h1>
