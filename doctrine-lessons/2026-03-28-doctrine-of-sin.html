@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Doctrine of Sin · Doctrine Lessons</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,700;1,6..72,400;1,6..72,700&family=Funnel+Sans:wght@400;500;600;700&family=Geist:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Geist', system-ui, -apple-system, sans-serif; background: #FFF7EF; color: #1A1A1A; min-height: 100vh; }
+    .page { max-width: 600px; margin: 0 auto; padding: 40px 24px 60px; display: flex; flex-direction: column; gap: 32px; }
+    .card { background: #FFFFFF; border-radius: 12px; padding: 24px 28px; box-shadow: 0 2px 4px rgba(0,0,0,0.031), 0 12px 32px rgba(0,0,0,0.059); }
+    .label-pill { display: inline-block; background: rgba(255,92,0,0.094); color: #FF5C00; font-family: 'Funnel Sans', 'Geist', system-ui, sans-serif; font-size: 11px; font-weight: 600; letter-spacing: 0.8px; padding: 4px 12px; border-radius: 999px; }
+    .hero { display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center; }
+    .breadcrumb { font-family: 'Funnel Sans', 'Geist', system-ui, sans-serif; font-size: 12px; font-weight: 500; color: #888888; letter-spacing: 1px; }
+    .breadcrumb a { color: #888888; text-decoration: none; }
+    .breadcrumb a:hover { color: #FF5C00; }
+    .hero-title { font-family: 'Newsreader', Georgia, serif; font-size: clamp(28px, 7vw, 36px); font-weight: 700; color: #1A1A1A; line-height: 1.15; }
+    .hero-subtitle { font-family: 'Newsreader', Georgia, serif; font-size: clamp(17px, 4vw, 22px); font-style: italic; color: #FF5C00; }
+    .hero-divider { width: 60px; height: 3px; background: #FF5C00; border-radius: 999px; }
+    .hero-meta { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: center; }
+    .hero-meta span { font-family: 'Funnel Sans', 'Geist', system-ui, sans-serif; font-size: 11px; font-weight: 500; color: #666666; }
+    .hero-meta .dot { color: #888888; }
+    .quote-card { display: flex; flex-direction: column; gap: 16px; }
+    .quote-mark { font-family: 'Newsreader', Georgia, serif; font-size: 48px; font-weight: 700; color: #FF5C00; line-height: 0.6; }
+    .quote-text { font-family: 'Newsreader', Georgia, serif; font-size: 18px; font-style: italic; color: #1A1A1A; line-height: 1.6; }
+    .quote-ref { font-family: 'Funnel Sans', 'Geist', system-ui, sans-serif; font-size: 12px; font-weight: 500; color: #FF8533; letter-spacing: 0.5px; }
+    .overview-card, .takeaway-card, .script-section, .key-section { display: flex; flex-direction: column; gap: 16px; }
+    .section-title { font-family: 'Newsreader', Georgia, serif; font-size: 22px; font-weight: 700; color: #1A1A1A; }
+    .overview-body { font-family: 'Geist', system-ui, sans-serif; font-size: 14px; color: #666666; line-height: 1.7; }
+    .overview-body strong { color: #1A1A1A; font-weight: 600; }
+    .key-grid { display: flex; flex-direction: column; gap: 10px; }
+    .key-tile { display: flex; align-items: center; gap: 12px; background: #FFF7EF; border-radius: 8px; padding: 14px 18px; }
+    .key-icon { font-size: 20px; line-height: 1; flex-shrink: 0; }
+    .key-name { font-family: 'Geist', system-ui, sans-serif; font-size: 14px; font-weight: 600; color: #1A1A1A; }
+    .key-sub { font-family: 'Funnel Sans', 'Geist', system-ui, sans-serif; font-size: 12px; font-weight: 500; color: #888888; margin-top: 2px; }
+    @media (min-width: 480px) { .key-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; } }
+    .script-card { background: #FFFFFF; border-radius: 12px; padding: 20px 24px; display: flex; flex-direction: column; gap: 12px; border: 1px solid #F3F4F6; box-shadow: 0 2px 4px rgba(0,0,0,0.031), 0 12px 32px rgba(0,0,0,0.059); }
+    .script-ref-pill { display: inline-block; background: rgba(255,92,0,0.078); color: #FF5C00; font-family: 'Funnel Sans', 'Geist', system-ui, sans-serif; font-size: 10px; font-weight: 600; letter-spacing: 0.5px; padding: 3px 10px; border-radius: 999px; align-self: flex-start; }
+    .script-verse { font-family: 'Newsreader', Georgia, serif; font-size: 15px; font-style: italic; color: #333333; line-height: 1.6; }
+    .script-verse .ref-inline { display: block; font-style: normal; font-family: 'Funnel Sans', 'Geist', system-ui, sans-serif; font-size: 11px; font-weight: 600; color: #FF5C00; margin-top: 4px; }
+    .script-body { font-family: 'Geist', system-ui, sans-serif; font-size: 14px; color: #555555; line-height: 1.65; }
+    .script-note { display: flex; gap: 8px; background: #FFF7EF; border-radius: 6px; padding: 10px 14px; }
+    .script-note-icon { font-size: 13px; flex-shrink: 0; margin-top: 1px; }
+    .script-insight { font-family: 'Geist', system-ui, sans-serif; font-size: 13px; font-weight: 600; color: #FF5C00; line-height: 1.5; }
+    .reflect-block { background: rgba(255,92,0,0.039); border-left: 3px solid #FF5C00; border-radius: 12px; padding: 24px 28px; display: flex; flex-direction: column; gap: 14px; }
+    .reflect-label { font-family: 'Funnel Sans', 'Geist', system-ui, sans-serif; font-size: 10px; font-weight: 700; color: #FF8533; letter-spacing: 1.5px; text-transform: uppercase; }
+    .reflect-text { font-family: 'Newsreader', Georgia, serif; font-size: 16px; font-style: italic; color: #1A1A1A; line-height: 1.7; }
+    .takeaway-list { display: flex; flex-direction: column; gap: 10px; }
+    .takeaway-item { display: flex; gap: 10px; align-items: flex-start; }
+    .ta-bullet { font-size: 14px; color: #FF5C00; flex-shrink: 0; margin-top: 1px; }
+    .ta-text { font-family: 'Geist', system-ui, sans-serif; font-size: 13px; color: #666666; line-height: 1.6; }
+    .close-quote { display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 16px 0 8px; text-align: center; }
+    .close-line { width: 40px; height: 2px; background: rgba(255,92,0,0.25); border-radius: 999px; }
+    .close-text { font-family: 'Newsreader', Georgia, serif; font-size: 14px; font-style: italic; color: #888888; line-height: 1.7; max-width: 420px; }
+    .close-ref { font-family: 'Funnel Sans', 'Geist', system-ui, sans-serif; font-size: 11px; font-weight: 500; color: #FF8533; letter-spacing: 0.5px; }
+    .footer { display: flex; justify-content: center; }
+    .footer-txt { font-family: 'Funnel Sans', 'Geist', system-ui, sans-serif; font-size: 10px; color: #888888; letter-spacing: 0.5px; }
+    @media (max-width: 480px) { .page { padding: 28px 16px 48px; gap: 24px; } .card { padding: 20px; } .script-card { padding: 16px 18px; } .reflect-block { padding: 20px; } }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="hero">
+    <div class="breadcrumb"><a href="./index.html">Lessons</a> &nbsp;/&nbsp; Doctrine &nbsp;/&nbsp; Sin</div>
+    <div>
+      <div class="hero-title">Doctrine of Sin</div>
+      <div class="hero-subtitle">Missing the Mark</div>
+    </div>
+    <div class="hero-divider"></div>
+    <div class="hero-meta">
+      <span>Future Lesson</span><span class="dot">·</span><span>Romans 3:23</span><span class="dot">·</span><span>Date TBD</span>
+    </div>
+  </div>
+
+  <div class="card quote-card">
+    <div class="quote-mark">"</div>
+    <div class="quote-text">For all have sinned and fall short of the glory of God.</div>
+    <div class="quote-ref">— Romans 3:23 (ESV)</div>
+  </div>
+
+  <div class="card overview-card">
+    <div class="label-pill">Lesson Overview</div>
+    <div class="section-title">What Is Sin?</div>
+    <p class="overview-body">Sin is not just doing obviously bad things. It is anything that falls short of God's perfect standard: wrong actions, wrong words, wrong desires, and even good-looking behavior done from a heart that does not trust Him. The Bible's picture is simple enough for brunch: <strong>sin misses the mark</strong>, and every person has missed it.</p>
+  </div>
+
+  <div class="key-section">
+    <div class="section-title" style="font-size:20px;">Four Truths About Sin</div>
+    <div class="key-grid">
+      <div class="key-tile"><div class="key-icon">🎯</div><div><div class="key-name">It Misses the Mark</div><div class="key-sub">God sets the standard</div></div></div>
+      <div class="key-tile"><div class="key-icon">👥</div><div><div class="key-name">It Touches Everyone</div><div class="key-sub">No one is naturally clean</div></div></div>
+      <div class="key-tile"><div class="key-icon">🌱</div><div><div class="key-name">It Grows</div><div class="key-sub">Small disobedience rarely stays small</div></div></div>
+      <div class="key-tile"><div class="key-icon">🎁</div><div><div class="key-name">It Needs Grace</div><div class="key-sub">The gospel is God's rescue</div></div></div>
+    </div>
+  </div>
+
+  <div class="script-section">
+    <div class="section-title" style="font-size:20px;">Stories &amp; Scripture</div>
+
+    <div class="script-card">
+      <div class="script-ref-pill">Genesis 3 — Adam &amp; Eve</div>
+      <div class="script-verse">"She took of its fruit and ate, and she also gave some to her husband who was with her, and he ate."<span class="ref-inline">Genesis 3:6 (ESV)</span></div>
+      <p class="script-body">God gave one clear boundary. Adam and Eve doubted God's goodness, chose their own way, and hid when they were exposed. Sin begins with distrust, then disobedience, then shame.</p>
+      <div class="script-note"><div class="script-note-icon">→</div><div class="script-insight">Sin says, "I know better than God."</div></div>
+    </div>
+
+    <div class="script-card">
+      <div class="script-ref-pill">2 Samuel 11–12 — David</div>
+      <div class="script-verse">"You are the man!"<span class="ref-inline">2 Samuel 12:7 (ESV)</span></div>
+      <p class="script-body">David's sin did not start with murder. It started with looking, wanting, taking, and covering up. Nathan's confrontation shows that even strong believers need God to expose what they would rather hide.</p>
+      <div class="script-note"><div class="script-note-icon">→</div><div class="script-insight">Sin grows in the dark. Confession brings it into the light.</div></div>
+    </div>
+
+    <div class="script-card">
+      <div class="script-ref-pill">Mark 10:17–22 — The Rich Young Ruler</div>
+      <div class="script-verse">"Disheartened by the saying, he went away sorrowful, for he had great possessions."<span class="ref-inline">Mark 10:22 (ESV)</span></div>
+      <p class="script-body">This man looked moral, serious, and religious. Jesus loved him enough to reveal the hidden idol underneath: he trusted his possessions more than God. Sin is not always loud. Sometimes it wears nice clothes.</p>
+      <div class="script-note"><div class="script-note-icon">→</div><div class="script-insight">Sin is anything we love, trust, or obey more than God.</div></div>
+    </div>
+  </div>
+
+  <div class="reflect-block">
+    <div class="reflect-label">Discussion</div>
+    <div class="reflect-text">If sin is missing God's mark, who gets to define the target: us, our friends, our feelings, or God?</div>
+  </div>
+
+  <div class="card takeaway-card">
+    <div class="label-pill">Takeaways</div>
+    <div class="section-title" style="font-size:20px;">Living It Out</div>
+    <div class="takeaway-list">
+      <div class="takeaway-item"><div class="ta-bullet">•</div><div class="ta-text">Do not measure yourself only against other people. God's standard is the real target.</div></div>
+      <div class="takeaway-item"><div class="ta-bullet">•</div><div class="ta-text">Ask God to show you hidden sin: motives, idols, pride, fear, and selfishness.</div></div>
+      <div class="takeaway-item"><div class="ta-bullet">•</div><div class="ta-text">Let the bad news make the good news clearer: sin is real, but God's gift in Jesus is greater.</div></div>
+    </div>
+  </div>
+
+  <div class="close-quote">
+    <div class="close-line"></div>
+    <div class="close-text">If we confess our sins, he is faithful and just to forgive us our sins and to cleanse us from all unrighteousness.</div>
+    <div class="close-ref">1 John 1:9</div>
+  </div>
+
+  <div class="footer"><div class="footer-txt">Doctrine Lessons · Future Lesson</div></div>
+</div>
+</body>
+</html>

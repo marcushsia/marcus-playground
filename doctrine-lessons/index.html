@@ -162,6 +162,15 @@
       border-radius: 999px;
       font-size: 11px;
     }
+    .col-status.next {
+      display: inline-block;
+      background: #FF5C00;
+      color: #FFFFFF;
+      padding: 2px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+    }
+    .col-status.planned { color: #8D8D8D; }
 
     .col-action { display: flex; align-items: center; }
 
@@ -182,6 +191,8 @@
     .lesson-btn:hover { opacity: 0.82; }
     .lesson-btn.open-done  { background: #FFF0E6; color: #FF5C00; }
     .lesson-btn.open-today { background: #FF5C00;  color: #FFFFFF;  }
+    .lesson-btn.open-next  { background: #FF5C00;  color: #FFFFFF;  }
+    .lesson-btn.open-planned { background: #F7F0EA; color: #8A5A44; }
 
     /* ── FOOTER NOTE ── */
     .footer-note {
@@ -191,6 +202,12 @@
       color: #8A5A44;
       text-align: center;
     }
+    .footer-note a {
+      color: #FF5C00;
+      font-weight: 700;
+      text-decoration: none;
+    }
+    .footer-note a:hover { opacity: 0.82; }
 
 
     /* ── MOBILE ── */
@@ -308,13 +325,33 @@
           <div class="col-action"><a class="lesson-btn open-done" href="./2025-11-15-the-law-of-rewards.html">Open Lesson Tab</a></div>
         </div>
 
-        <!-- Row: The Least of These (TODAY) -->
+        <!-- Row: The Least of These -->
         <div class="tbl-row">
-          <div class="col-date is-today">03/28/26</div>
-          <div class="col-topic is-today">The Least of These: Who Jesus Notices</div>
-          <div class="col-status today">Today</div>
+          <div class="col-date">03/28/26</div>
+          <div class="col-topic">The Least of These: Who Jesus Notices</div>
+          <div class="col-status done">Done</div>
           <div class="col-action">
-            <a class="lesson-btn open-today" href="./2026-03-28-the-least-of-these.html">Open Lesson Tab</a>
+            <a class="lesson-btn open-done" href="./2026-03-28-the-least-of-these.html">Open Lesson Tab</a>
+          </div>
+        </div>
+
+        <!-- Row: Adoption (NEXT) -->
+        <div class="tbl-row">
+          <div class="col-date is-today">TBD</div>
+          <div class="col-topic is-today">Adoption: What It Means to Belong to God</div>
+          <div class="col-status next">Next</div>
+          <div class="col-action">
+            <a class="lesson-btn open-next" href="./future-adoption.html">Open Lesson Tab</a>
+          </div>
+        </div>
+
+        <!-- Row: Doctrine of Sin -->
+        <div class="tbl-row">
+          <div class="col-date">TBD</div>
+          <div class="col-topic is-future">Doctrine of Sin</div>
+          <div class="col-status planned">Planned</div>
+          <div class="col-action">
+            <a class="lesson-btn open-planned" href="./2026-03-28-doctrine-of-sin.html">Open Lesson Tab</a>
           </div>
         </div>
 
@@ -323,7 +360,7 @@
     </div><!-- /.list-card -->
 
   <!-- FOOTER NOTE -->
-  <div class="footer-note">Each lesson row links to its individual lesson page.</div>
+  <div class="footer-note">Each lesson row links to its individual lesson page. Future topic notes: <a href="./future-lesson-ideas.md">future-lesson-ideas.md</a></div>
 
 </div><!-- /.page -->
 

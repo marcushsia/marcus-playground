@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Adoption · Doctrine Lessons</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,700;1,6..72,400;1,6..72,700&family=Funnel+Sans:wght@400;500;600;700&family=Geist:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Geist', system-ui, -apple-system, sans-serif; background: #FFF7EF; color: #1A1A1A; min-height: 100vh; }
+    .page { max-width: 600px; margin: 0 auto; padding: 40px 24px 60px; display: flex; flex-direction: column; gap: 32px; }
+    .card { background: #FFFFFF; border-radius: 12px; padding: 24px 28px; box-shadow: 0 2px 4px rgba(0,0,0,0.031), 0 12px 32px rgba(0,0,0,0.059); }
+    .label-pill { display: inline-block; background: rgba(255,92,0,0.094); color: #FF5C00; font-family: 'Funnel Sans', 'Geist', system-ui, sans-serif; font-size: 11px; font-weight: 600; letter-spacing: 0.8px; padding: 4px 12px; border-radius: 999px; }
+    .hero { display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center; }
+    .breadcrumb { font-family: 'Funnel Sans', 'Geist', system-ui, sans-serif; font-size: 12px; font-weight: 500; color: #888888; letter-spacing: 1px; }
+    .breadcrumb a { color: #888888; text-decoration: none; }
+    .breadcrumb a:hover { color: #FF5C00; }
+    .hero-title { font-family: 'Newsreader', Georgia, serif; font-size: clamp(28px, 7vw, 36px); font-weight: 700; color: #1A1A1A; line-height: 1.15; }
+    .hero-subtitle { font-family: 'Newsreader', Georgia, serif; font-size: clamp(17px, 4vw, 22px); font-style: italic; color: #FF5C00; }
+    .hero-divider { width: 60px; height: 3px; background: #FF5C00; border-radius: 999px; }
+    .hero-meta { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: center; }
+    .hero-meta span { font-family: 'Funnel Sans', 'Geist', system-ui, sans-serif; font-size: 11px; font-weight: 500; color: #666666; }
+    .hero-meta .dot { color: #888888; }
+    .quote-card { display: flex; flex-direction: column; gap: 16px; }
+    .quote-mark { font-family: 'Newsreader', Georgia, serif; font-size: 48px; font-weight: 700; color: #FF5C00; line-height: 0.6; }
+    .quote-text { font-family: 'Newsreader', Georgia, serif; font-size: 18px; font-style: italic; color: #1A1A1A; line-height: 1.6; }
+    .quote-ref { font-family: 'Funnel Sans', 'Geist', system-ui, sans-serif; font-size: 12px; font-weight: 500; color: #FF8533; letter-spacing: 0.5px; }
+    .overview-card, .takeaway-card, .script-section, .key-section { display: flex; flex-direction: column; gap: 16px; }
+    .section-title { font-family: 'Newsreader', Georgia, serif; font-size: 22px; font-weight: 700; color: #1A1A1A; }
+    .overview-body { font-family: 'Geist', system-ui, sans-serif; font-size: 14px; color: #666666; line-height: 1.7; }
+    .overview-body strong { color: #1A1A1A; font-weight: 600; }
+    .key-grid { display: flex; flex-direction: column; gap: 10px; }
+    .key-tile { display: flex; align-items: center; gap: 12px; background: #FFF7EF; border-radius: 8px; padding: 14px 18px; }
+    .key-icon { font-size: 20px; line-height: 1; flex-shrink: 0; }
+    .key-name { font-family: 'Geist', system-ui, sans-serif; font-size: 14px; font-weight: 600; color: #1A1A1A; }
+    .key-sub { font-family: 'Funnel Sans', 'Geist', system-ui, sans-serif; font-size: 12px; font-weight: 500; color: #888888; margin-top: 2px; }
+    @media (min-width: 480px) { .key-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; } }
+    .script-card { background: #FFFFFF; border-radius: 12px; padding: 20px 24px; display: flex; flex-direction: column; gap: 12px; border: 1px solid #F3F4F6; box-shadow: 0 2px 4px rgba(0,0,0,0.031), 0 12px 32px rgba(0,0,0,0.059); }
+    .script-ref-pill { display: inline-block; background: rgba(255,92,0,0.078); color: #FF5C00; font-family: 'Funnel Sans', 'Geist', system-ui, sans-serif; font-size: 10px; font-weight: 600; letter-spacing: 0.5px; padding: 3px 10px; border-radius: 999px; align-self: flex-start; }
+    .script-verse { font-family: 'Newsreader', Georgia, serif; font-size: 15px; font-style: italic; color: #333333; line-height: 1.6; }
+    .script-verse .ref-inline { display: block; font-style: normal; font-family: 'Funnel Sans', 'Geist', system-ui, sans-serif; font-size: 11px; font-weight: 600; color: #FF5C00; margin-top: 4px; }
+    .script-body { font-family: 'Geist', system-ui, sans-serif; font-size: 14px; color: #555555; line-height: 1.65; }
+    .script-note { display: flex; gap: 8px; background: #FFF7EF; border-radius: 6px; padding: 10px 14px; }
+    .script-note-icon { font-size: 13px; flex-shrink: 0; margin-top: 1px; }
+    .script-insight { font-family: 'Geist', system-ui, sans-serif; font-size: 13px; font-weight: 600; color: #FF5C00; line-height: 1.5; }
+    .reflect-block { background: rgba(255,92,0,0.039); border-left: 3px solid #FF5C00; border-radius: 12px; padding: 24px 28px; display: flex; flex-direction: column; gap: 14px; }
+    .reflect-label { font-family: 'Funnel Sans', 'Geist', system-ui, sans-serif; font-size: 10px; font-weight: 700; color: #FF8533; letter-spacing: 1.5px; text-transform: uppercase; }
+    .reflect-text { font-family: 'Newsreader', Georgia, serif; font-size: 16px; font-style: italic; color: #1A1A1A; line-height: 1.7; }
+    .takeaway-list { display: flex; flex-direction: column; gap: 10px; }
+    .takeaway-item { display: flex; gap: 10px; align-items: flex-start; }
+    .ta-bullet { font-size: 14px; color: #FF5C00; flex-shrink: 0; margin-top: 1px; }
+    .ta-text { font-family: 'Geist', system-ui, sans-serif; font-size: 13px; color: #666666; line-height: 1.6; }
+    .close-quote { display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 16px 0 8px; text-align: center; }
+    .close-line { width: 40px; height: 2px; background: rgba(255,92,0,0.25); border-radius: 999px; }
+    .close-text { font-family: 'Newsreader', Georgia, serif; font-size: 14px; font-style: italic; color: #888888; line-height: 1.7; max-width: 420px; }
+    .close-ref { font-family: 'Funnel Sans', 'Geist', system-ui, sans-serif; font-size: 11px; font-weight: 500; color: #FF8533; letter-spacing: 0.5px; }
+    .footer { display: flex; justify-content: center; }
+    .footer-txt { font-family: 'Funnel Sans', 'Geist', system-ui, sans-serif; font-size: 10px; color: #888888; letter-spacing: 0.5px; }
+    @media (max-width: 480px) { .page { padding: 28px 16px 48px; gap: 24px; } .card { padding: 20px; } .script-card { padding: 16px 18px; } .reflect-block { padding: 20px; } }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="hero">
+    <div class="breadcrumb"><a href="./index.html">Lessons</a> &nbsp;/&nbsp; Doctrine &nbsp;/&nbsp; Adoption</div>
+    <div>
+      <div class="hero-title">Adoption</div>
+      <div class="hero-subtitle">What It Means to Belong to God</div>
+    </div>
+    <div class="hero-divider"></div>
+    <div class="hero-meta">
+      <span>Next Lesson</span><span class="dot">·</span><span>Romans 8:15</span><span class="dot">·</span><span>Date TBD</span>
+    </div>
+  </div>
+
+  <div class="card quote-card">
+    <div class="quote-mark">"</div>
+    <div class="quote-text">You have received the Spirit of adoption as sons, by whom we cry, "Abba! Father!"</div>
+    <div class="quote-ref">— Romans 8:15 (ESV)</div>
+  </div>
+
+  <div class="card overview-card">
+    <div class="label-pill">Lesson Overview</div>
+    <div class="section-title">More Than Forgiven</div>
+    <p class="overview-body">Salvation does not only mean God cancels our guilt. It means He brings us into His family. In adoption, God gives believers a new identity, a new Father, a new family, and a future inheritance. <strong>Christians do not live like spiritual orphans trying to earn a place at the table; they live as children who have been welcomed home.</strong></p>
+  </div>
+
+  <div class="key-section">
+    <div class="section-title" style="font-size:20px;">Four Gifts of Adoption</div>
+    <div class="key-grid">
+      <div class="key-tile"><div class="key-icon">🏠</div><div><div class="key-name">A New Family</div><div class="key-sub">God welcomes us as His children</div></div></div>
+      <div class="key-tile"><div class="key-icon">🪪</div><div><div class="key-name">A New Identity</div><div class="key-sub">Loved before we perform</div></div></div>
+      <div class="key-tile"><div class="key-icon">🗣️</div><div><div class="key-name">A New Freedom</div><div class="key-sub">We can call God Father</div></div></div>
+      <div class="key-tile"><div class="key-icon">🎁</div><div><div class="key-name">A New Inheritance</div><div class="key-sub">What belongs to Christ becomes ours</div></div></div>
+    </div>
+  </div>
+
+  <div class="script-section">
+    <div class="section-title" style="font-size:20px;">Stories &amp; Scripture</div>
+
+    <div class="script-card">
+      <div class="script-ref-pill">John 1:12 — Received as Children</div>
+      <div class="script-verse">"But to all who did receive him, who believed in his name, he gave the right to become children of God."<span class="ref-inline">John 1:12 (ESV)</span></div>
+      <p class="script-body">Becoming God's child is not automatic because we are human, and it is not earned by being impressive. It is a gift given to those who receive Christ by faith.</p>
+      <div class="script-note"><div class="script-note-icon">→</div><div class="script-insight">Faith in Jesus gives us a family status we could never earn.</div></div>
+    </div>
+
+    <div class="script-card">
+      <div class="script-ref-pill">Romans 8:15–17 — No Longer Slaves</div>
+      <div class="script-verse">"The Spirit himself bears witness with our spirit that we are children of God, and if children, then heirs..."<span class="ref-inline">Romans 8:16–17 (ESV)</span></div>
+      <p class="script-body">Paul contrasts fear with adoption. A slave wonders if he is safe. A child is invited to come close. The Spirit teaches believers to cry "Father" instead of hiding from God.</p>
+      <div class="script-note"><div class="script-note-icon">→</div><div class="script-insight">Adoption replaces fear-driven religion with family closeness.</div></div>
+    </div>
+
+    <div class="script-card">
+      <div class="script-ref-pill">Luke 15 — The Lost Son</div>
+      <div class="script-verse">"This my son was dead, and is alive again; he was lost, and is found."<span class="ref-inline">Luke 15:24 (ESV)</span></div>
+      <p class="script-body">The younger son returned with a speech about being treated like a servant. The father interrupted him with a robe, a ring, sandals, and a feast. That is adoption logic: not merely tolerated, but restored as a son.</p>
+      <div class="script-note"><div class="script-note-icon">→</div><div class="script-insight">God does not make repentant children live in the servant quarters.</div></div>
+    </div>
+  </div>
+
+  <div class="reflect-block">
+    <div class="reflect-label">Discussion</div>
+    <div class="reflect-text">Where do you most often act like an orphan: trying to prove yourself, hiding when you fail, comparing yourself to others, or doubting that you are loved?</div>
+  </div>
+
+  <div class="card takeaway-card">
+    <div class="label-pill">Takeaways</div>
+    <div class="section-title" style="font-size:20px;">Living It Out</div>
+    <div class="takeaway-list">
+      <div class="takeaway-item"><div class="ta-bullet">•</div><div class="ta-text">When you fail, run to the Father instead of hiding from Him.</div></div>
+      <div class="takeaway-item"><div class="ta-bullet">•</div><div class="ta-text">Your identity starts with God's welcome, not your performance.</div></div>
+      <div class="takeaway-item"><div class="ta-bullet">•</div><div class="ta-text">Treat other Christians as family, because God has adopted them too.</div></div>
+    </div>
+  </div>
+
+  <div class="close-quote">
+    <div class="close-line"></div>
+    <div class="close-text">See what kind of love the Father has given to us, that we should be called children of God; and so we are.</div>
+    <div class="close-ref">1 John 3:1</div>
+  </div>
+
+  <div class="footer"><div class="footer-txt">Doctrine Lessons · Next Lesson</div></div>
+</div>
+</body>
+</html>
