@@ -20,7 +20,7 @@
 
   .tracker-body {
     width: 100%;
-    max-width: 860px;
+    max-width: 920px;
     background: #111A2E;
     border-radius: 18px;
     padding: 24px;
@@ -67,42 +67,53 @@
     line-height: 1.45;
   }
 
-  /* ── Score Update Controls ──────────────────────────────────── */
-  .score-controls {
+  /* ── Add Book Form ───────────────────────────────────────────── */
+  .entry-panel {
     background: #0C1220;
-    border-radius: 12px;
-    padding: 10px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    flex-wrap: wrap;
+    border-radius: 14px;
+    padding: 14px;
+    display: grid;
+    gap: 12px;
   }
-  .book-select, .score-input {
+  .entry-heading {
+    font-size: 18px;
+    font-weight: 700;
+    color: #F8FAFC;
+  }
+  .entry-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .field-wide {
+    grid-column: 1 / -1;
+  }
+  .field label {
+    font-size: 12px;
+    font-weight: 700;
+    color: #9EB1D7;
+  }
+  .text-input, .score-input, .file-input {
     background: #111A2E;
-    border: none;
+    border: 1px solid #23314D;
     border-radius: 10px;
     padding: 9px 12px;
     font-family: 'Inter', sans-serif;
     font-size: 13px;
     font-weight: 500;
     color: #C8D4EC;
-    cursor: pointer;
     outline: none;
-    appearance: none;
-    -webkit-appearance: none;
   }
-  .book-select {
-    width: 280px;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238EA1C7' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 12px center;
-    padding-right: 32px;
-  }
-  .score-input {
-    width: 170px;
-  }
-  .score-input::placeholder {
+  .text-input::placeholder, .score-input::placeholder {
     color: #6F83AA;
+  }
+  .file-input {
+    cursor: pointer;
   }
   .update-btn {
     background: #2563EB;
@@ -116,8 +127,18 @@
     cursor: pointer;
     white-space: nowrap;
     transition: background 0.15s;
+    justify-self: start;
   }
   .update-btn:hover { background: #1D4ED8; }
+  .form-status {
+    min-height: 18px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #9EB1D7;
+  }
+  .form-status.error {
+    color: #F87171;
+  }
 
   /* ── Scores Panel ───────────────────────────────────────────── */
   .scores-panel {
@@ -163,11 +184,11 @@
     text-overflow: ellipsis;
   }
 
-  .col-book  { width: 260px; flex-shrink: 0; }
-  .col-date  { width: 120px; flex-shrink: 0; }
-  .col-score { width: 80px;  flex-shrink: 0; }
-  .col-q     { width: 160px; flex-shrink: 0; }
-  .col-a     { width: 140px; flex-shrink: 0; }
+  .col-book  { width: 270px; flex-shrink: 0; }
+  .col-date  { width: 110px; flex-shrink: 0; }
+  .col-score { width: 130px; flex-shrink: 0; }
+  .col-q     { width: 145px; flex-shrink: 0; }
+  .col-a     { width: 120px; flex-shrink: 0; }
 
   .book-name  { color: #E6ECFA; font-weight: 500; }
   .date-text  { color: #C2CEE6; }
@@ -261,6 +282,30 @@
     z-index: 100;
   }
   .toast.show { opacity: 1; }
+
+  @media (max-width: 760px) {
+    .entry-grid {
+      grid-template-columns: 1fr;
+    }
+    .header-row {
+      display: none;
+    }
+    .data-row {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 6px;
+      padding: 10px;
+    }
+    .data-row span, .data-row a {
+      width: auto;
+    }
+    .col-book, .col-date, .col-score, .col-q, .col-a {
+      width: auto;
+    }
+    .quick-summary {
+      flex-direction: column;
+    }
+  }
 </style>
 </head>
 <body>
@@ -274,19 +319,44 @@
     <span class="tag-text">Student: Jadon Hsia</span>
   </div>
 
-  <p class="subtitle">Track every book Jadon reads, update comprehension test scores, and open question/answer PDFs in one place.</p>
+  <p class="subtitle">Track every book Jadon reads, save comprehension test scores, and open question/answer PDFs in one place.</p>
 
-  <!-- Score Update Controls -->
-  <div class="score-controls">
-    <select class="book-select" id="bookSelect">
-      <option value="">Select Book</option>
-      <option value="North! Or Be Eaten">North! Or Be Eaten</option>
-      <option value="The Monster in the Hollows (Wingfeather Saga Book 3)">The Monster in the Hollows</option>
-      <option value="The Warden and the Wolf King (Wingfeather Saga Book 4)">The Warden and the Wolf King</option>
-    </select>
-    <input class="score-input" type="number" id="scoreInput" placeholder="e.g. 94" min="0" max="100" />
-    <button class="update-btn" onclick="updateScore()">Add / Update Score</button>
-  </div>
+  <!-- Add Book Controls -->
+  <form class="entry-panel" id="entryForm">
+    <h2 class="entry-heading">Add a Book and Test Result</h2>
+    <div class="entry-grid">
+      <div class="field field-wide">
+        <label for="bookTitle">Book name</label>
+        <input class="text-input" type="text" id="bookTitle" name="bookTitle" placeholder="e.g. The Action Bible: God's Redemptive Story" required />
+      </div>
+      <div class="field">
+        <label for="series">Series or category</label>
+        <input class="text-input" type="text" id="series" name="series" placeholder="Optional" />
+      </div>
+      <div class="field">
+        <label for="testDate">Test date</label>
+        <input class="text-input" type="date" id="testDate" name="testDate" required />
+      </div>
+      <div class="field">
+        <label for="rawScore">Raw score</label>
+        <input class="score-input" type="number" id="rawScore" name="rawScore" placeholder="e.g. 27" min="0" required />
+      </div>
+      <div class="field">
+        <label for="totalQuestions">Total possible</label>
+        <input class="score-input" type="number" id="totalQuestions" name="totalQuestions" value="30" min="1" required />
+      </div>
+      <div class="field">
+        <label for="questionsPdf">Questions PDF</label>
+        <input class="file-input" type="file" id="questionsPdf" name="questionsPdf" accept="application/pdf,.pdf" required />
+      </div>
+      <div class="field">
+        <label for="answersPdf">Answers PDF</label>
+        <input class="file-input" type="file" id="answersPdf" name="answersPdf" accept="application/pdf,.pdf" />
+      </div>
+    </div>
+    <button class="update-btn" type="submit">Save Book</button>
+    <div class="form-status" id="formStatus"></div>
+  </form>
 
   <!-- Scores Panel -->
   <div class="scores-panel">
@@ -320,30 +390,7 @@
 <div class="toast" id="toast">Score updated!</div>
 
 <script>
-  // ── Data ──────────────────────────────────────────────────────
-  const books = [
-    {
-      title: "North! Or Be Eaten (Wingfeather Saga Book 2)",
-      date: "Mar 27, 2026",
-      score: 90,
-      qPdf: "Wingfeather_North_Or_Be_Eaten_Questions.pdf",
-      aPdf: "Wingfeather_North_Or_Be_Eaten_Answers.pdf"
-    },
-    {
-      title: "The Monster in the Hollows (Wingfeather Saga Book 3)",
-      date: "Apr 08, 2026",
-      score: 93,
-      qPdf: "Wingfeather_Monster_In_The_Hollows_Questions.pdf",
-      aPdf: "Wingfeather_Monster_In_The_Hollows_Answers.pdf"
-    },
-    {
-      title: "The Warden and the Wolf King (Wingfeather Saga Book 4)",
-      date: "Apr 13, 2026",
-      score: 100,
-      qPdf: "Wingfeather_Warden_And_The_Wolf_King_Questions.pdf",
-      aPdf: "Wingfeather_Warden_And_The_Wolf_King_Answers.pdf"
-    }
-  ];
+  let books = [];
 
   // ── Score color ───────────────────────────────────────────────
   function scoreClass(s) {
@@ -351,6 +398,30 @@
     if (s >= 85) return 'score-lime';
     if (s >= 75) return 'score-amber';
     return 'score-red';
+  }
+
+  function formatDate(dateValue) {
+    const date = new Date(`${dateValue}T00:00:00`);
+    if (Number.isNaN(date.getTime())) return dateValue || '';
+    return date.toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' });
+  }
+
+  function escapeHtml(value) {
+    return String(value || '').replace(/[&<>"']/g, char => ({
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#39;'
+    }[char]));
+  }
+
+  function sortBooksByDateDesc(items) {
+    return [...items].sort((a, b) => {
+      const dateDiff = new Date(`${b.date}T00:00:00`) - new Date(`${a.date}T00:00:00`);
+      if (dateDiff) return dateDiff;
+      return String(a.title || '').localeCompare(String(b.title || ''));
+    });
   }
 
   // ── Render table ──────────────────────────────────────────────
@@ -361,12 +432,15 @@
       const row = document.createElement('div');
       row.className = 'data-row';
       row.dataset.index = i;
+      const answersLink = b.aPdf
+        ? `<a class="col-a link-amber" href="${encodeURI(b.aPdf)}" target="_blank">View Answers</a>`
+        : `<span class="col-a date-text">Not added</span>`;
       row.innerHTML = `
-        <span class="col-book book-name">${b.title}</span>
-        <span class="col-date date-text">${b.date}</span>
-        <span class="col-score score-text ${scoreClass(b.score)}">${b.score}%</span>
-        <a class="col-q link-blue" href="${b.qPdf}" target="_blank">View Questions</a>
-        <a class="col-a link-amber" href="${b.aPdf}" target="_blank">View Answers</a>
+        <span class="col-book book-name">${escapeHtml(b.title)}</span>
+        <span class="col-date date-text">${formatDate(b.date)}</span>
+        <span class="col-score score-text ${scoreClass(b.score)}">${b.score}% (${b.rawScore}/${b.totalQuestions})</span>
+        <a class="col-q link-blue" href="${encodeURI(b.qPdf)}" target="_blank">View Questions</a>
+        ${answersLink}
       `;
       tbody.appendChild(row);
     });
@@ -386,53 +460,122 @@
     renderSummary();
   }
 
-  // ── Update score ──────────────────────────────────────────────
-  function updateScore() {
-    const bookTitle = document.getElementById('bookSelect').value;
-    const scoreRaw  = document.getElementById('scoreInput').value;
-
-    if (!bookTitle) { alert('Please select a book.'); return; }
-    if (scoreRaw === '' || isNaN(scoreRaw) || +scoreRaw < 0 || +scoreRaw > 100) {
-      alert('Please enter a valid score (0–100).');
-      return;
-    }
-
-    const score = Math.round(+scoreRaw);
-    const today = new Date();
-    const dateStr = today.toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' });
-
-    const existing = books.find(b => b.title === bookTitle);
-    if (existing) {
-      existing.score = score;
-      existing.date  = dateStr;
-    } else {
-      const slug = bookTitle.toLowerCase().replace(/[^a-z0-9]+/g, '_');
-      books.push({
-        title: bookTitle,
-        date:  dateStr,
-        score,
-        qPdf: slug + '_questions.pdf',
-        aPdf: slug + '_answers.pdf'
-      });
-      // Add to dropdown
-      const sel = document.getElementById('bookSelect');
-      const opt = document.createElement('option');
-      opt.value = bookTitle;
-      opt.textContent = bookTitle;
-      sel.appendChild(opt);
-    }
-
+  async function loadBooks() {
+    const response = await fetch('books.json', { cache: 'no-store' });
+    books = sortBooksByDateDesc(await response.json());
     renderAll();
-    document.getElementById('scoreInput').value = '';
-    document.getElementById('bookSelect').value = '';
+  }
 
+  function showToast(message) {
     const toast = document.getElementById('toast');
+    toast.textContent = message;
     toast.classList.add('show');
     setTimeout(() => toast.classList.remove('show'), 2000);
   }
 
+  function setStatus(message, isError = false) {
+    const status = document.getElementById('formStatus');
+    status.textContent = message;
+    status.classList.toggle('error', isError);
+  }
+
+  function fileToPayload(file) {
+    return new Promise((resolve, reject) => {
+      if (!file) {
+        resolve(null);
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = () => {
+        const result = String(reader.result || '');
+        resolve({
+          name: file.name,
+          type: file.type,
+          data: result.includes(',') ? result.split(',')[1] : result
+        });
+      };
+      reader.onerror = () => reject(reader.error);
+      reader.readAsDataURL(file);
+    });
+  }
+
+  async function saveBook(event) {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const saveButton = form.querySelector('button[type="submit"]');
+    const rawScore = Number(document.getElementById('rawScore').value);
+    const totalQuestions = Number(document.getElementById('totalQuestions').value);
+
+    if (rawScore > totalQuestions) {
+      setStatus('Raw score cannot be higher than total possible.', true);
+      return;
+    }
+
+    saveButton.disabled = true;
+    saveButton.textContent = 'Saving...';
+    setStatus('Saving the book, PDFs, and project notes...');
+
+    try {
+      const payload = {
+        title: document.getElementById('bookTitle').value,
+        series: document.getElementById('series').value,
+        date: document.getElementById('testDate').value,
+        rawScore,
+        totalQuestions,
+        questionsPdf: await fileToPayload(document.getElementById('questionsPdf').files[0]),
+        answersPdf: await fileToPayload(document.getElementById('answersPdf').files[0])
+      };
+
+      const response = await fetch('/api/books', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || 'The book could not be saved.');
+
+      books = sortBooksByDateDesc(result.books);
+      renderAll();
+      form.reset();
+      setDefaultDate();
+      document.getElementById('totalQuestions').value = '30';
+      setStatus('Saved.');
+      showToast('Book saved!');
+    } catch (error) {
+      setStatus(error.message || 'Something went wrong while saving.', true);
+    } finally {
+      saveButton.disabled = false;
+      saveButton.textContent = 'Save Book';
+    }
+  }
+
+  function setDefaultDate() {
+    document.getElementById('testDate').value = new Date().toISOString().slice(0, 10);
+  }
+
+  function isLocalTrackerHelper() {
+    return ['localhost', '127.0.0.1'].includes(window.location.hostname);
+  }
+
+  function configureSaveMode() {
+    if (isLocalTrackerHelper()) return;
+
+    const form = document.getElementById('entryForm');
+    form.querySelectorAll('input, button').forEach(control => {
+      control.disabled = true;
+    });
+    setStatus('Adding books and PDFs works from the local tracker helper. GitHub Pages can display saved books, but cannot save uploads directly.');
+  }
+
   // ── Init ──────────────────────────────────────────────────────
-  renderAll();
+  setDefaultDate();
+  document.getElementById('entryForm').addEventListener('submit', saveBook);
+  loadBooks().catch(error => {
+    setStatus('Start the local tracker helper to save and load books.', true);
+    console.error(error);
+  }).finally(() => {
+    configureSaveMode();
+  });
 </script>
 </body>
 </html>
