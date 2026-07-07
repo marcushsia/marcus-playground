@@ -1,5 +1,38 @@
 [
   {
+    "title": "The Secret of the Swamp King (Wilderking Trilogy Book 2)",
+    "series": "Wilderking Trilogy",
+    "date": "2026-07-04",
+    "rawScore": 30,
+    "totalQuestions": 30,
+    "score": 100,
+    "grade": "A+",
+    "qPdf": "The_Secret_Of_The_Swamp_King_Questions.pdf",
+    "aPdf": "The_Secret_Of_The_Swamp_King_Answers.pdf"
+  },
+  {
+    "title": "2 Samuel",
+    "series": "Bible",
+    "date": "2026-06-30",
+    "rawScore": 30,
+    "totalQuestions": 30,
+    "score": 100,
+    "grade": "A+",
+    "qPdf": "Second_Samuel_Bible_Questions.pdf",
+    "aPdf": "Second_Samuel_Bible_Answers.pdf"
+  },
+  {
+    "title": "1 Samuel",
+    "series": "Bible",
+    "date": "2026-06-30",
+    "rawScore": 29,
+    "totalQuestions": 30,
+    "score": 97,
+    "grade": "A+",
+    "qPdf": "First_Samuel_Bible_Questions.pdf",
+    "aPdf": "First_Samuel_Bible_Answers.pdf"
+  },
+  {
     "title": "Rise of the Evening Star (Fablehaven Book 2)",
     "series": "",
     "date": "2026-06-11",
@@ -9,6 +42,17 @@
     "grade": "A+",
     "qPdf": "Rise_of_the_Evening_Star_Fablehaven_Book_2_Questions.pdf",
     "aPdf": "Rise_of_the_Evening_Star_Fablehaven_Book_2_Answers.pdf"
+  },
+  {
+    "title": "Fablehaven: Grip of the Shadow Plague",
+    "series": "Fablehaven",
+    "date": "2026-06-10",
+    "rawScore": 30,
+    "totalQuestions": 30,
+    "score": 100,
+    "grade": "A+",
+    "qPdf": "Fablehaven_Grip_Of_The_Shadow_Plague_Questions.pdf",
+    "aPdf": "Fablehaven_Grip_Of_The_Shadow_Plague_Answers.pdf"
   },
   {
     "title": "Fablehaven",
