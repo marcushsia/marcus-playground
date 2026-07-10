@@ -184,13 +184,42 @@
     text-overflow: ellipsis;
   }
 
-  .col-book  { width: 270px; flex-shrink: 0; }
+  .col-book  { width: 300px; flex-shrink: 0; }
   .col-date  { width: 110px; flex-shrink: 0; }
   .col-score { width: 130px; flex-shrink: 0; }
-  .col-q     { width: 145px; flex-shrink: 0; }
-  .col-a     { width: 120px; flex-shrink: 0; }
+  .col-q     { width: 130px; flex-shrink: 0; }
+  .col-a     { width: 110px; flex-shrink: 0; }
 
-  .book-name  { color: #E6ECFA; font-weight: 500; }
+  .book-block {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    min-width: 0;
+  }
+  .book-title {
+    color: #E6ECFA;
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 1.28;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+  .book-series {
+    max-width: 100%;
+    border: 1px solid #214D63;
+    border-radius: 999px;
+    background: #10283C;
+    padding: 3px 8px;
+    color: #8BE0D4;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.02em;
+    line-height: 1.1;
+    text-transform: uppercase;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
   .date-text  { color: #C2CEE6; }
   .score-text { font-weight: 700; }
   .score-green      { color: #22C55E; }
@@ -295,6 +324,12 @@
       grid-template-columns: 1fr;
       gap: 6px;
       padding: 10px;
+    }
+    .book-block {
+      gap: 7px;
+    }
+    .book-title {
+      font-size: 14px;
     }
     .data-row span, .data-row a {
       width: auto;
@@ -420,6 +455,74 @@
     }[char]));
   }
 
+  const knownSeriesBooks = {
+    fablehaven: {
+      fablehaven: 1,
+      'rise of the evening star': 2,
+      'grip of the shadow plague': 3,
+      'secrets of the dragon sanctuary': 4
+    },
+    'wingfeather saga': {
+      'north! or be eaten': 2,
+      'the monster in the hollows': 3,
+      'the warden and the wolf king': 4
+    },
+    'wilderking trilogy': {
+      'the secret of the swamp king': 2
+    }
+  };
+
+  function normalizeTitle(value) {
+    return String(value || '')
+      .toLowerCase()
+      .replace(/[\u2018\u2019]/g, "'")
+      .replace(/[^a-z0-9!]+/g, ' ')
+      .trim();
+  }
+
+  function titleCaseSeries(value) {
+    return String(value || '')
+      .replace(/[_-]+/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim()
+      .replace(/\b\w/g, letter => letter.toUpperCase());
+  }
+
+  function displayBookTitle(book) {
+    let title = String(book.title || '').trim();
+    let series = String(book.series || '').trim();
+    let bookNumber = null;
+
+    const parenthetical = title.match(/\s*\(([^()]*?)(?:,\s*)?Book\s+(\d+)\)\s*$/i);
+    if (parenthetical) {
+      title = title.slice(0, parenthetical.index).trim();
+      if (!series) series = parenthetical[1].trim();
+      bookNumber = parenthetical[2];
+    }
+
+    const seriesPrefix = title.match(/^([^:]+):\s+(.+)$/);
+    if (seriesPrefix && (!series || normalizeTitle(seriesPrefix[1]) === normalizeTitle(series))) {
+      if (!series) series = seriesPrefix[1].trim();
+      title = seriesPrefix[2].trim();
+    }
+
+    if (!series) {
+      const pathText = `${book.qPdf || ''} ${book.aPdf || ''}`.toLowerCase();
+      const inferredSeries = Object.keys(knownSeriesBooks).find(name => pathText.includes(name.replace(/\s+/g, '_')));
+      series = inferredSeries ? titleCaseSeries(inferredSeries) : '';
+    }
+
+    if (series && !bookNumber) {
+      const knownBookNumber = knownSeriesBooks[normalizeTitle(series)]?.[normalizeTitle(title)];
+      bookNumber = knownBookNumber ? String(knownBookNumber) : null;
+    }
+
+    return {
+      title,
+      seriesLabel: series ? `${series}${bookNumber ? ` - Book ${bookNumber}` : ''}` : ''
+    };
+  }
+
   function sortBooksByDateDesc(items) {
     return [...items].sort((a, b) => {
       const dateDiff = new Date(`${b.date}T00:00:00`) - new Date(`${a.date}T00:00:00`);
@@ -436,11 +539,15 @@
       const row = document.createElement('div');
       row.className = 'data-row';
       row.dataset.index = i;
+      const display = displayBookTitle(b);
       const answersLink = b.aPdf
         ? `<a class="col-a link-amber" href="${encodeURI(b.aPdf)}" target="_blank">View Answers</a>`
         : `<span class="col-a date-text">Not added</span>`;
       row.innerHTML = `
-        <span class="col-book book-name">${escapeHtml(b.title)}</span>
+        <div class="col-book book-block">
+          <div class="book-title">${escapeHtml(display.title)}</div>
+          ${display.seriesLabel ? `<div class="book-series">${escapeHtml(display.seriesLabel)}</div>` : ''}
+        </div>
         <span class="col-date date-text">${formatDate(b.date)}</span>
         <span class="col-score score-text ${scoreClass(b.score)}">${b.score}% (${b.rawScore}/${b.totalQuestions})</span>
         <a class="col-q link-blue" href="${encodeURI(b.qPdf)}" target="_blank">View Questions</a>
