@@ -4,703 +4,793 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Jadon Hsia's Reading Tracker</title>
-  <script>
-    (function () {
-      if (window.location.hostname !== 'marcushsia.github.io') return;
-      var legacyPrefix = '/marcus-playground';
-      var nextPath = window.location.pathname;
-      if (nextPath.indexOf(legacyPrefix) === 0) nextPath = nextPath.slice(legacyPrefix.length) || '/';
-      window.location.replace('https://marcus-playground.vercel.app' + nextPath + window.location.search + window.location.hash);
-    })();
-  </script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<script>
+  (function () {
+    if (window.location.hostname !== 'marcushsia.github.io') return;
+    var legacyPrefix = '/marcus-playground';
+    var nextPath = window.location.pathname;
+    if (nextPath.indexOf(legacyPrefix) === 0) nextPath = nextPath.slice(legacyPrefix.length) || '/';
+    window.location.replace('https://marcus-playground.vercel.app' + nextPath + window.location.search + window.location.hash);
+  })();
+</script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  *, *::before, *::after { box-sizing: border-box; }
+
+  :root {
+    color-scheme: dark;
+    --page: #111827;
+    --panel: #0b1120;
+    --panel-2: #111c31;
+    --row: #121d33;
+    --row-alt: #0f192c;
+    --line: #263653;
+    --text: #eef4ff;
+    --muted: #9fb0cf;
+    --blue: #60a5fa;
+    --gold: #fbbf24;
+    --green: #22c55e;
+    --teal: #48d7c9;
+  }
 
   body {
-    font-family: 'Inter', system-ui, sans-serif;
-    background: #111A2E;
-    color: #F8FAFC;
+    margin: 0;
     min-height: 100vh;
-    display: flex;
-    justify-content: center;
     padding: 32px 16px;
+    background: radial-gradient(circle at top left, rgba(34, 197, 94, 0.10), transparent 28rem), var(--page);
+    color: var(--text);
+    font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   }
 
-  .tracker-body {
-    width: 100%;
-    max-width: 920px;
-    background: #111A2E;
-    border-radius: 18px;
-    padding: 24px;
+  .tracker {
+    width: min(100%, 960px);
+    margin: 0 auto;
+  }
+
+  .masthead {
+    display: grid;
+    gap: 10px;
+    margin-bottom: 18px;
+  }
+
+  h1 {
+    margin: 0;
+    font-size: clamp(28px, 5vw, 44px);
+    line-height: 1.05;
+    letter-spacing: 0;
+  }
+
+  .subtitle {
+    margin: 0;
+    max-width: 680px;
+    color: var(--muted);
+    font-size: 15px;
+    line-height: 1.5;
+  }
+
+  .workflow-panel {
     display: flex;
-    flex-direction: column;
-    gap: 18px;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    margin-bottom: 18px;
+    border: 1px solid rgba(96, 165, 250, 0.14);
+    border-radius: 8px;
+    background: rgba(11, 17, 32, 0.78);
+    padding: 12px;
   }
 
-  /* ── Title ─────────────────────────────────────────────────── */
-  .title {
-    font-size: 32px;
-    font-weight: 700;
-    color: #F8FAFC;
-    line-height: 1.2;
+  .workflow-panel[hidden] { display: none; }
+
+  .workflow-title {
+    display: block;
+    color: #f3f7ff;
+    font-size: 14px;
+    font-weight: 800;
   }
 
-  /* ── Student Tag ────────────────────────────────────────────── */
+  .workflow-copy {
+    display: block;
+    margin-top: 3px;
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.35;
+  }
+
+  .workflow-button {
+    display: inline-flex;
+    min-height: 36px;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(72, 215, 201, 0.32);
+    border-radius: 8px;
+    background: rgba(17, 99, 118, 0.32);
+    color: #9ff5ec;
+    padding: 0 12px;
+    font-size: 12px;
+    font-weight: 800;
+    text-decoration: none;
+    white-space: nowrap;
+    cursor: pointer;
+  }
+
+  .entry-panel {
+    display: none;
+    margin-bottom: 18px;
+    border: 1px solid rgba(96, 165, 250, 0.14);
+    border-radius: 8px;
+    background: var(--panel);
+    padding: 14px;
+  }
+
+  .entry-panel.open { display: block; }
+
+  .entry-form {
+    display: grid;
+    gap: 12px;
+  }
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: minmax(220px, 1.6fr) minmax(160px, 1fr);
+    gap: 12px;
+  }
+
+  .form-grid.compact {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .form-grid.files {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  label {
+    display: grid;
+    gap: 6px;
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 800;
+  }
+
+  input {
+    width: 100%;
+    min-height: 40px;
+    border: 1px solid rgba(96, 165, 250, 0.20);
+    border-radius: 8px;
+    background: #111c31;
+    color: var(--text);
+    font: inherit;
+    font-size: 14px;
+    padding: 9px 10px;
+  }
+
+  input[type="file"] {
+    padding: 7px;
+    font-size: 12px;
+  }
+
+  .entry-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: flex-end;
+  }
+
+  .save-button {
+    min-height: 40px;
+    border: 0;
+    border-radius: 8px;
+    background: #22a06b;
+    color: #ffffff;
+    padding: 0 14px;
+    font-size: 13px;
+    font-weight: 800;
+    cursor: pointer;
+  }
+
+  .save-button:disabled {
+    cursor: wait;
+    opacity: 0.7;
+  }
+
+  .form-status {
+    color: var(--muted);
+    font-size: 13px;
+  }
+
   .student-tag {
     display: inline-flex;
+    width: fit-content;
     align-items: center;
     gap: 8px;
-    background: #17243D;
+    border: 1px solid rgba(96, 165, 250, 0.25);
     border-radius: 999px;
+    background: rgba(15, 25, 44, 0.92);
+    color: #c9d7ef;
     padding: 6px 10px;
-    align-self: flex-start;
+    font-size: 12px;
+    font-weight: 700;
   }
+
   .tag-dot {
     width: 8px;
     height: 8px;
-    border-radius: 50%;
-    background: #22C55E;
-    flex-shrink: 0;
-  }
-  .tag-text {
-    font-size: 12px;
-    font-weight: 600;
-    color: #B9C8E6;
+    border-radius: 999px;
+    background: var(--green);
   }
 
-  /* ── Subtitle ───────────────────────────────────────────────── */
-  .subtitle {
-    font-size: 15px;
-    color: #A8B4CC;
-    line-height: 1.45;
-  }
-
-  /* ── Add Book Form ───────────────────────────────────────────── */
-  .entry-panel {
-    background: #0C1220;
-    border-radius: 14px;
-    padding: 14px;
+  .summary {
     display: grid;
-    gap: 12px;
-  }
-  .entry-heading {
-    font-size: 18px;
-    font-weight: 700;
-    color: #F8FAFC;
-  }
-  .entry-grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 10px;
+    margin-bottom: 18px;
   }
-  .field {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
+
+  .summary-card {
+    border: 1px solid rgba(96, 165, 250, 0.16);
+    border-radius: 8px;
+    background: var(--panel-2);
+    padding: 12px;
   }
-  .field-wide {
-    grid-column: 1 / -1;
-  }
-  .field label {
+
+  .summary-label {
+    display: block;
+    color: var(--muted);
     font-size: 12px;
     font-weight: 700;
-    color: #9EB1D7;
   }
-  .text-input, .score-input, .file-input {
-    background: #111A2E;
-    border: 1px solid #23314D;
-    border-radius: 10px;
-    padding: 9px 12px;
-    font-family: 'Inter', sans-serif;
-    font-size: 13px;
-    font-weight: 500;
-    color: #C8D4EC;
+
+  .summary-value {
+    display: block;
+    margin-top: 4px;
+    font-size: 26px;
+    font-weight: 800;
+  }
+
+  .scores-panel {
+    border: 1px solid rgba(96, 165, 250, 0.14);
+    border-radius: 12px;
+    background: var(--panel);
+    padding: 14px;
+    overflow-x: auto;
+  }
+
+  table {
+    width: 100%;
+    min-width: 760px;
+    border-collapse: collapse;
+    table-layout: fixed;
+  }
+
+  thead th {
+    border-bottom: 1px solid var(--line);
+    color: var(--muted);
+    padding: 0 8px 10px;
+    text-align: left;
+    font-size: 12px;
+    font-weight: 800;
+  }
+
+  th button {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    min-height: 26px;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    cursor: pointer;
+    padding: 0;
+  }
+
+  th button:hover,
+  th button:focus-visible {
+    color: var(--text);
     outline: none;
   }
-  .text-input::placeholder, .score-input::placeholder {
-    color: #6F83AA;
-  }
-  .file-input {
-    cursor: pointer;
-  }
-  .update-btn {
-    background: #2563EB;
-    color: #FFFFFF;
-    font-family: 'Inter', sans-serif;
-    font-size: 13px;
-    font-weight: 700;
-    border: none;
-    border-radius: 10px;
-    padding: 10px 14px;
-    cursor: pointer;
-    white-space: nowrap;
-    transition: background 0.15s;
-    justify-self: start;
-  }
-  .update-btn:hover { background: #1D4ED8; }
-  .form-status {
-    min-height: 18px;
-    font-size: 12px;
-    font-weight: 600;
-    color: #9EB1D7;
-  }
-  .form-status.error {
-    color: #F87171;
-  }
 
-  /* ── Scores Panel ───────────────────────────────────────────── */
-  .scores-panel {
-    background: #0C1220;
-    border-radius: 14px;
-    padding: 14px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-  .header-row {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 0 4px;
-  }
-  .header-row span {
-    font-size: 12px;
-    font-weight: 600;
-    color: #8FA2C7;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  .divider {
-    height: 1px;
-    background: #1F2A44;
-    border-radius: 1px;
-  }
-  .data-row {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    border-radius: 10px;
-    padding: 6px 4px;
-  }
-  .data-row:nth-child(odd) { background: #131E34; }
-  .data-row:nth-child(even) { background: #101A2E; }
-  .data-row span {
-    font-size: 13px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .col-book  { width: 300px; flex-shrink: 0; }
-  .col-date  { width: 110px; flex-shrink: 0; }
-  .col-score { width: 130px; flex-shrink: 0; }
-  .col-q     { width: 130px; flex-shrink: 0; }
-  .col-a     { width: 110px; flex-shrink: 0; }
-
-  .book-block {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 6px;
-    min-width: 0;
-  }
-  .book-title {
-    color: #E6ECFA;
-    font-size: 13px;
-    font-weight: 700;
-    line-height: 1.28;
-    white-space: normal;
-    overflow-wrap: anywhere;
-  }
-  .book-series {
-    max-width: 100%;
-    border: 1px solid #214D63;
-    border-radius: 999px;
-    background: #10283C;
-    padding: 3px 8px;
-    color: #8BE0D4;
+  .sort-mark {
+    width: 11px;
+    color: #647796;
     font-size: 10px;
+  }
+
+  tbody tr:nth-child(odd) { background: var(--row); }
+  tbody tr:nth-child(even) { background: var(--row-alt); }
+
+  tbody tr:first-child td:first-child { border-top-left-radius: 8px; }
+  tbody tr:first-child td:last-child { border-top-right-radius: 8px; }
+  tbody tr:last-child td:first-child { border-bottom-left-radius: 8px; }
+  tbody tr:last-child td:last-child { border-bottom-right-radius: 8px; }
+
+  td {
+    padding: 10px 8px;
+    vertical-align: middle;
+    font-size: 14px;
+  }
+
+  .col-book { width: 35%; }
+  .col-series { width: 22%; }
+  .col-date { width: 16%; }
+  .col-score { width: 15%; }
+  .col-docs { width: 12%; }
+
+  .book-title {
+    display: block;
+    color: #f3f7ff;
     font-weight: 800;
-    letter-spacing: 0.02em;
-    line-height: 1.1;
-    text-transform: uppercase;
-    white-space: normal;
-    overflow-wrap: anywhere;
-  }
-  .date-text  { color: #C2CEE6; }
-  .score-text { font-weight: 700; }
-  .score-green      { color: #22C55E; }
-  .score-lime       { color: #84CC16; }
-  .score-amber      { color: #F59E0B; }
-  .score-red        { color: #EF4444; }
-  .link-blue  { color: #60A5FA; font-weight: 600; text-decoration: none; cursor: pointer; }
-  .link-amber { color: #FBBF24; font-weight: 600; text-decoration: none; cursor: pointer; }
-  .link-blue:hover  { text-decoration: underline; }
-  .link-amber:hover { text-decoration: underline; }
-
-  /* ── Quick Summary ──────────────────────────────────────────── */
-  .quick-summary {
-    display: flex;
-    gap: 12px;
-  }
-  .summary-card {
-    background: #17243D;
-    border-radius: 12px;
-    padding: 12px;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    flex: 1;
-  }
-  .summary-label {
-    font-size: 12px;
-    font-weight: 600;
-    color: #9EB1D7;
-  }
-  .summary-value {
-    font-size: 30px;
-    font-weight: 700;
-    color: #F8FAFC;
+    line-height: 1.25;
   }
 
-  /* ── PDF Links ──────────────────────────────────────────────── */
-  .pdf-panel {
-    background: #0C1220;
-    border-radius: 14px;
-    padding: 14px;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+  .series-pill {
+    display: inline-flex;
+    max-width: 100%;
+    align-items: center;
+    border: 1px solid rgba(72, 215, 201, 0.28);
+    border-radius: 999px;
+    background: rgba(17, 99, 118, 0.32);
+    color: #83eee3;
+    padding: 4px 8px;
+    font-size: 11px;
+    font-weight: 800;
+    line-height: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
-  .pdf-heading {
-    font-size: 18px;
-    font-weight: 700;
-    color: #F8FAFC;
+
+  .series-empty {
+    color: #647796;
   }
-  .pdf-desc {
-    font-size: 13px;
-    color: #9FB0D1;
+
+  .date-text { color: #c8d4eb; }
+
+  .score {
+    color: var(--green);
+    font-weight: 800;
   }
-  .pdf-link-row {
-    font-size: 13px;
-    font-weight: 500;
-    color: #60A5FA;
+
+  .docs {
+    display: inline-flex;
+    gap: 6px;
   }
-  .pdf-link-row a {
-    color: #60A5FA;
+
+  .doc-link {
+    display: inline-flex;
+    width: 34px;
+    height: 34px;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(96, 165, 250, 0.22);
+    border-radius: 8px;
+    background: rgba(96, 165, 250, 0.10);
+    color: var(--blue);
+    font-weight: 900;
     text-decoration: none;
   }
-  .pdf-link-row a:hover { text-decoration: underline; }
-  .pdf-link-row .sep { color: #4B5E80; margin: 0 4px; }
 
-  /* ── Footer ─────────────────────────────────────────────────── */
+  .doc-link.answers {
+    border-color: rgba(251, 191, 36, 0.25);
+    background: rgba(251, 191, 36, 0.11);
+    color: var(--gold);
+  }
+
+  .doc-link:hover,
+  .doc-link:focus-visible {
+    transform: translateY(-1px);
+    outline: none;
+    filter: brightness(1.12);
+  }
+
   .footer {
-    font-size: 12px;
-    font-weight: 500;
-    color: #7E8DAE;
+    margin-top: 14px;
+    color: #7888a5;
     text-align: center;
-  }
-
-  /* ── Toast ──────────────────────────────────────────────────── */
-  .toast {
-    position: fixed;
-    bottom: 24px;
-    right: 24px;
-    background: #22C55E;
-    color: #fff;
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 600;
-    padding: 10px 18px;
-    border-radius: 10px;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.2s;
-    z-index: 100;
   }
-  .toast.show { opacity: 1; }
 
-  @media (max-width: 760px) {
-    .entry-grid {
+  @media (max-width: 720px) {
+    body { padding: 18px 10px; }
+    h1 { font-size: 30px; }
+    .summary { grid-template-columns: 1fr; }
+    .workflow-panel {
+      align-items: stretch;
+      flex-direction: column;
+    }
+    .workflow-button { width: 100%; }
+    .form-grid,
+    .form-grid.compact,
+    .form-grid.files {
       grid-template-columns: 1fr;
     }
-    .header-row {
-      display: none;
+    .entry-actions {
+      align-items: stretch;
+      flex-direction: column;
     }
-    .data-row {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 6px;
+    .save-button { width: 100%; }
+    .scores-panel {
+      padding: 0;
+      overflow: visible;
+      background: transparent;
+      border: 0;
+    }
+    table,
+    thead,
+    tbody,
+    tr,
+    td {
+      display: block;
+      width: 100%;
+      min-width: 0;
+    }
+    thead { display: none; }
+    tbody tr,
+    tbody tr:nth-child(odd),
+    tbody tr:nth-child(even) {
+      margin-bottom: 10px;
+      border: 1px solid rgba(96, 165, 250, 0.14);
+      border-radius: 8px;
+      background: var(--panel);
       padding: 10px;
     }
-    .book-block {
-      gap: 7px;
+    tbody tr:first-child td:first-child,
+    tbody tr:first-child td:last-child,
+    tbody tr:last-child td:first-child,
+    tbody tr:last-child td:last-child {
+      border-radius: 0;
+    }
+    td {
+      display: grid;
+      grid-template-columns: 88px minmax(0, 1fr);
+      gap: 12px;
+      align-items: center;
+      padding: 7px 0;
+      font-size: 13px;
+    }
+    td::before {
+      content: attr(data-label);
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
     }
     .book-title {
-      font-size: 14px;
-    }
-    .data-row span, .data-row a {
-      width: auto;
-    }
-    .col-book, .col-date, .col-score, .col-q, .col-a {
-      width: auto;
-    }
-    .quick-summary {
-      flex-direction: column;
+      font-size: 15px;
+      white-space: normal;
     }
   }
 </style>
 </head>
 <body>
+<main class="tracker">
+  <header class="masthead">
+    <h1>Jadon Hsia's Reading Tracker</h1>
+    <div class="student-tag"><span class="tag-dot"></span>Student: Jadon Hsia</div>
+    <p class="subtitle">Track completed reading-comprehension tests, sort the results, and open the question or answer PDFs without crowding the table.</p>
+  </header>
 
-<div class="tracker-body">
+  <section class="workflow-panel" id="workflowPanel" aria-label="Tracker workflow" hidden>
+    <span>
+      <span class="workflow-title">Add or update an entry</span>
+      <span class="workflow-copy">This local helper can save tracker data and copy question/answer PDFs into the right folders.</span>
+    </span>
+    <button class="workflow-button" type="button" id="toggleEntryForm">Add Entry</button>
+  </section>
 
-  <h1 class="title">Jadon Hsia's Reading Tracker</h1>
+  <section class="entry-panel" id="entryPanel" aria-label="Add or update tracker entry">
+    <form class="entry-form" id="entryForm">
+      <div class="form-grid">
+        <label>
+          Book title
+          <input name="title" required autocomplete="off" />
+        </label>
+        <label>
+          Series
+          <input name="series" autocomplete="off" placeholder="Optional" />
+        </label>
+      </div>
+      <div class="form-grid compact">
+        <label>
+          Test date
+          <input name="date" type="date" required />
+        </label>
+        <label>
+          Raw score
+          <input name="rawScore" type="number" min="0" required />
+        </label>
+        <label>
+          Total
+          <input name="totalQuestions" type="number" min="1" required />
+        </label>
+      </div>
+      <div class="form-grid files">
+        <label>
+          Questions PDF
+          <input name="questionsPdf" type="file" accept="application/pdf,.pdf" required />
+        </label>
+        <label>
+          Answers PDF
+          <input name="answersPdf" type="file" accept="application/pdf,.pdf" />
+        </label>
+      </div>
+      <div class="entry-actions">
+        <span class="form-status" id="formStatus"></span>
+        <button class="save-button" type="submit">Save Entry</button>
+      </div>
+    </form>
+  </section>
 
-  <div class="student-tag">
-    <div class="tag-dot"></div>
-    <span class="tag-text">Student: Jadon Hsia</span>
-  </div>
-
-  <p class="subtitle">Track every book Jadon reads, save comprehension test scores, and open question/answer PDFs in one place.</p>
-
-  <!-- Add Book Controls -->
-  <form class="entry-panel" id="entryForm">
-    <h2 class="entry-heading">Add a Book and Test Result</h2>
-    <div class="entry-grid">
-      <div class="field field-wide">
-        <label for="bookTitle">Book name</label>
-        <input class="text-input" type="text" id="bookTitle" name="bookTitle" placeholder="e.g. The Action Bible: God's Redemptive Story" required />
-      </div>
-      <div class="field">
-        <label for="series">Series or category</label>
-        <input class="text-input" type="text" id="series" name="series" placeholder="Optional" />
-      </div>
-      <div class="field">
-        <label for="testDate">Test date</label>
-        <input class="text-input" type="date" id="testDate" name="testDate" required />
-      </div>
-      <div class="field">
-        <label for="rawScore">Raw score</label>
-        <input class="score-input" type="number" id="rawScore" name="rawScore" placeholder="e.g. 27" min="0" required />
-      </div>
-      <div class="field">
-        <label for="totalQuestions">Total possible</label>
-        <input class="score-input" type="number" id="totalQuestions" name="totalQuestions" value="30" min="1" required />
-      </div>
-      <div class="field">
-        <label for="questionsPdf">Questions PDF</label>
-        <input class="file-input" type="file" id="questionsPdf" name="questionsPdf" accept="application/pdf,.pdf" required />
-      </div>
-      <div class="field">
-        <label for="answersPdf">Answers PDF</label>
-        <input class="file-input" type="file" id="answersPdf" name="answersPdf" accept="application/pdf,.pdf" />
-      </div>
-      <div class="field field-wide">
-        <label for="adminPassword">Admin password</label>
-        <input class="text-input" type="password" id="adminPassword" name="adminPassword" autocomplete="current-password" placeholder="Required on Vercel" />
-      </div>
-    </div>
-    <button class="update-btn" type="submit">Save Book</button>
-    <div class="form-status" id="formStatus"></div>
-  </form>
-
-  <!-- Scores Panel -->
-  <div class="scores-panel">
-    <div class="header-row">
-      <span class="col-book">Book</span>
-      <span class="col-date">Test Date</span>
-      <span class="col-score">Score</span>
-      <span class="col-q">Questions PDF</span>
-      <span class="col-a">Answers PDF</span>
-    </div>
-    <div class="divider"></div>
-    <div id="tableBody"></div>
-  </div>
-
-  <!-- Quick Summary -->
-  <div class="quick-summary">
+  <section class="summary" aria-label="Reading summary">
     <div class="summary-card">
       <span class="summary-label">Books Tracked</span>
       <span class="summary-value" id="booksTracked">0</span>
     </div>
     <div class="summary-card">
       <span class="summary-label">Average Score</span>
-      <span class="summary-value" id="avgScore">—</span>
+      <span class="summary-value" id="avgScore">--</span>
     </div>
-  </div>
+    <div class="summary-card">
+      <span class="summary-label">Latest Test</span>
+      <span class="summary-value" id="latestTest">--</span>
+    </div>
+  </section>
+
+  <section class="scores-panel" aria-label="Reading scores">
+    <table>
+      <thead>
+        <tr id="headerRow"></tr>
+      </thead>
+      <tbody id="tableBody"></tbody>
+    </table>
+  </section>
 
   <p class="footer">Built for Jadon Hsia &middot; Reading growth one book at a time</p>
-
-</div>
-
-<div class="toast" id="toast">Score updated!</div>
+</main>
 
 <script>
+  const fallbackBooks = [
+    {"title":"Secrets of the Dragon Sanctuary (Fablehaven Book 4)","series":"Fablehaven","testDate":"2026-07-10","rawScore":29,"totalQuestions":30,"questionsPdf":"Fablehaven_Secrets_Of_The_Dragon_Sanctuary_Questions.pdf","answersPdf":"Fablehaven_Secrets_Of_The_Dragon_Sanctuary_Answers.pdf"},
+    {"title":"Nehemiah and Esther","series":"Bible","testDate":"2026-07-07","rawScore":30,"totalQuestions":30,"questionsPdf":"Nehemiah_And_Esther_Bible_Questions.pdf","answersPdf":"Nehemiah_And_Esther_Bible_Answers.pdf"},
+    {"title":"The Secret of the Swamp King (Wilderking Trilogy Book 2)","series":"Wilderking Trilogy","testDate":"2026-07-04","rawScore":30,"totalQuestions":30,"questionsPdf":"The_Secret_Of_The_Swamp_King_Questions.pdf","answersPdf":"The_Secret_Of_The_Swamp_King_Answers.pdf"},
+    {"title":"1 Samuel","series":"Bible","testDate":"2026-06-30","rawScore":29,"totalQuestions":30,"questionsPdf":"First_Samuel_Bible_Questions.pdf","answersPdf":"First_Samuel_Bible_Answers.pdf"},
+    {"title":"2 Samuel","series":"Bible","testDate":"2026-06-30","rawScore":30,"totalQuestions":30,"questionsPdf":"Second_Samuel_Bible_Questions.pdf","answersPdf":"Second_Samuel_Bible_Answers.pdf"},
+    {"title":"Rise of the Evening Star (Fablehaven Book 2)","series":"Fablehaven","testDate":"2026-06-11","rawScore":30,"totalQuestions":30,"questionsPdf":"Rise_of_the_Evening_Star_Fablehaven_Book_2_Questions.pdf","answersPdf":"Rise_of_the_Evening_Star_Fablehaven_Book_2_Answers.pdf"},
+    {"title":"Grip of the Shadow Plague (Fablehaven Book 3)","series":"Fablehaven","testDate":"2026-06-10","rawScore":30,"totalQuestions":30,"questionsPdf":"Fablehaven_Grip_Of_The_Shadow_Plague_Questions.pdf","answersPdf":"Fablehaven_Grip_Of_The_Shadow_Plague_Answers.pdf"},
+    {"title":"Fablehaven (Fablehaven Book 1)","series":"Fablehaven","testDate":"2026-05-25","rawScore":29,"totalQuestions":30,"questionsPdf":"Fablehaven_Questions.pdf","answersPdf":"Fablehaven_Answers.pdf"},
+    {"title":"The Action Bible","series":"Bible","testDate":"2026-05-10","rawScore":28,"totalQuestions":30,"questionsPdf":"The_Action_Bible_Questions.pdf","answersPdf":"The_Action_Bible_Answers.pdf"},
+    {"title":"Miracles Break Pride","series":"","testDate":"2026-04-23","rawScore":15,"totalQuestions":15,"questionsPdf":"Miracles_Break_Pride_Questions.pdf","answersPdf":"Miracles_Break_Pride_Answers.pdf"},
+    {"title":"The Warden and the Wolf King (Wingfeather Saga Book 4)","series":"Wingfeather Saga","testDate":"2026-04-13","rawScore":30,"totalQuestions":30,"questionsPdf":"Wingfeather_Warden_And_The_Wolf_King_Questions.pdf","answersPdf":"Wingfeather_Warden_And_The_Wolf_King_Answers.pdf"},
+    {"title":"The Monster in the Hollows (Wingfeather Saga Book 3)","series":"Wingfeather Saga","testDate":"2026-04-08","rawScore":28,"totalQuestions":30,"questionsPdf":"Wingfeather_Monster_In_The_Hollows_Questions.pdf","answersPdf":"Wingfeather_Monster_In_The_Hollows_Answers.pdf"},
+    {"title":"North! Or Be Eaten (Wingfeather Saga Book 2)","series":"Wingfeather Saga","testDate":"2026-03-27","rawScore":27,"totalQuestions":30,"questionsPdf":"Wingfeather_North_Or_Be_Eaten_Questions.pdf","answersPdf":"Wingfeather_North_Or_Be_Eaten_Answers.pdf"}
+  ];
+
+  const columns = [
+    { key: "title", label: "Book", className: "col-book", sortable: true },
+    { key: "series", label: "Series", className: "col-series", sortable: true },
+    { key: "testDate", label: "Test Date", className: "col-date", sortable: true },
+    { key: "score", label: "Score", className: "col-score", sortable: true },
+    { key: "docs", label: "PDFs", className: "col-docs", sortable: true }
+  ];
+
   let books = [];
+  let visibleColumns = columns;
+  let sortState = { key: "testDate", direction: "desc" };
+  let canSaveEntries = false;
 
-  // ── Score color ───────────────────────────────────────────────
-  function scoreClass(s) {
-    if (s >= 93) return 'score-green';
-    if (s >= 85) return 'score-lime';
-    if (s >= 75) return 'score-amber';
-    return 'score-red';
-  }
+  document.getElementById("entryForm").elements.namedItem("date").value = new Date().toISOString().slice(0, 10);
+  document.getElementById("toggleEntryForm").addEventListener("click", () => {
+    const panel = document.getElementById("entryPanel");
+    const isOpen = panel.classList.toggle("open");
+    document.getElementById("toggleEntryForm").textContent = isOpen ? "Hide Entry Form" : "Add Entry";
+  });
 
-  function formatDate(dateValue) {
-    const date = new Date(`${dateValue}T00:00:00`);
-    if (Number.isNaN(date.getTime())) return dateValue || '';
-    return date.toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' });
-  }
-
-  function escapeHtml(value) {
-    return String(value || '').replace(/[&<>"']/g, char => ({
-      '&': '&amp;',
-      '<': '&lt;',
-      '>': '&gt;',
-      '"': '&quot;',
-      "'": '&#39;'
-    }[char]));
-  }
-
-  const knownSeriesBooks = {
-    fablehaven: {
-      fablehaven: 1,
-      'rise of the evening star': 2,
-      'grip of the shadow plague': 3,
-      'secrets of the dragon sanctuary': 4
-    },
-    'wingfeather saga': {
-      'north! or be eaten': 2,
-      'the monster in the hollows': 3,
-      'the warden and the wolf king': 4
-    },
-    'wilderking trilogy': {
-      'the secret of the swamp king': 2
-    }
-  };
-
-  function normalizeTitle(value) {
-    return String(value || '')
-      .toLowerCase()
-      .replace(/[\u2018\u2019]/g, "'")
-      .replace(/[^a-z0-9!]+/g, ' ')
-      .trim();
-  }
-
-  function titleCaseSeries(value) {
-    return String(value || '')
-      .replace(/[_-]+/g, ' ')
-      .replace(/\s+/g, ' ')
-      .trim()
-      .replace(/\b\w/g, letter => letter.toUpperCase());
-  }
-
-  function displayBookTitle(book) {
-    let title = String(book.title || '').trim();
-    let series = String(book.series || '').trim();
-    let bookNumber = null;
-
-    const parenthetical = title.match(/\s*\(([^()]*?)(?:,\s*)?Book\s+(\d+)\)\s*$/i);
-    if (parenthetical) {
-      title = title.slice(0, parenthetical.index).trim();
-      if (!series) series = parenthetical[1].trim();
-      bookNumber = parenthetical[2];
-    }
-
-    const seriesPrefix = title.match(/^([^:]+):\s+(.+)$/);
-    if (seriesPrefix && (!series || normalizeTitle(seriesPrefix[1]) === normalizeTitle(series))) {
-      if (!series) series = seriesPrefix[1].trim();
-      title = seriesPrefix[2].trim();
-    }
-
-    if (!series) {
-      const pathText = `${book.qPdf || ''} ${book.aPdf || ''}`.toLowerCase();
-      const inferredSeries = Object.keys(knownSeriesBooks).find(name => pathText.includes(name.replace(/\s+/g, '_')));
-      series = inferredSeries ? titleCaseSeries(inferredSeries) : '';
-    }
-
-    if (series && !bookNumber) {
-      const knownBookNumber = knownSeriesBooks[normalizeTitle(series)]?.[normalizeTitle(title)];
-      bookNumber = knownBookNumber ? String(knownBookNumber) : null;
-    }
-
+  function normalizeBook(book) {
     return {
-      title,
-      seriesLabel: series ? `${series}${bookNumber ? ` - Book ${bookNumber}` : ''}` : ''
+      title: book.title || book.book || "",
+      series: book.series || "",
+      testDate: book.testDate || book.test_date || book.date || "",
+      rawScore: Number(book.rawScore ?? book.raw_score ?? 0),
+      totalQuestions: Number(book.totalQuestions ?? book.total_questions ?? 0),
+      questionsPdf: book.questionsPdf || book.questions_pdf_path || book.qPdf || "",
+      answersPdf: book.answersPdf || book.answers_pdf_path || book.aPdf || ""
     };
   }
 
-  function sortBooksByDateDesc(items) {
-    return [...items].sort((a, b) => {
-      const dateDiff = new Date(`${b.date}T00:00:00`) - new Date(`${a.date}T00:00:00`);
-      if (dateDiff) return dateDiff;
-      return String(a.title || '').localeCompare(String(b.title || ''));
+  function cleanTitle(title) {
+    return title.replace(/\s*\((Fablehaven|Wingfeather Saga|Wilderking Trilogy)\s+Book\s+\d+\)\s*$/i, "");
+  }
+
+  function bookNumber(title) {
+    const match = title.match(/\((?:Fablehaven|Wingfeather Saga|Wilderking Trilogy)\s+Book\s+(\d+)\)/i);
+    return match ? `Book ${match[1]}` : "";
+  }
+
+  function seriesLabel(book) {
+    if (!book.series) return "";
+    const number = bookNumber(book.title);
+    return number ? `${book.series} - ${number}` : book.series;
+  }
+
+  function scorePercent(book) {
+    if (!book.totalQuestions) return 0;
+    return Math.round((book.rawScore / book.totalQuestions) * 100);
+  }
+
+  function formatDate(value) {
+    const date = new Date(`${value}T00:00:00`);
+    if (Number.isNaN(date.getTime())) return value;
+    return date.toLocaleDateString("en-US", { month: "short", day: "2-digit", year: "numeric" });
+  }
+
+  function sortValue(book, key) {
+    if (key === "title") return cleanTitle(book.title).toLowerCase();
+    if (key === "series") return seriesLabel(book).toLowerCase();
+    if (key === "testDate") return new Date(`${book.testDate}T00:00:00`).getTime();
+    if (key === "score") return scorePercent(book);
+    if (key === "docs") return Number(Boolean(book.questionsPdf)) + Number(Boolean(book.answersPdf));
+    return "";
+  }
+
+  function sortedBooks() {
+    return [...books].sort((a, b) => {
+      const aValue = sortValue(a, sortState.key);
+      const bValue = sortValue(b, sortState.key);
+      if (aValue < bValue) return sortState.direction === "asc" ? -1 : 1;
+      if (aValue > bValue) return sortState.direction === "asc" ? 1 : -1;
+      return cleanTitle(a.title).localeCompare(cleanTitle(b.title));
     });
   }
 
-  // ── Render table ──────────────────────────────────────────────
-  function renderTable() {
-    const tbody = document.getElementById('tableBody');
-    tbody.innerHTML = '';
-    books.forEach((b, i) => {
-      const row = document.createElement('div');
-      row.className = 'data-row';
-      row.dataset.index = i;
-      const display = displayBookTitle(b);
-      const answersLink = b.aPdf
-        ? `<a class="col-a link-amber" href="${encodeURI(b.aPdf)}" target="_blank">View Answers</a>`
-        : `<span class="col-a date-text">Not added</span>`;
-      row.innerHTML = `
-        <div class="col-book book-block">
-          <div class="book-title">${escapeHtml(display.title)}</div>
-          ${display.seriesLabel ? `<div class="book-series">${escapeHtml(display.seriesLabel)}</div>` : ''}
-        </div>
-        <span class="col-date date-text">${formatDate(b.date)}</span>
-        <span class="col-score score-text ${scoreClass(b.score)}">${b.score}% (${b.rawScore}/${b.totalQuestions})</span>
-        <a class="col-q link-blue" href="${encodeURI(b.qPdf)}" target="_blank">View Questions</a>
-        ${answersLink}
+  function setSort(key) {
+    if (sortState.key === key) {
+      sortState.direction = sortState.direction === "asc" ? "desc" : "asc";
+    } else {
+      sortState = { key, direction: key === "title" || key === "series" ? "asc" : "desc" };
+    }
+    render();
+  }
+
+  function renderHeader() {
+    const headerRow = document.getElementById("headerRow");
+    headerRow.innerHTML = visibleColumns.map((column) => {
+      if (!column.sortable) return `<th class="${column.className}">${column.label}</th>`;
+      const active = sortState.key === column.key;
+      const mark = active ? (sortState.direction === "asc" ? "▲" : "▼") : "↕";
+      return `
+        <th class="${column.className}">
+          <button type="button" data-sort="${column.key}" aria-label="Sort by ${column.label}">
+            ${column.label}<span class="sort-mark">${mark}</span>
+          </button>
+        </th>
       `;
-      tbody.appendChild(row);
+    }).join("");
+
+    headerRow.querySelectorAll("[data-sort]").forEach((button) => {
+      button.addEventListener("click", () => setSort(button.dataset.sort));
     });
   }
 
-  // ── Render summary ────────────────────────────────────────────
+  function renderRows() {
+    const tbody = document.getElementById("tableBody");
+    tbody.innerHTML = sortedBooks().map((book) => {
+      const pct = scorePercent(book);
+      const label = seriesLabel(book);
+      return `
+        <tr>
+          <td data-label="Book"><span class="book-title">${cleanTitle(book.title)}</span></td>
+          ${visibleColumns.some((column) => column.key === "series") ? `<td data-label="Series">${label ? `<span class="series-pill">${label}</span>` : `<span class="series-empty">--</span>`}</td>` : ""}
+          <td data-label="Date" class="date-text">${formatDate(book.testDate)}</td>
+          <td data-label="Score"><span class="score">${pct}% (${book.rawScore}/${book.totalQuestions})</span></td>
+          <td data-label="PDFs">
+            <span class="docs">
+              <a class="doc-link" href="${book.questionsPdf}" target="_blank" rel="noreferrer" title="Open questions PDF" aria-label="Open questions PDF for ${cleanTitle(book.title)}">Q</a>
+              <a class="doc-link answers" href="${book.answersPdf}" target="_blank" rel="noreferrer" title="Open answers PDF" aria-label="Open answers PDF for ${cleanTitle(book.title)}">A</a>
+            </span>
+          </td>
+        </tr>
+      `;
+    }).join("");
+  }
+
   function renderSummary() {
     const count = books.length;
-    const avg = count ? (books.reduce((a, b) => a + b.score, 0) / count).toFixed(2) : 0;
-    document.getElementById('booksTracked').textContent = count;
-    document.getElementById('avgScore').textContent = count ? avg + '%' : '—';
+    const avg = count ? Math.round(books.reduce((sum, book) => sum + scorePercent(book), 0) / count) : 0;
+    const latest = books.reduce((max, book) => sortValue(book, "testDate") > sortValue(max, "testDate") ? book : max, books[0]);
+    document.getElementById("booksTracked").textContent = count;
+    document.getElementById("avgScore").textContent = count ? `${avg}%` : "--";
+    document.getElementById("latestTest").textContent = latest ? formatDate(latest.testDate).replace(", 2026", "") : "--";
   }
 
-  // ── Render all ────────────────────────────────────────────────
-  function renderAll() {
-    renderTable();
+  function render() {
+    visibleColumns = books.some((book) => book.series) ? columns : columns.filter((column) => column.key !== "series");
+    renderHeader();
+    renderRows();
     renderSummary();
   }
 
   async function loadBooks() {
-    const response = await fetch('books.json', { cache: 'no-store' });
-    books = sortBooksByDateDesc(await response.json());
-    renderAll();
-  }
-
-  function showToast(message) {
-    const toast = document.getElementById('toast');
-    toast.textContent = message;
-    toast.classList.add('show');
-    setTimeout(() => toast.classList.remove('show'), 2000);
-  }
-
-  function setStatus(message, isError = false) {
-    const status = document.getElementById('formStatus');
-    status.textContent = message;
-    status.classList.toggle('error', isError);
-  }
-
-  function fileToPayload(file) {
-    return new Promise((resolve, reject) => {
-      if (!file) {
-        resolve(null);
-        return;
+    try {
+      const response = await fetch("/api/books", { cache: "no-store" });
+      if (!response.ok) throw new Error("api was not available");
+      books = (await response.json()).map(normalizeBook);
+      canSaveEntries = true;
+      document.getElementById("workflowPanel").hidden = false;
+    } catch (error) {
+      canSaveEntries = false;
+      document.getElementById("workflowPanel").hidden = true;
+      try {
+        const response = await fetch("books.json", { cache: "no-store" });
+        if (!response.ok) throw new Error("books.json was not available");
+        books = (await response.json()).map(normalizeBook);
+      } catch (fallbackError) {
+        books = fallbackBooks.map(normalizeBook);
       }
+    }
+    render();
+  }
+
+  function readFilePayload(file) {
+    if (!file || !file.size) return Promise.resolve(null);
+    return new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.onload = () => {
-        const result = String(reader.result || '');
+        const dataUrl = String(reader.result || "");
         resolve({
           name: file.name,
           type: file.type,
-          data: result.includes(',') ? result.split(',')[1] : result
+          data: dataUrl.includes(",") ? dataUrl.split(",")[1] : dataUrl
         });
       };
-      reader.onerror = () => reject(reader.error);
+      reader.onerror = reject;
       reader.readAsDataURL(file);
     });
   }
 
-  async function saveBook(event) {
+  document.getElementById("entryForm").addEventListener("submit", async (event) => {
     event.preventDefault();
+    if (!canSaveEntries) return;
     const form = event.currentTarget;
-    const saveButton = form.querySelector('button[type="submit"]');
-    const rawScore = Number(document.getElementById('rawScore').value);
-    const totalQuestions = Number(document.getElementById('totalQuestions').value);
+    const status = document.getElementById("formStatus");
+    const button = form.querySelector("button[type='submit']");
+    const formData = new FormData(form);
 
-    if (rawScore > totalQuestions) {
-      setStatus('Raw score cannot be higher than total possible.', true);
-      return;
-    }
-
-    saveButton.disabled = true;
-    saveButton.textContent = 'Saving...';
-    setStatus('Saving the book, PDFs, and project notes...');
+    status.textContent = "Saving...";
+    button.disabled = true;
 
     try {
       const payload = {
-        title: document.getElementById('bookTitle').value,
-        series: document.getElementById('series').value,
-        date: document.getElementById('testDate').value,
-        rawScore,
-        totalQuestions,
-        questionsPdf: await fileToPayload(document.getElementById('questionsPdf').files[0]),
-        answersPdf: await fileToPayload(document.getElementById('answersPdf').files[0]),
-        adminPassword: document.getElementById('adminPassword').value
+        title: formData.get("title"),
+        series: formData.get("series"),
+        date: formData.get("date"),
+        rawScore: Number(formData.get("rawScore")),
+        totalQuestions: Number(formData.get("totalQuestions")),
+        questionsPdf: await readFilePayload(formData.get("questionsPdf")),
+        answersPdf: await readFilePayload(formData.get("answersPdf"))
       };
 
-      const response = await fetch('/api/books', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const response = await fetch("/api/books", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload)
       });
       const result = await response.json();
-      if (!response.ok) throw new Error(result.error || 'The book could not be saved.');
+      if (!response.ok) throw new Error(result.error || "Save failed.");
 
-      books = sortBooksByDateDesc(result.books);
-      renderAll();
+      books = result.books.map(normalizeBook);
+      render();
       form.reset();
-      setDefaultDate();
-      document.getElementById('totalQuestions').value = '30';
-      setStatus('Saved.');
-      showToast('Book saved!');
+      form.elements.namedItem("date").value = new Date().toISOString().slice(0, 10);
+      status.textContent = "Saved.";
     } catch (error) {
-      setStatus(error.message || 'Something went wrong while saving.', true);
+      status.textContent = error.message || "Save failed.";
     } finally {
-      saveButton.disabled = false;
-      saveButton.textContent = 'Save Book';
+      button.disabled = false;
     }
-  }
-
-  function setDefaultDate() {
-    document.getElementById('testDate').value = new Date().toISOString().slice(0, 10);
-  }
-
-  function isLocalTrackerHelper() {
-    return ['localhost', '127.0.0.1'].includes(window.location.hostname);
-  }
-
-  function isVercelHost() {
-    return window.location.hostname.endsWith('.vercel.app');
-  }
-
-  function configureSaveMode() {
-    if (isLocalTrackerHelper() || isVercelHost()) return;
-
-    const form = document.getElementById('entryForm');
-    form.querySelectorAll('input, button').forEach(control => {
-      control.disabled = true;
-    });
-    setStatus('Adding books and PDFs works from the Vercel site or the local tracker helper. GitHub Pages can display saved books, but cannot save uploads directly.');
-  }
-
-  // ── Init ──────────────────────────────────────────────────────
-  setDefaultDate();
-  document.getElementById('entryForm').addEventListener('submit', saveBook);
-  loadBooks().catch(error => {
-    setStatus('Start the local tracker helper to save and load books.', true);
-    console.error(error);
-  }).finally(() => {
-    configureSaveMode();
   });
+
+  loadBooks();
 </script>
 </body>
 </html>
