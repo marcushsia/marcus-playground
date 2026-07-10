@@ -10,6 +10,20 @@ function cleanText(value) {
   return String(value || '').trim();
 }
 
+function normalizeRepo(value) {
+  const cleaned = cleanText(value || 'marcushsia/marcus-playground')
+    .replace(/^https?:\/\/github\.com\//, '')
+    .replace(/^git@github\.com:/, '')
+    .replace(/\.git$/, '')
+    .replace(/^\/+|\/+$/g, '');
+  const parts = cleaned.split('/').filter(Boolean);
+  return parts.length >= 2 ? `${parts[0]}/${parts[1]}` : cleaned;
+}
+
+function normalizeRepoPath(value, fallback) {
+  return cleanText(value || fallback).replace(/^\/+/, '');
+}
+
 function sanitizeFileStem(value) {
   return String(value || 'reading-test')
     .normalize('NFKD')
@@ -47,12 +61,12 @@ function sortBooksByDateDesc(books) {
 
 function getConfig() {
   return {
-    token: process.env.TRACKER_GITHUB_TOKEN,
-    repo: process.env.TRACKER_GITHUB_REPOSITORY || 'marcushsia/marcus-playground',
-    branch: process.env.TRACKER_GITHUB_BRANCH || 'main',
-    booksPath: process.env.TRACKER_GITHUB_BOOKS_PATH || 'jadon-reading-comprehension/books.json',
-    assetPathPrefix: process.env.TRACKER_GITHUB_ASSET_PATH_PREFIX || 'jadon-reading-comprehension',
-    adminPassword: process.env.TRACKER_ADMIN_PASSWORD,
+    token: cleanText(process.env.TRACKER_GITHUB_TOKEN),
+    repo: normalizeRepo(process.env.TRACKER_GITHUB_REPOSITORY),
+    branch: cleanText(process.env.TRACKER_GITHUB_BRANCH || 'main'),
+    booksPath: normalizeRepoPath(process.env.TRACKER_GITHUB_BOOKS_PATH, 'jadon-reading-comprehension/books.json'),
+    assetPathPrefix: normalizeRepoPath(process.env.TRACKER_GITHUB_ASSET_PATH_PREFIX, 'jadon-reading-comprehension'),
+    adminPassword: cleanText(process.env.TRACKER_ADMIN_PASSWORD),
   };
 }
 
@@ -75,7 +89,8 @@ async function githubRequest(config, path, options = {}) {
   const text = await response.text();
   const data = text ? JSON.parse(text) : null;
   if (!response.ok) {
-    throw new Error(data?.message || `GitHub request failed with status ${response.status}.`);
+    const target = `${config.repo}/${path}`;
+    throw new Error(`${data?.message || `GitHub request failed with status ${response.status}.`} (${target})`);
   }
   return data;
 }
