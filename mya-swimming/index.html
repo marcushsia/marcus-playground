@@ -4,6 +4,15 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Mya's Swimming Training Plan</title>
+  <script>
+    (function () {
+      if (window.location.hostname !== 'marcushsia.github.io') return;
+      var legacyPrefix = '/marcus-playground';
+      var nextPath = window.location.pathname;
+      if (nextPath.indexOf(legacyPrefix) === 0) nextPath = nextPath.slice(legacyPrefix.length) || '/';
+      window.location.replace('https://marcus-playground.vercel.app' + nextPath + window.location.search + window.location.hash);
+    })();
+  </script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {

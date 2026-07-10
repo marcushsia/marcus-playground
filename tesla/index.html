@@ -4,6 +4,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tesla Decision Guide — Mom &amp; Dad</title>
+  <script>
+    (function () {
+      if (window.location.hostname !== 'marcushsia.github.io') return;
+      var legacyPrefix = '/marcus-playground';
+      var nextPath = window.location.pathname;
+      if (nextPath.indexOf(legacyPrefix) === 0) nextPath = nextPath.slice(legacyPrefix.length) || '/';
+      window.location.replace('https://marcus-playground.vercel.app' + nextPath + window.location.search + window.location.hash);
+    })();
+  </script>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; background: #f4f4f4; color: #1a1a1a; font-size: 17px; line-height: 1.6; }
