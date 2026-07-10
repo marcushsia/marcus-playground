@@ -353,6 +353,10 @@
         <label for="answersPdf">Answers PDF</label>
         <input class="file-input" type="file" id="answersPdf" name="answersPdf" accept="application/pdf,.pdf" />
       </div>
+      <div class="field field-wide">
+        <label for="adminPassword">Admin password</label>
+        <input class="text-input" type="password" id="adminPassword" name="adminPassword" autocomplete="current-password" placeholder="Required on Vercel" />
+      </div>
     </div>
     <button class="update-btn" type="submit">Save Book</button>
     <div class="form-status" id="formStatus"></div>
@@ -523,7 +527,8 @@
         rawScore,
         totalQuestions,
         questionsPdf: await fileToPayload(document.getElementById('questionsPdf').files[0]),
-        answersPdf: await fileToPayload(document.getElementById('answersPdf').files[0])
+        answersPdf: await fileToPayload(document.getElementById('answersPdf').files[0]),
+        adminPassword: document.getElementById('adminPassword').value
       };
 
       const response = await fetch('/api/books', {
@@ -557,14 +562,18 @@
     return ['localhost', '127.0.0.1'].includes(window.location.hostname);
   }
 
+  function isVercelHost() {
+    return window.location.hostname.endsWith('.vercel.app');
+  }
+
   function configureSaveMode() {
-    if (isLocalTrackerHelper()) return;
+    if (isLocalTrackerHelper() || isVercelHost()) return;
 
     const form = document.getElementById('entryForm');
     form.querySelectorAll('input, button').forEach(control => {
       control.disabled = true;
     });
-    setStatus('Adding books and PDFs works from the local tracker helper. GitHub Pages can display saved books, but cannot save uploads directly.');
+    setStatus('Adding books and PDFs works from the Vercel site or the local tracker helper. GitHub Pages can display saved books, but cannot save uploads directly.');
   }
 
   // ── Init ──────────────────────────────────────────────────────
