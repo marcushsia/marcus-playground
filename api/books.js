@@ -24,6 +24,16 @@ function normalizeRepoPath(value, fallback) {
   return cleanText(value || fallback).replace(/^\/+/, '');
 }
 
+function normalizeBooksPath(value) {
+  const path = normalizeRepoPath(value, 'jadon-reading-comprehension/books.json');
+  return path.endsWith('books.json') ? path : 'jadon-reading-comprehension/books.json';
+}
+
+function normalizeAssetPathPrefix(value) {
+  const path = normalizeRepoPath(value, 'jadon-reading-comprehension');
+  return /^[\w./-]+$/.test(path) ? path : 'jadon-reading-comprehension';
+}
+
 function sanitizeFileStem(value) {
   return String(value || 'reading-test')
     .normalize('NFKD')
@@ -64,8 +74,8 @@ function getConfig() {
     token: cleanText(process.env.TRACKER_GITHUB_TOKEN),
     repo: normalizeRepo(process.env.TRACKER_GITHUB_REPOSITORY),
     branch: cleanText(process.env.TRACKER_GITHUB_BRANCH || 'main'),
-    booksPath: normalizeRepoPath(process.env.TRACKER_GITHUB_BOOKS_PATH, 'jadon-reading-comprehension/books.json'),
-    assetPathPrefix: normalizeRepoPath(process.env.TRACKER_GITHUB_ASSET_PATH_PREFIX, 'jadon-reading-comprehension'),
+    booksPath: normalizeBooksPath(process.env.TRACKER_GITHUB_BOOKS_PATH),
+    assetPathPrefix: normalizeAssetPathPrefix(process.env.TRACKER_GITHUB_ASSET_PATH_PREFIX),
     adminPassword: cleanText(process.env.TRACKER_ADMIN_PASSWORD),
   };
 }
