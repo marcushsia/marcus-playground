@@ -1,5 +1,27 @@
 [
   {
+    "title": "Joshua",
+    "series": "Bible",
+    "date": "2026-07-23",
+    "rawScore": 30,
+    "totalQuestions": 30,
+    "score": 100,
+    "grade": "A+",
+    "qPdf": "Joshua_Bible_Questions.pdf",
+    "aPdf": "Joshua_Bible_Answers.pdf"
+  },
+  {
+    "title": "The Way of the Wilderking (Wilderking Trilogy Book 3)",
+    "series": "Wilderking Trilogy",
+    "date": "2026-07-23",
+    "rawScore": 30,
+    "totalQuestions": 30,
+    "score": 100,
+    "grade": "A+",
+    "qPdf": "The_Way_Of_The_Wilderking_Questions.pdf",
+    "aPdf": "The_Way_Of_The_Wilderking_Answers.pdf"
+  },
+  {
     "title": "Secrets of the Dragon Sanctuary (Fablehaven Book 4)",
     "series": "Fablehaven",
     "date": "2026-07-10",
