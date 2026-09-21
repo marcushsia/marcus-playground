@@ -1,5 +1,27 @@
 [
   {
+    "title": "Matthew",
+    "series": "Bible",
+    "date": "2026-09-20",
+    "rawScore": 29,
+    "totalQuestions": 30,
+    "score": 97,
+    "grade": "A+",
+    "qPdf": "Matthew_Bible_Questions.pdf",
+    "aPdf": "Matthew_Bible_Answers.pdf"
+  },
+  {
+    "title": "Dragonwatch: A Fablehaven Adventure (Dragonwatch Book 1)",
+    "series": "Dragonwatch / Fablehaven sequel",
+    "date": "2026-09-19",
+    "rawScore": 30,
+    "totalQuestions": 30,
+    "score": 100,
+    "grade": "A+",
+    "qPdf": "Dragonwatch_Book_1_Questions.pdf",
+    "aPdf": "Dragonwatch_Book_1_Answers.pdf"
+  },
+  {
     "title": "Keys to the Demon Prison (Fablehaven Book 5)",
     "series": "Fablehaven",
     "date": "2026-08-14",
